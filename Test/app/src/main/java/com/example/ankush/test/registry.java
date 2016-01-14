@@ -11,10 +11,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class registry extends AppCompatActivity {
 
     public boolean isValid(String entry_no){
-        if (entry_no.length()!=11){
+
+        /*if (entry_no.length()!=11){
             return false;
         }
         else if (!entry_no.substring(4,6).toLowerCase().equals("cs") &&!entry_no.substring(4,6).toLowerCase().equals("ee")&&!entry_no.substring(4,6).toLowerCase().equals("mt")&&!entry_no.substring(4,6).toLowerCase().equals("me")){
@@ -28,7 +32,13 @@ public class registry extends AppCompatActivity {
         }
         else{
             return true;
-        }
+        }*/
+
+        // Using RegEx to check instead of checking as done above
+        String Regex_Pattern = "^201[0-4](bb|BB|cs|CS|ce|CE|ch|CH|ee|EE|mt|MT|me|ME|tt|TT)[1-7][0-9]{4}$";
+        Pattern p = Pattern.compile(Regex_Pattern);
+        Matcher m = p.matcher(entry_no);
+        return m.find();
     }
 
     @Override
@@ -54,6 +64,7 @@ public class registry extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                // checking if entries are filled properly
                 if (team_name.getText().toString().length()==0){
                     new AlertDialog.Builder(context)
                             .setTitle("Team Name Unspecifed")
@@ -167,7 +178,7 @@ public class registry extends AppCompatActivity {
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
                 }
-                else{
+                else /* all the entries are filled properly */ {
                     Intent intent = new Intent(registry.this, Welcome.class);
                     startActivity(intent);
                     Toast.makeText(registry.this, "Team Registered",Toast.LENGTH_LONG).show();
