@@ -11,10 +11,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class registry extends AppCompatActivity {
+
+    final String url="http://agni.iitd.ernet.in/cop290/assign0/register/";
 
     public boolean isValid(String entry_no){
 
@@ -178,10 +190,52 @@ public class registry extends AppCompatActivity {
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
                 }
-                else /* all the entries are filled properly */ {
-                    Intent intent = new Intent(registry.this, Welcome.class);
-                    startActivity(intent);
-                    Toast.makeText(registry.this, "Team Registered",Toast.LENGTH_LONG).show();
+                else{
+                    // JsonObjectRequest code inspired by AndroidHive.com
+
+                    StringRequest postReq = new StringRequest(Request.Method.POST,
+                            url,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    String success = null;
+                                    try {
+                                        JSONObject jsonResponse = new JSONObject(response);
+                                        success = jsonResponse.get("RESPONSE_MESSAGE").toString();
+                                        Toast.makeText(registry.this, success, Toast.LENGTH_LONG).show();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    } finally {
+                                        if (!success.equals("Data not posted!")) {
+                                            Intent intent = new Intent(registry.this, Welcome.class);
+                                            startActivity(intent);
+                                        }
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(registry.this, "Connection Error",Toast.LENGTH_LONG).show();
+                        }
+                    }) {
+
+                        @Override
+                        public Map<String, String> getParams() {
+                            Map<String,String> params=new HashMap<String,String>();
+                            params.put("teamname",team_name.getText().toString());
+                            params.put("entry1",entry_no1.getText().toString());
+                            params.put("name1",name1.getText().toString());
+                            params.put("entry2",entry_no2.getText().toString());
+                            params.put("name2",name2.getText().toString());
+                            params.put("entry3",entry_no3.getText().toString());
+                            params.put("name3",name3.getText().toString());
+                            return params;
+                        }
+
+                    };
+
+                    RequestQ.getInstance().addToRequestQ(postReq);
+
                 }
             }
         });
