@@ -4,8 +4,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -63,7 +66,7 @@ public class registry extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
 
         final Context context=this;
-        Button btn = (Button)findViewById(R.id.button2);
+        final Button btn = (Button)findViewById(R.id.button2);
         final EditText team_name=(EditText) findViewById(R.id.editText);
         final EditText name1=(EditText) findViewById(R.id.editText2);
         final EditText entry_no1=(EditText) findViewById(R.id.editText3);
@@ -72,13 +75,58 @@ public class registry extends AppCompatActivity {
         final EditText name3=(EditText) findViewById(R.id.editText6);
         final EditText entry_no3=(EditText) findViewById(R.id.editText7);
 
+        entry_no1.addTextChangedListener(new TextWatcher() {
+            public void onTextChanged(CharSequence s, int start,int before, int count)
+            {
+                if(entry_no1.getText().toString().length()==11)     //size as per your requirement
+                {
+                    name2.requestFocus();
+                }
+            }
+            public void beforeTextChanged(CharSequence s, int start,int count, int after) {           
+            }
+            public void afterTextChanged(Editable s) {
+            }
+
+        });
+        
+        entry_no2.addTextChangedListener(new TextWatcher() {
+            public void onTextChanged(CharSequence s, int start,int before, int count)
+            {
+                if(entry_no2.getText().toString().length()==11)     //size as per your requirement
+                {
+                    name3.requestFocus();
+                }
+            }
+            public void beforeTextChanged(CharSequence s, int start,int count, int after) {
+            }
+            public void afterTextChanged(Editable s) {
+            }
+
+        });
+        
+        entry_no3.addTextChangedListener(new TextWatcher() {
+            public void onTextChanged(CharSequence s, int start,int before, int count)
+            {
+                if(entry_no3.getText().toString().length()==11)     //size as per your requirement
+                {
+                    btn.requestFocus();
+                }
+            }
+            public void beforeTextChanged(CharSequence s, int start,int count, int after) {
+            }
+            public void afterTextChanged(Editable s) {
+            }
+
+        });
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 // checking if entries are filled properly
-                if (team_name.getText().toString().length()==0){
-                    new AlertDialog.Builder(context)
+                if (team_name.getText().toString().length() == 0) {
+                    /*new AlertDialog.Builder(context)
                             .setTitle("Team Name Unspecifed")
                             .setMessage("Please enter the Team Name")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -86,10 +134,13 @@ public class registry extends AppCompatActivity {
                                 }
                             })
                             .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
-                }
-                else if (name1.getText().toString().length()==0){
-                    new AlertDialog.Builder(context)
+                            .show();*/
+                    team_name.setHint("This is a required field");
+                    team_name.setText("");
+                    team_name.setHintTextColor(Integer.parseInt(String.valueOf(Color.RED)));
+                    team_name.requestFocus();
+                } else if (name1.getText().toString().length() == 0) {
+                    /*new AlertDialog.Builder(context)
                             .setTitle("Name Unspecifed")
                             .setMessage("Please enter the Name of Member 1")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -97,10 +148,13 @@ public class registry extends AppCompatActivity {
                                 }
                             })
                             .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
-                }
-                else if (entry_no1.getText().toString().length()==0){
-                    new AlertDialog.Builder(context)
+                            .show();*/
+                    name1.setHint("This is a required field");
+                    name1.setText("");
+                    name1.setHintTextColor(Integer.parseInt(String.valueOf(Color.RED)));
+                    name1.requestFocus();
+                } else if (entry_no1.getText().toString().length() == 0) {
+                    /*new AlertDialog.Builder(context)
                             .setTitle("Entry Number Unspecifed")
                             .setMessage("Please enter the Entry Number of Member 1")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -108,22 +162,27 @@ public class registry extends AppCompatActivity {
                                 }
                             })
                             .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
-                }
-                else if (!isValid(entry_no1.getText().toString())){
+                            .show();*/
+                    entry_no1.setHint("This is a required field");
+                    entry_no1.setText("");
+                    entry_no1.setHintTextColor(Integer.parseInt(String.valueOf(Color.RED)));
+                    entry_no1.requestFocus();
+                } else if (!isValid(entry_no1.getText().toString())) {
                     new AlertDialog.Builder(context)
                             .setTitle("Invalid Entry Number")
                             .setMessage("Please enter a valid Entry Number for Member 1")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     entry_no1.setText("");
+                                    entry_no1.setHint("Entry Number of First Member");
+                                    entry_no1.setHintTextColor(Integer.parseInt(String.valueOf(Color.GRAY)));
+                                    entry_no1.requestFocus();
                                 }
                             })
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
-                }
-                else if (name2.getText().toString().length()==0){
-                    new AlertDialog.Builder(context)
+                } else if (name2.getText().toString().length() == 0) {
+                    /*new AlertDialog.Builder(context)
                             .setTitle("Name Unspecifed")
                             .setMessage("Please enter the Name of Member 2")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -131,10 +190,13 @@ public class registry extends AppCompatActivity {
                                 }
                             })
                             .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
-                }
-                else if (entry_no2.getText().toString().length()==0){
-                    new AlertDialog.Builder(context)
+                            .show();*/
+                    name2.setHint("This is a required field");
+                    name2.setText("");
+                    name2.setHintTextColor(Integer.parseInt(String.valueOf(Color.RED)));
+                    name2.requestFocus();
+                } else if (entry_no2.getText().toString().length() == 0) {
+                    /*new AlertDialog.Builder(context)
                             .setTitle("Entry Number Unspecifed")
                             .setMessage("Please enter the Entry Number of Member 2")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -142,22 +204,27 @@ public class registry extends AppCompatActivity {
                                 }
                             })
                             .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
-                }
-                else if (!isValid(entry_no2.getText().toString())){
+                            .show();*/
+                    entry_no2.setHint("This is a required field");
+                    entry_no2.setText("");
+                    entry_no2.setHintTextColor(Integer.parseInt(String.valueOf(Color.RED)));
+                    entry_no2.requestFocus();
+                } else if (!isValid(entry_no2.getText().toString())) {
                     new AlertDialog.Builder(context)
                             .setTitle("Invalid Entry Number")
                             .setMessage("Please enter a valid Entry Number for Member 2")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     entry_no2.setText("");
+                                    entry_no2.setHint("Entry Number of First Member");
+                                    entry_no2.setHintTextColor(Integer.parseInt(String.valueOf(Color.GRAY)));
+                                    entry_no2.requestFocus();
                                 }
                             })
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
-                }
-                else if (name3.getText().toString().length()==0){
-                    new AlertDialog.Builder(context)
+                } else if (name3.getText().toString().length() == 0) {
+                    /*new AlertDialog.Builder(context)
                             .setTitle("Name Unspecifed")
                             .setMessage("Please enter the Name of Member 3")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -165,10 +232,13 @@ public class registry extends AppCompatActivity {
                                 }
                             })
                             .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
-                }
-                else if (entry_no3.getText().toString().length()==0){
-                    new AlertDialog.Builder(context)
+                            .show();*/
+                    name3.setHint("This is a required field");
+                    name3.setText("");
+                    name3.setHintTextColor(Integer.parseInt(String.valueOf(Color.RED)));
+                    name3.requestFocus();
+                } else if (entry_no3.getText().toString().length() == 0) {
+                    /*new AlertDialog.Builder(context)
                             .setTitle("Entry Number Unspecifed")
                             .setMessage("Please enter the Entry Number of Member 3")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -176,21 +246,26 @@ public class registry extends AppCompatActivity {
                                 }
                             })
                             .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
-                }
-                else if (!isValid(entry_no3.getText().toString())){
+                            .show();*/
+                    entry_no3.setHint("This is a required field");
+                    entry_no3.setText("");
+                    entry_no3.setHintTextColor(Integer.parseInt(String.valueOf(Color.RED)));
+                    entry_no3.requestFocus();
+                } else if (!isValid(entry_no3.getText().toString())) {
                     new AlertDialog.Builder(context)
                             .setTitle("Invalid Entry Number")
                             .setMessage("Please enter a valid Entry Number for Member 3")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     entry_no3.setText("");
+                                    entry_no3.setHint("Entry Number of First Member");
+                                    entry_no3.setHintTextColor(Integer.parseInt(String.valueOf(Color.GRAY)));
+                                    entry_no3.requestFocus();
                                 }
                             })
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
-                }
-                else{
+                } else {
                     // JsonObjectRequest code inspired by AndroidHive.com
 
                     StringRequest postReq = new StringRequest(Request.Method.POST,
@@ -215,25 +290,24 @@ public class registry extends AppCompatActivity {
                             }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(registry.this, "Connection Error",Toast.LENGTH_LONG).show();
+                            Toast.makeText(registry.this, "Connection Error", Toast.LENGTH_LONG).show();
                         }
                     }) {
 
                         @Override
                         public Map<String, String> getParams() {
-                            Map<String,String> params=new HashMap<String,String>();
-                            params.put("teamname",team_name.getText().toString());
-                            params.put("entry1",entry_no1.getText().toString());
-                            params.put("name1",name1.getText().toString());
-                            params.put("entry2",entry_no2.getText().toString());
-                            params.put("name2",name2.getText().toString());
-                            params.put("entry3",entry_no3.getText().toString());
-                            params.put("name3",name3.getText().toString());
+                            Map<String, String> params = new HashMap<String, String>();
+                            params.put("teamname", team_name.getText().toString());
+                            params.put("entry1", entry_no1.getText().toString());
+                            params.put("name1", name1.getText().toString());
+                            params.put("entry2", entry_no2.getText().toString());
+                            params.put("name2", name2.getText().toString());
+                            params.put("entry3", entry_no3.getText().toString());
+                            params.put("name3", name3.getText().toString());
                             return params;
                         }
 
                     };
-
                     RequestQ.getInstance().addToRequestQ(postReq);
 
                 }

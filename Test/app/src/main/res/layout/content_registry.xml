@@ -39,6 +39,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignEnd="@+id/ScrlView"
                 android:hint="Enter Team Name"
+                android:selectAllOnFocus="true"
                 android:layout_gravity="center_vertical" />
 
             <TextView
@@ -49,7 +50,8 @@
                 android:id="@+id/textView3"
                 android:layout_below="@+id/editText"
                 android:layout_alignParentStart="true"
-                android:layout_marginTop="20dp" />
+                android:layout_marginTop="20dp"
+                android:selectAllOnFocus="true"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -58,7 +60,8 @@
                 android:layout_below="@+id/textView3"
                 android:layout_alignParentStart="true"
                 android:layout_alignEnd="@+id/ScrlView"
-                android:hint="Name of First Member"/>
+                android:hint="Name of First Member"
+                android:selectAllOnFocus="true"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -67,7 +70,8 @@
                 android:layout_below="@+id/editText2"
                 android:layout_alignParentStart="true"
                 android:layout_alignEnd="@+id/ScrlView"
-                android:hint="Entry Number of First Member"/>
+                android:hint="Entry Number of First Member"
+                android:selectAllOnFocus="true"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -86,7 +90,8 @@
                 android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignEnd="@+id/ScrlView"
-                android:hint="Name of Second Member"/>
+                android:hint="Name of Second Member"
+                android:selectAllOnFocus="true"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -95,7 +100,8 @@
                 android:layout_below="@+id/editText4"
                 android:layout_alignParentStart="true"
                 android:layout_alignEnd="@+id/ScrlView"
-                android:hint="Entry Number of Second Member"/>
+                android:hint="Entry Number of Second Member"
+                android:selectAllOnFocus="true"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -105,7 +111,8 @@
                 android:id="@+id/textView5"
                 android:layout_below="@+id/editText5"
                 android:layout_alignParentStart="true"
-                android:layout_marginTop="24dp" />
+                android:layout_marginTop="24dp"
+                />
 
             <EditText
                 android:layout_width="match_parent"
@@ -114,7 +121,8 @@
                 android:layout_below="@+id/textView5"
                 android:layout_alignParentStart="true"
                 android:layout_alignEnd="@+id/ScrlView"
-                android:hint="Name of Third Member"/>
+                android:hint="Name of Third Member"
+                android:selectAllOnFocus="true"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -123,7 +131,8 @@
                 android:layout_below="@+id/editText6"
                 android:layout_alignParentStart="true"
                 android:layout_alignEnd="@+id/ScrlView"
-                android:hint="Entry Number of Third Member"/>
+                android:hint="Entry Number of Third Member"
+                android:selectAllOnFocus="true"/>
 
             <Button
                 android:layout_width="wrap_content"
