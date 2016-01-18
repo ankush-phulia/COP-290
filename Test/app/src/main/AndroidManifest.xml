@@ -4,16 +4,17 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
+    <!-- image courtesy softicons.com, Mr.artdesigner-->
     <application
         android:name=".RequestQ"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/register"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".Welcome"
-            android:label="@string/app_name"
+            android:label="COP 290 Registration"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +24,7 @@
         </activity>
         <activity
             android:name=".registry"
-            android:label="@string/title_activity_registry"
+            android:label="Registry"
             android:parentActivityName=".Welcome"
             android:theme="@style/AppTheme">
             <meta-data
