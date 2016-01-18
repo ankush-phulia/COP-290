@@ -11,7 +11,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.ankush.test.registry"
     tools:showIn="@layout/activity_registry"
-    android:background="@drawable/backg"
+    android:background="@drawable/background1"
     android:nestedScrollingEnabled="true">
 
     <ScrollView android:id="@+id/ScrlView" android:layout_width="fill_parent" android:layout_height="fill_parent"
@@ -31,7 +31,8 @@
                 android:id="@+id/textView6"
                 android:layout_gravity="center_horizontal"
                 android:textColor="#ffffff"
-                android:textSize="26dp" />
+                android:textSize="26dp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -238,8 +239,10 @@
                 android:selectAllOnFocus="true"/>
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="35dp"
+                android:background="@drawable/custom_button"
+                android:textColor="#FFFFFF"
                 android:text="Register"
                 android:id="@+id/button2"
                 android:layout_alignBottom="@+id/ScrlView"

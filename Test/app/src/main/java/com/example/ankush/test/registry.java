@@ -34,23 +34,7 @@ public class registry extends AppCompatActivity {
 
     public boolean isValid(String entry_no){
 
-        /*if (entry_no.length()!=11){
-            return false;
-        }
-        else if (!entry_no.substring(4,6).toLowerCase().equals("cs") &&!entry_no.substring(4,6).toLowerCase().equals("ee")&&!entry_no.substring(4,6).toLowerCase().equals("mt")&&!entry_no.substring(4,6).toLowerCase().equals("me")){
-            return false;
-        }
-        else if (!entry_no.substring(0,4).matches("[0-9]+") || !entry_no.substring(6,11).matches("[0-9]+")){
-            return false;
-        }
-        else if (Integer.parseInt(entry_no.substring(0,4))>2014 ||Integer.parseInt(entry_no.substring(0,4))<2010 || Integer.parseInt(entry_no.substring(7,8))!=0 ){
-            return false;
-        }
-        else{
-            return true;
-        }*/
-
-        // Using RegEx to check instead of checking as done above
+        // Using RegEx to check validity of entry no.
         String testString = entry_no.toLowerCase();
         String Regex_Pattern = "^201[0-4](bb|cs|ce|ch|ee|mt|me|tt)[1-7][0-9]{4}$";
         Pattern p = Pattern.compile(Regex_Pattern);
@@ -62,10 +46,6 @@ public class registry extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registry);
-        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
 
         final Context context=this;
         final Button btn = (Button)findViewById(R.id.button2);
@@ -76,10 +56,10 @@ public class registry extends AppCompatActivity {
         final EditText entry_no2 = (EditText) findViewById(R.id.editText5);
         final EditText name3 = (EditText) findViewById(R.id.editText6);
         final EditText entry_no3 = (EditText) findViewById(R.id.editText7);
-        final TextView ass1 = (TextView) findViewById(R.id.textView21) ;
-        final TextView ass2 = (TextView) findViewById(R.id.textView31) ;
-        final TextView ass3 = (TextView) findViewById(R.id.textView41) ;
-        final TextView ass4 = (TextView) findViewById(R.id.textView51) ;
+        final TextView asterisk1 = (TextView) findViewById(R.id.textView21) ;
+        final TextView asterisk2 = (TextView) findViewById(R.id.textView31) ;
+        final TextView asterisk3 = (TextView) findViewById(R.id.textView41) ;
+        final TextView asterisk4 = (TextView) findViewById(R.id.textView51) ;
 
         // dealing with asterisk on changing text inside team name
 
@@ -90,12 +70,10 @@ public class registry extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (team_name.getText().toString().length() != 0){
-                    ass1.setText("");
+                    asterisk1.setText("");
+                } else {
+                    asterisk1.setText("*");
                 }
-                else{
-                    ass1.setText("*");
-                }
-
             }
             @Override
             public void afterTextChanged(Editable s) {
@@ -110,19 +88,12 @@ public class registry extends AppCompatActivity {
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (name1.getText().toString().length() != 0 ) {
-                    if (entry_no1.getText().toString().length() == 0){
-                        ass2.setText("*");
-                    }
-                    else{
-                        ass2.setText("");
-                    }
+                if (name1.getText().toString().length() != 0 && entry_no1.getText().toString().length() != 0) {
+                    asterisk2.setText("");
                 }
                 else {
-                    ass2.setText("*");
+                    asterisk2.setText("*");
                 }
-
-
             }
 
             @Override
@@ -130,22 +101,18 @@ public class registry extends AppCompatActivity {
                 entry_no1.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
                     }
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (entry_no1.getText().toString().length() ==0){
-                            ass2.setText("*") ;
+                        if (entry_no1.getText().toString().length() == 0 || name1.getText().toString().length() == 0){
+                            asterisk2.setText("*");
                         }
                         else{
-                            if (name1.getText().toString().length() != 0)ass2.setText("");
-                            else{
-                                ass2.setText("*");
-                            }
-                            if (entry_no1.getText().toString().length() == 11){
+                            asterisk2.setText("");
+                        }
+                        if (entry_no1.getText().toString().length() == 11){
                                 name2.requestFocus() ;
-                            }
                         }
                     }
 
@@ -163,18 +130,12 @@ public class registry extends AppCompatActivity {
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (name2.getText().toString().length() != 0 ) {
-                    if (entry_no2.getText().toString().length() == 0){
-                        ass3.setText("*");
-                    }
-                    else{
-                        ass3.setText("");
-                    }
+                if (name2.getText().toString().length() != 0 && entry_no2.getText().toString().length() != 0) {
+                    asterisk3.setText("");
                 }
                 else {
-                    ass3.setText("*");
+                    asterisk3.setText("*");
                 }
-
             }
 
             @Override
@@ -187,17 +148,14 @@ public class registry extends AppCompatActivity {
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (entry_no2.getText().toString().length() ==0){
-                            ass3.setText("*") ;
+                        if (entry_no2.getText().toString().length() == 0 || name2.getText().toString().length() == 0){
+                            asterisk3.setText("*");
                         }
                         else{
-                            if (name2.getText().toString().length() != 0)ass3.setText("");
-                            else{
-                                ass3.setText("*");
-                            }
-                            if (entry_no2.getText().toString().length() == 11){
-                                name3.requestFocus() ;
-                            }
+                            asterisk3.setText("");
+                        }
+                        if (entry_no2.getText().toString().length() == 11){
+                            name3.requestFocus() ;
                         }
                     }
 
@@ -216,20 +174,12 @@ public class registry extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (name3.getText().toString().length() != 0 ) {
-                    if (entry_no3.getText().toString().length() == 0){
-                        ass4.setText("*");
-                    }
-                    else{
-                        ass4.setText("");
-                    }
+                if (name3.getText().toString().length() != 0 && entry_no3.getText().toString().length() != 0) {
+                    asterisk4.setText("");
                 }
                 else {
-                    ass4.setText("*");
+                    asterisk4.setText("*");
                 }
-
-
-
             }
 
             @Override
@@ -242,16 +192,14 @@ public class registry extends AppCompatActivity {
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (entry_no3.getText().toString().length() == 0) {
-                            ass4.setText("*");
-                        } else {
-                            if (name3.getText().toString().length() != 0) ass4.setText("");
-                            else {
-                                ass4.setText("*");
-                            }
-                            if (entry_no3.getText().toString().length() == 11) {
-                                btn.requestFocus();
-                            }
+                        if (entry_no3.getText().toString().length() == 0 || name3.getText().toString().length() == 0){
+                            asterisk4.setText("*");
+                        }
+                        else{
+                            asterisk4.setText("");
+                        }
+                        if (entry_no3.getText().toString().length() == 11){
+                            btn.requestFocus() ;
                         }
                     }
 
@@ -262,36 +210,6 @@ public class registry extends AppCompatActivity {
                 });
             }
         });
-        /*entry_no2.addTextChangedListener(new TextWatcher() {
-            public void onTextChanged(CharSequence s, int start,int before, int count)
-            {
-                if(entry_no2.getText().toString().length()==11)     //size as per your requirement
-                {
-                    name3.requestFocus();
-                }
-            }
-            public void beforeTextChanged(CharSequence s, int start,int count, int after) {
-            }
-            public void afterTextChanged(Editable s) {
-            }
-
-        });
-        
-        entry_no3.addTextChangedListener(new TextWatcher() {
-            public void onTextChanged(CharSequence s, int start,int before, int count)
-            {
-                if(entry_no3.getText().toString().length()==11)     //size as per your requirement
-                {
-                    btn.requestFocus();
-                }
-            }
-            public void beforeTextChanged(CharSequence s, int start,int count, int after) {
-            }
-            public void afterTextChanged(Editable s) {
-            }
-
-        }); */
-
 
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -300,48 +218,28 @@ public class registry extends AppCompatActivity {
 
                 // checking if entries are filled properly
                 if (team_name.getText().toString().length() == 0) {
-                    /*new AlertDialog.Builder(context)
-                            .setTitle("Team Name Unspecifed")
-                            .setMessage("Please enter the Team Name")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();*/
+                    // No team name!
                     team_name.setHint("This is a required field");
                     team_name.setText("");
                     team_name.setHintTextColor(Integer.parseInt(String.valueOf(Color.RED)));
                     team_name.requestFocus();
-                } else if (name1.getText().toString().length() == 0) {
-                    /*new AlertDialog.Builder(context)
-                            .setTitle("Name Unspecifed")
-                            .setMessage("Please enter the Name of Member 1")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();*/
+                }
+                else if (name1.getText().toString().length() == 0) {
+                    // Name of member1 absent!
                     name1.setHint("This is a required field");
                     name1.setText("");
                     name1.setHintTextColor(Integer.parseInt(String.valueOf(Color.RED)));
                     name1.requestFocus();
-                } else if (entry_no1.getText().toString().length() == 0) {
-                    /*new AlertDialog.Builder(context)
-                            .setTitle("Entry Number Unspecifed")
-                            .setMessage("Please enter the Entry Number of Member 1")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();*/
+                }
+                else if (entry_no1.getText().toString().length() == 0) {
+                    // Entry no. of member1 absent!
                     entry_no1.setHint("This is a required field");
                     entry_no1.setText("");
                     entry_no1.setHintTextColor(Integer.parseInt(String.valueOf(Color.RED)));
                     entry_no1.requestFocus();
-                } else if (!isValid(entry_no1.getText().toString())) {
+                }
+                else if (!isValid(entry_no1.getText().toString())) {
+                    // checking validity of entry no. of member1
                     new AlertDialog.Builder(context)
                             .setTitle("Invalid Entry Number")
                             .setMessage("Please enter a valid Entry Number for Member 1")
@@ -355,35 +253,24 @@ public class registry extends AppCompatActivity {
                             })
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
-                } else if (name2.getText().toString().length() == 0) {
-                    /*new AlertDialog.Builder(context)
-                            .setTitle("Name Unspecifed")
-                            .setMessage("Please enter the Name of Member 2")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();*/
+                }
+
+                else if (name2.getText().toString().length() == 0) {
+                    // Name of member2 absent!
                     name2.setHint("This is a required field");
                     name2.setText("");
                     name2.setHintTextColor(Integer.parseInt(String.valueOf(Color.RED)));
                     name2.requestFocus();
-                } else if (entry_no2.getText().toString().length() == 0) {
-                    /*new AlertDialog.Builder(context)
-                            .setTitle("Entry Number Unspecifed")
-                            .setMessage("Please enter the Entry Number of Member 2")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();*/
+                }
+                else if (entry_no2.getText().toString().length() == 0) {
+                    // Entry no. of member2 absent!
                     entry_no2.setHint("This is a required field");
                     entry_no2.setText("");
                     entry_no2.setHintTextColor(Integer.parseInt(String.valueOf(Color.RED)));
                     entry_no2.requestFocus();
-                } else if (!isValid(entry_no2.getText().toString())) {
+                }
+                else if (!isValid(entry_no2.getText().toString())) {
+                    // checking validity of entry no. of member2
                     new AlertDialog.Builder(context)
                             .setTitle("Invalid Entry Number")
                             .setMessage("Please enter a valid Entry Number for Member 2")
@@ -397,35 +284,24 @@ public class registry extends AppCompatActivity {
                             })
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
-                } else if (name3.getText().toString().length() == 0) {
-                    /*new AlertDialog.Builder(context)
-                            .setTitle("Name Unspecifed")
-                            .setMessage("Please enter the Name of Member 3")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();*/
+                }
+
+                else if (name3.getText().toString().length() == 0) {
+                    // Name of member3 absent!
                     name3.setHint("This is a required field");
                     name3.setText("");
                     name3.setHintTextColor(Integer.parseInt(String.valueOf(Color.RED)));
                     name3.requestFocus();
-                } else if (entry_no3.getText().toString().length() == 0) {
-                    /*new AlertDialog.Builder(context)
-                            .setTitle("Entry Number Unspecifed")
-                            .setMessage("Please enter the Entry Number of Member 3")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();*/
+                }
+                else if (entry_no3.getText().toString().length() == 0) {
+                    // Entry no. of member3 absent!
                     entry_no3.setHint("This is a required field");
                     entry_no3.setText("");
                     entry_no3.setHintTextColor(Integer.parseInt(String.valueOf(Color.RED)));
                     entry_no3.requestFocus();
-                } else if (!isValid(entry_no3.getText().toString())) {
+                }
+                else if (!isValid(entry_no3.getText().toString())) {
+                    // checking validity of entry no. of member3
                     new AlertDialog.Builder(context)
                             .setTitle("Invalid Entry Number")
                             .setMessage("Please enter a valid Entry Number for Member 3")
@@ -439,7 +315,13 @@ public class registry extends AppCompatActivity {
                             })
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
-                } else {
+                }
+
+                else {
+                    /* everything is perfect...
+                     * way to go!
+                     */
+
                     // JsonObjectRequest code inspired by AndroidHive.com
 
                     StringRequest postReq = new StringRequest(Request.Method.POST,
@@ -468,6 +350,7 @@ public class registry extends AppCompatActivity {
                         }
                     }) {
 
+                        // putting the parameters as key-value pairs to pass
                         @Override
                         public Map<String, String> getParams() {
                             Map<String, String> params = new HashMap<String, String>();
@@ -483,7 +366,6 @@ public class registry extends AppCompatActivity {
 
                     };
                     RequestQ.getInstance().addToRequestQ(postReq);
-
                 }
             }
         });
