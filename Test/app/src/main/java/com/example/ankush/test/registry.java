@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -50,9 +51,10 @@ public class registry extends AppCompatActivity {
         }*/
 
         // Using RegEx to check instead of checking as done above
-        String Regex_Pattern = "^201[0-4](bb|BB|cs|CS|ce|CE|ch|CH|ee|EE|mt|MT|me|ME|tt|TT)[1-7][0-9]{4}$";
+        String testString = entry_no.toLowerCase();
+        String Regex_Pattern = "^201[0-4](bb|cs|ce|ch|ee|mt|me|tt)[1-7][0-9]{4}$";
         Pattern p = Pattern.compile(Regex_Pattern);
-        Matcher m = p.matcher(entry_no);
+        Matcher m = p.matcher(testString);
         return m.find();
     }
 
@@ -67,30 +69,200 @@ public class registry extends AppCompatActivity {
 
         final Context context=this;
         final Button btn = (Button)findViewById(R.id.button2);
-        final EditText team_name=(EditText) findViewById(R.id.editText);
-        final EditText name1=(EditText) findViewById(R.id.editText2);
-        final EditText entry_no1=(EditText) findViewById(R.id.editText3);
-        final EditText name2=(EditText) findViewById(R.id.editText4);
-        final EditText entry_no2=(EditText) findViewById(R.id.editText5);
-        final EditText name3=(EditText) findViewById(R.id.editText6);
-        final EditText entry_no3=(EditText) findViewById(R.id.editText7);
+        final EditText team_name = (EditText) findViewById(R.id.editText);
+        final EditText name1 = (EditText) findViewById(R.id.editText2);
+        final EditText entry_no1 = (EditText) findViewById(R.id.editText3);
+        final EditText name2 = (EditText) findViewById(R.id.editText4);
+        final EditText entry_no2 = (EditText) findViewById(R.id.editText5);
+        final EditText name3 = (EditText) findViewById(R.id.editText6);
+        final EditText entry_no3 = (EditText) findViewById(R.id.editText7);
+        final TextView ass1 = (TextView) findViewById(R.id.textView21) ;
+        final TextView ass2 = (TextView) findViewById(R.id.textView31) ;
+        final TextView ass3 = (TextView) findViewById(R.id.textView41) ;
+        final TextView ass4 = (TextView) findViewById(R.id.textView51) ;
 
-        entry_no1.addTextChangedListener(new TextWatcher() {
-            public void onTextChanged(CharSequence s, int start,int before, int count)
-            {
-                if(entry_no1.getText().toString().length()==11)     //size as per your requirement
-                {
-                    name2.requestFocus();
+        // dealing with asterisk on changing text inside team name
+
+        team_name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (team_name.getText().toString().length() != 0){
+                    ass1.setText("");
                 }
+                else{
+                    ass1.setText("*");
+                }
+
             }
-            public void beforeTextChanged(CharSequence s, int start,int count, int after) {           
-            }
+            @Override
             public void afterTextChanged(Editable s) {
             }
-
         });
-        
-        entry_no2.addTextChangedListener(new TextWatcher() {
+
+        // dealing with asterisk on changing text inside member1
+
+        name1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (name1.getText().toString().length() != 0 ) {
+                    if (entry_no1.getText().toString().length() == 0){
+                        ass2.setText("*");
+                    }
+                    else{
+                        ass2.setText("");
+                    }
+                }
+                else {
+                    ass2.setText("*");
+                }
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                entry_no1.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (entry_no1.getText().toString().length() ==0){
+                            ass2.setText("*") ;
+                        }
+                        else{
+                            if (name1.getText().toString().length() != 0)ass2.setText("");
+                            else{
+                                ass2.setText("*");
+                            }
+                            if (entry_no1.getText().toString().length() == 11){
+                                name2.requestFocus() ;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+            }
+        });
+
+        name2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (name2.getText().toString().length() != 0 ) {
+                    if (entry_no2.getText().toString().length() == 0){
+                        ass3.setText("*");
+                    }
+                    else{
+                        ass3.setText("");
+                    }
+                }
+                else {
+                    ass3.setText("*");
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                entry_no2.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (entry_no2.getText().toString().length() ==0){
+                            ass3.setText("*") ;
+                        }
+                        else{
+                            if (name2.getText().toString().length() != 0)ass3.setText("");
+                            else{
+                                ass3.setText("*");
+                            }
+                            if (entry_no2.getText().toString().length() == 11){
+                                name3.requestFocus() ;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+            }
+        });
+
+        name3.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (name3.getText().toString().length() != 0 ) {
+                    if (entry_no3.getText().toString().length() == 0){
+                        ass4.setText("*");
+                    }
+                    else{
+                        ass4.setText("");
+                    }
+                }
+                else {
+                    ass4.setText("*");
+                }
+
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                entry_no3.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (entry_no3.getText().toString().length() == 0) {
+                            ass4.setText("*");
+                        } else {
+                            if (name3.getText().toString().length() != 0) ass4.setText("");
+                            else {
+                                ass4.setText("*");
+                            }
+                            if (entry_no3.getText().toString().length() == 11) {
+                                btn.requestFocus();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+            }
+        });
+        /*entry_no2.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence s, int start,int before, int count)
             {
                 if(entry_no2.getText().toString().length()==11)     //size as per your requirement
@@ -118,7 +290,9 @@ public class registry extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
 
-        });
+        }); */
+
+
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
