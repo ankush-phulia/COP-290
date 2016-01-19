@@ -13,6 +13,8 @@ public class Welcome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
+        // simply go the the next activity on click
+
         Button btn = (Button)findViewById(R.id.button);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

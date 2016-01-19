@@ -47,6 +47,8 @@ public class registry extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registry);
 
+        //get all UI elements so that they can be worked upon
+
         final Context context=this;
         final Button btn = (Button)findViewById(R.id.button2);
         final EditText team_name = (EditText) findViewById(R.id.editText);
@@ -111,6 +113,7 @@ public class registry extends AppCompatActivity {
                         else{
                             asterisk2.setText("");
                         }
+                        //soft check for length of valid entry number
                         if (entry_no1.getText().toString().length() == 11){
                                 name2.requestFocus() ;
                         }
@@ -123,6 +126,8 @@ public class registry extends AppCompatActivity {
                 });
             }
         });
+
+        // dealing with asterisk on changing text inside member2
 
         name2.addTextChangedListener(new TextWatcher() {
             @Override
@@ -154,6 +159,7 @@ public class registry extends AppCompatActivity {
                         else{
                             asterisk3.setText("");
                         }
+                        //soft check for length of valid entry number
                         if (entry_no2.getText().toString().length() == 11){
                             name3.requestFocus() ;
                         }
@@ -166,6 +172,8 @@ public class registry extends AppCompatActivity {
                 });
             }
         });
+
+        // dealing with asterisk on changing text inside member3
 
         name3.addTextChangedListener(new TextWatcher() {
             @Override
@@ -198,6 +206,7 @@ public class registry extends AppCompatActivity {
                         else{
                             asterisk4.setText("");
                         }
+                        //soft check for length of valid entry number
                         if (entry_no3.getText().toString().length() == 11){
                             btn.requestFocus() ;
                         }
@@ -240,14 +249,14 @@ public class registry extends AppCompatActivity {
                 }
                 else if (!isValid(entry_no1.getText().toString())) {
                     // checking validity of entry no. of member1
-                    new AlertDialog.Builder(context)
+                    new AlertDialog.Builder(context,AlertDialog.THEME_HOLO_DARK)
                             .setTitle("Invalid Entry Number")
                             .setMessage("Please enter a valid Entry Number for Member 1")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     entry_no1.setText("");
                                     entry_no1.setHint("Entry Number of First Member");
-                                    entry_no1.setHintTextColor(Integer.parseInt(String.valueOf(Color.GRAY)));
+                                    entry_no1.setHintTextColor(Integer.parseInt(String.valueOf(Color.WHITE)));
                                     entry_no1.requestFocus();
                                 }
                             })
@@ -271,14 +280,14 @@ public class registry extends AppCompatActivity {
                 }
                 else if (!isValid(entry_no2.getText().toString())) {
                     // checking validity of entry no. of member2
-                    new AlertDialog.Builder(context)
+                    new AlertDialog.Builder(context,AlertDialog.THEME_HOLO_DARK)
                             .setTitle("Invalid Entry Number")
                             .setMessage("Please enter a valid Entry Number for Member 2")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     entry_no2.setText("");
                                     entry_no2.setHint("Entry Number of First Member");
-                                    entry_no2.setHintTextColor(Integer.parseInt(String.valueOf(Color.GRAY)));
+                                    entry_no2.setHintTextColor(Integer.parseInt(String.valueOf(Color.WHITE)));
                                     entry_no2.requestFocus();
                                 }
                             })
@@ -302,14 +311,14 @@ public class registry extends AppCompatActivity {
                 }
                 else if (!isValid(entry_no3.getText().toString())) {
                     // checking validity of entry no. of member3
-                    new AlertDialog.Builder(context)
+                    new AlertDialog.Builder(context,AlertDialog.THEME_HOLO_DARK)
                             .setTitle("Invalid Entry Number")
                             .setMessage("Please enter a valid Entry Number for Member 3")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     entry_no3.setText("");
                                     entry_no3.setHint("Entry Number of First Member");
-                                    entry_no3.setHintTextColor(Integer.parseInt(String.valueOf(Color.GRAY)));
+                                    entry_no3.setHintTextColor(Integer.parseInt(String.valueOf(Color.WHITE)));
                                     entry_no3.requestFocus();
                                 }
                             })
@@ -330,6 +339,7 @@ public class registry extends AppCompatActivity {
                                 @Override
                                 public void onResponse(String response) {
                                     String success = null;
+                                    //receive reply from server and display it to the user as appropriate
                                     try {
                                         JSONObject jsonResponse = new JSONObject(response);
                                         success = jsonResponse.get("RESPONSE_MESSAGE").toString();
@@ -365,6 +375,7 @@ public class registry extends AppCompatActivity {
                         }
 
                     };
+                    //Add the team details to global request queue
                     RequestQ.getInstance().addToRequestQ(postReq);
                 }
             }

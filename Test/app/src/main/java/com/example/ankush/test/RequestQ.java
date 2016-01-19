@@ -6,7 +6,11 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
+// reference to androidhive
+
 public class RequestQ extends Application{
+
+    //create a global request queue to cater to server requests
 
     RequestQueue rq;
     static RequestQ RQinstance;
@@ -22,6 +26,7 @@ public class RequestQ extends Application{
     }
 
     public RequestQueue getRequestQueue() {
+        //fetches the current request queue or creates a new one till the app lifecycle does not terminate in its entirety
         if (rq == null) {
             rq = Volley.newRequestQueue(getApplicationContext());
         }
@@ -29,6 +34,7 @@ public class RequestQ extends Application{
     }
 
     public <T> void addToRequestQ(Request<T> request){
+        //to add any type of request to the queue
         this.getRequestQueue().add(request);
     }
 

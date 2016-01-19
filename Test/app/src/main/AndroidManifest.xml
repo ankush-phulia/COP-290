@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
-    <!-- image courtesy softicons.com, Mr.artdesigner-->
     <application
         android:name=".RequestQ"
         android:allowBackup="true"
