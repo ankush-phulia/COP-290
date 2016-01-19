@@ -12,6 +12,8 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.ankush.test.Welcome"
     tools:showIn="@layout/activity_welcome">
+    <!-- background image from "https://www.google.co.in/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwiW46rKkLXKAhXWBI4KHQmzAdYQjRwIBw&url=http%3A%2F%2Ftophdimg.com%2Flight-color-background-images-for-website.html&psig=AFQjCNF37my4oLQ3OXKRo5em1apG0yu0JQ&ust=1453267263800512"
+    -->
 
     <TextView
         android:layout_width="wrap_content"

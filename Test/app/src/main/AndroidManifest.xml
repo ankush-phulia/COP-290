@@ -12,6 +12,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <!--Icon image courtesy: https://www.google.co.in/imgres?imgurl=http://tradefair.omaheke.com/wp-content/uploads/2015/07/register.png&imgrefurl=http://tradefair.omaheke.com/index.php/register-for-otf/&h=346&w=347&tbnid=aHjLKAn1JgGNpM:&docid=y2Lpbapbt8E-lM&ei=VMidVr7GMYWVuATrn4rQBg&tbm=isch&ved=0ahUKEwi-wMCQkbXKAhWFCo4KHeuPAmoQMwhBKBEwEQ
+        -->
+        
         <activity
             android:name=".Welcome"
             android:label="@string/homePageMessage"
