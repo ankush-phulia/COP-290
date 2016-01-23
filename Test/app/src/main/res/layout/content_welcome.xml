@@ -38,9 +38,8 @@
         android:textSize="20sp"
         android:id="@+id/button"
         android:shadowColor="#A8A8A8"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="201dp"
-        android:textStyle="italic" />
+        android:textStyle="italic"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
