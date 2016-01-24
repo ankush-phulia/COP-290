@@ -1,5 +1,10 @@
-\usepackage{graphicx}
+
 \documentclass{beamer}
+\usepackage{graphicx}
+
+
+%Global Background must be put in preamble
+
 
 \usetheme{Madrid}
 
@@ -15,12 +20,19 @@
   IIT Delhi}
 
 \subject{COP 290}
+
+
+
 \begin{document}
 
+{\usebackgroundtemplate%
+{\includegraphics[width=\paperwidth,height=\paperheight]{back.png}}
 \begin{frame}
   \titlepage
 \end{frame}
-
+}
+{\usebackgroundtemplate%
+{\includegraphics[width=\paperwidth,height=\paperheight]{back.png}}
 \begin{frame}{Application Description}{}
   \begin{itemize}
   \item {
@@ -37,6 +49,9 @@
   }
   \end{itemize}
 \end{frame}
+}
+{\usebackgroundtemplate%
+{\includegraphics[width=\paperwidth,height=\paperheight]{back.png}}
 
 \begin{frame}{Application Features}
   \begin{itemize}
@@ -57,11 +72,13 @@
   }
   \end{itemize}
 \end{frame}
-
+}
+{\usebackgroundtemplate%
+{\includegraphics[width=\paperwidth,height=\paperheight]{back.png}}
 
 \begin{frame}{High Level Functions Used }
 \begin{block}{IsValid (String)}
-To check if entry number given its valid.
+To check if entry number given is valid.
 \end{block}
 \begin{block}{Text-Watcher Methods}
 Added to various text fields to bring them into focus or hide the asterisk, indicating they are filled.
@@ -70,11 +87,12 @@ Added to various text fields to bring them into focus or hide the asterisk, indi
 For buttons which involve navigation, checking and sending requests to servers.
 \end{block}
 \begin{block}{Various Methods for Request Queue}
-A separate class used to implement a global request queue in order to not create a new one on every button click.
+A separate class used to implement a global request queue in order to avoid creating a new one on every button click.
 \end{block}
 
 
 \end{frame}
+}
 
 \begin{frame}{How to use the app ? }
     \begin{enumerate}
@@ -89,6 +107,8 @@ A separate class used to implement a global request queue in order to not create
     
 \end{frame}
 
+{\usebackgroundtemplate%
+{\includegraphics[width=\paperwidth,height=\paperheight]{back.png}}
 
 \begin{frame}{References}
     
@@ -100,7 +120,8 @@ A separate class used to implement a global request queue in order to not create
     \end{itemize}
     
 \end{frame}
-
+}
 
 \end{document}
+
 
