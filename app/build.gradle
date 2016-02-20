@@ -24,9 +24,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
-<<<<<<< HEAD
-=======
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'
->>>>>>> 3c5626b2e6d63519435344d78f97efca6fc2346f
     compile project(':volley')
 }
