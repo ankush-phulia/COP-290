@@ -91,9 +91,14 @@ public class Login extends Activity implements OnClickListener {
                 loginPrefsEditor.clear();
                 loginPrefsEditor.commit();
                 startActivity(intent);
+                this.finish();
             }
 
         }
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 
 }

@@ -39,7 +39,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ribieroboys.moodleplus.LoginActivity" />
+                android:value="com.ribieroboys.moodleplus.Login" />
         </activity>
         <activity
             android:name=".Login"
@@ -49,6 +49,15 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ribieroboys.moodleplus.splash_screen" />
+        </activity>
+        <activity
+            android:name=".Profile"
+            android:label="@string/title_activity_profile"
+            android:parentActivityName=".Dashboard"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ribieroboys.moodleplus.Dashboard" />
         </activity>
     </application>
 
