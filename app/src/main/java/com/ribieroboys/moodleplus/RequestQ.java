@@ -16,7 +16,7 @@ public class RequestQ extends Application {
     @Override
     public void onCreate(){
         super.onCreate();
-        RQinstance=this;
+        RQinstance = this;
     }
 
     public static synchronized RequestQ getInstance() {

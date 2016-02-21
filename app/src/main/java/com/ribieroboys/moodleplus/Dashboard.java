@@ -25,9 +25,9 @@ public class Dashboard extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent data = getIntent();
-        user=data.getStringExtra("user");
-        pass=data.getStringExtra("user");
-        TextView welcome= (TextView) findViewById(R.id.textView8);
+        user = data.getStringExtra("user");
+        pass = data.getStringExtra("pass");
+        TextView welcome = (TextView) findViewById(R.id.textView8);
         welcome.setText("Welcome " + user);
     }
 

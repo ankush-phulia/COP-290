@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 public class splash_screen extends AppCompatActivity {
 
-    int time=1700;
+    int time = 1700;    // in milliseconds
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

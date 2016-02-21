@@ -21,14 +21,14 @@ public class Profile extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Intent data=getIntent();
-        user=data.getStringExtra("user");
-        pass=data.getStringExtra("pass");
+        Intent data = getIntent();
+        user = data.getStringExtra("user");
+        pass = data.getStringExtra("pass");
         TextView username= (TextView) findViewById(R.id.textView11);
         username.setText(user);
         TextView fullname= (TextView) findViewById(R.id.textView13);
         fullname.setText(" ");
-        back=(Button) findViewById(R.id.button);
+        back = (Button) findViewById(R.id.button);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
