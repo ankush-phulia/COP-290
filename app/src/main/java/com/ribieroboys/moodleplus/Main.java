@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -16,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +31,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
     private DrawerLayout drawer;
+    List<String> Courses = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +62,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         getSupportFragmentManager().beginTransaction().add(R.id.frame_container, firstFragment).commit();
 
         expListView = (ExpandableListView) findViewById(R.id.expandableListView);
-        prepareListData();
+        prepareListData(Courses);
         listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
         expListView.setAdapter(listAdapter);
 
@@ -69,17 +70,21 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                Toast.makeText(
-                        getApplicationContext(),
-                        listDataHeader.get(groupPosition)
-                                + " : "
-                                + listDataChild.get(
-                                listDataHeader.get(groupPosition)).get(
-                                childPosition), Toast.LENGTH_SHORT)
-                        .show();
-
-
-                return false;
+                Fragment oldFragment = getSupportFragmentManager().findFragmentById(R.id.frame_container);
+                Course newf4 = new Course();
+                Bundle args2 = new Bundle();
+                args2.putString("user", user);
+                args2.putString("pass", pass);
+                args2.putString("course", listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition));
+                //Log.e("litem", listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition));
+                newf4.setArguments(args2);
+                FragmentTransaction transaction4 = getSupportFragmentManager().beginTransaction();
+                transaction4.replace(R.id.frame_container, newf4);
+                transaction4.addToBackStack(null);
+                transaction4.commit();
+                drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawers();
+                return true;
             }
         });
 
@@ -120,15 +125,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                         transaction3.commit();
                         return true;
                     case 3:
-                        Course newf4 = new Course();
-                        newf4.setArguments(args);
-                        FragmentTransaction transaction4 = getSupportFragmentManager().beginTransaction();
-                        transaction4.replace(R.id.frame_container, newf4);
-                        transaction4.addToBackStack(null);
-                        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                        drawer.closeDrawers();
-                        transaction4.commit();
-                        return true;
+                        return false;
                     default:
                         return true;
                 }
@@ -140,9 +137,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
             @Override
             public void onGroupExpand(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
-                        listDataHeader.get(groupPosition) + " Expanded",
-                        Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -150,15 +144,11 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
             @Override
             public void onGroupCollapse(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
-                        listDataHeader.get(groupPosition) + " Collapsed",
-                        Toast.LENGTH_SHORT).show();
-
             }
         });
     }
 
-    private void prepareListData() {
+    private void prepareListData(List<String> Courses) {
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
 
@@ -166,14 +156,13 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         listDataHeader.add("Notifications");
         listDataHeader.add("Grades");
         listDataHeader.add("Courses");
+        Courses.add("1");
+        Courses.add("2");
+        Courses.add("3");
 
         List<String> Overview = new ArrayList<String>();
         List<String> Notifications = new ArrayList<String>();
         List<String> Grades = new ArrayList<String>();
-        List<String> Courses = new ArrayList<String>();
-        Courses.add("1");
-        Courses.add("2");
-        Courses.add("3");
         listDataChild.put(listDataHeader.get(0), Overview);
         listDataChild.put(listDataHeader.get(1), Notifications);
         listDataChild.put(listDataHeader.get(2), Grades);

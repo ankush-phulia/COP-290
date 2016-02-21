@@ -5,29 +5,43 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * Created by nitin on 21/2/16.
- */
 public class Course extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
 
+    String user;
+    String pass;
+    String course;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        user=getArguments().getString("user");
+        pass=getArguments().getString("pass");
+        course=getArguments().getString("course");
+        //Log.e("course", course);
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_parent, container, false);
-        getIDs(view);
-        setEvents();
-        this.addPage("Course 1");
-        Log.d("addPage1", "3");
-        this.addPage("Course 2");
-        this.addPage("Course 3");
+
+        this.getIDs(view);
+        this.setEvents();
+        this.addPage("Overview",0);
+        this.addPage("Assignments",1);
+        this.addPage("Grades",2);
+        this.addPage("Threads",3);
+
+        viewPager.setCurrentItem(0);
+
         return view;
     }
 
@@ -48,30 +62,62 @@ public class Course extends Fragment {
                 super.onTabSelected(tab);
                 viewPager.setCurrentItem(tab.getPosition());
                 selectedTabPosition = viewPager.getCurrentItem();
-                Log.d("Selected", "Selected " + tab.getPosition());
-
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                super.onTabUnselected(tab);
-                Log.d("Unselected", "Unselected " + tab.getPosition());
             }
         });
     }
 
-    public void addPage(String pagename) {
+    public void addPage(String pagename,int i) {
         Bundle bundle = new Bundle();
         bundle.putString("data", pagename);
-        FragmentChild fragmentChild = new FragmentChild();
-        fragmentChild.setArguments(bundle);
-        adapter.addFrag(fragmentChild, pagename);
-        adapter.notifyDataSetChanged();
-        if (adapter.getCount() > 0)
-            tabLayout.setupWithViewPager(viewPager);
+        bundle.putString("course", course);
+        switch(i){
+            case 0:
+                FragmentChild fragmentChild = new FragmentChild();
+                fragmentChild.setArguments(bundle);
+                adapter.addFrag(fragmentChild, pagename);
+                adapter.notifyDataSetChanged();
+                if (adapter.getCount() > 0)
+                    tabLayout.setupWithViewPager(viewPager);
+                viewPager.setCurrentItem(adapter.getCount() - 1);
+                setupTabLayout();
+                break;
+            case 1:
+                FragmentChild1 fragmentChild1 = new FragmentChild1();
+                fragmentChild1.setArguments(bundle);
+                adapter.addFrag(fragmentChild1, pagename);
+                adapter.notifyDataSetChanged();
+                if (adapter.getCount() > 0)
+                    tabLayout.setupWithViewPager(viewPager);
+                viewPager.setCurrentItem(adapter.getCount() - 1);
+                setupTabLayout();
+                break;
+            case 2:
+                FragmentChild2 fragmentChild2 = new FragmentChild2();
+                fragmentChild2.setArguments(bundle);
+                adapter.addFrag(fragmentChild2, pagename);
+                adapter.notifyDataSetChanged();
+                if (adapter.getCount() > 0)
+                    tabLayout.setupWithViewPager(viewPager);
+                viewPager.setCurrentItem(adapter.getCount() - 1);
+                setupTabLayout();
+                break;
+            case 3:
+                FragmentChild3 fragmentChild3 = new FragmentChild3();
+                fragmentChild3.setArguments(bundle);
+                adapter.addFrag(fragmentChild3, pagename);
+                adapter.notifyDataSetChanged();
+                if (adapter.getCount() > 0)
+                    tabLayout.setupWithViewPager(viewPager);
+                viewPager.setCurrentItem(adapter.getCount() - 1);
+                setupTabLayout();
+                break;
+        }
 
-        viewPager.setCurrentItem(adapter.getCount() - 1);
-        setupTabLayout();
+
     }
 
     public void setupTabLayout() {
@@ -81,4 +127,5 @@ public class Course extends Fragment {
         }
 
     }
+
 }

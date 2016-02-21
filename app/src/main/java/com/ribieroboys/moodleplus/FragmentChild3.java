@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class FragmentChild extends Fragment {
+public class FragmentChild3 extends Fragment {
     String childname;
     String course;
     TextView textViewChildName;
@@ -26,14 +26,14 @@ public class FragmentChild extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_child, container, false);
+        View view = inflater.inflate(R.layout.fragment_fragment_child3, container, false);
         getIDs(view);
         setEvents();
         return view;
     }
 
     private void getIDs(View view) {
-        textViewChildName = (TextView) view.findViewById(R.id.textViewChild);
+        textViewChildName = (TextView) view.findViewById(R.id.textViewChild3);
         textViewChildName.setText(course + "\n" + childname);
     }
 

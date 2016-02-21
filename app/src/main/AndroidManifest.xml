@@ -33,20 +33,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-
-        <activity
-            android:name=".ScreenSlidePager"
-            android:label="@string/title_activity_dashboard"
-            android:parentActivityName=".Login"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ribieroboys.moodleplus.Login" />
-        </activity>
-
-
-
-
         <activity
             android:name=".Login"
             android:label="@string/title_activity_login"
@@ -67,7 +53,7 @@
         </activity>
         <activity
             android:name=".Main"
-            android:label="Dashboard"
+            android:label="MoodlePlus"
             android:parentActivityName=".Login"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
