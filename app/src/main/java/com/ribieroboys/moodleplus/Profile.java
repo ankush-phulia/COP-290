@@ -28,6 +28,7 @@ public class Profile extends AppCompatActivity {
         username.setText(user);
         TextView fullname= (TextView) findViewById(R.id.textView13);
         fullname.setText(" ");
+
         back = (Button) findViewById(R.id.button);
 
         back.setOnClickListener(new View.OnClickListener() {

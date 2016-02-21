@@ -101,7 +101,7 @@ public class Login extends Activity implements OnClickListener {
             if(!success)
                 return;
 
-            final Intent intent = new Intent(Login.this, ScreenSlidePager.class);
+            final Intent intent = new Intent(Login.this, Dashboard.class);
             intent.putExtra("user",username);
             intent.putExtra("pass", password);
 
