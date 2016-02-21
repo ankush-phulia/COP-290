@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,14 +48,14 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         navigationView.setNavigationItemSelectedListener(this);
 
         Intent data = getIntent();
-        user=data.getStringExtra("user");
-        pass=data.getStringExtra("pass");
+        user = data.getStringExtra("user");
+        pass = data.getStringExtra("pass");
 
         final Bundle args = new Bundle();
         args.putString("user", user);
         args.putString("pass", pass);
 
-        Dashboard firstFragment=new Dashboard();
+        Dashboard firstFragment = new Dashboard();
         firstFragment.setArguments(data.getExtras());
 
         getSupportFragmentManager().beginTransaction().add(R.id.frame_container, firstFragment).commit();
@@ -76,6 +77,8 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                                 listDataHeader.get(groupPosition)).get(
                                 childPosition), Toast.LENGTH_SHORT)
                         .show();
+
+
                 return false;
             }
         });
@@ -117,7 +120,15 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                         transaction3.commit();
                         return true;
                     case 3:
-                        return false;
+                        Course newf4 = new Course();
+                        newf4.setArguments(args);
+                        FragmentTransaction transaction4 = getSupportFragmentManager().beginTransaction();
+                        transaction4.replace(R.id.frame_container, newf4);
+                        transaction4.addToBackStack(null);
+                        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                        drawer.closeDrawers();
+                        transaction4.commit();
+                        return true;
                     default:
                         return true;
                 }

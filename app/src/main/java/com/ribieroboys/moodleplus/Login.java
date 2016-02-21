@@ -74,7 +74,7 @@ public class Login extends Activity implements OnClickListener {
             password = editTextPassword.getText().toString();
 
             // check for validity of credentials
-            String tempURL = url + "/default/login.json?userid=" + username + "&password=" + password;
+            /*String tempURL = url + "/default/login.json?userid=" + username + "&password=" + password;
             StringRequest getReq = new StringRequest(Request.Method.GET,
                     tempURL,
                     new Response.Listener<String>() {
@@ -99,9 +99,9 @@ public class Login extends Activity implements OnClickListener {
 
             RequestQ.getInstance().addToRequestQ(getReq);
             if(!success)
-                return;
+                return;*/
 
-            final Intent intent=new Intent(Login.this, Main.class);
+            final Intent intent = new Intent(Login.this, Main.class);
 
             intent.putExtra("user",username);
             intent.putExtra("pass", password);

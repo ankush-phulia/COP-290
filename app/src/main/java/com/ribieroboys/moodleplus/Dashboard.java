@@ -28,8 +28,8 @@ public class Dashboard extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        user=getArguments().getString("user");
-        pass=getArguments().getString("pass");
+        user = getArguments().getString("user");
+        pass = getArguments().getString("pass");
         TextView welcome=(TextView) rootView.findViewById(R.id.textView14);
         welcome.setText("Welcome " + user);
         return rootView;
