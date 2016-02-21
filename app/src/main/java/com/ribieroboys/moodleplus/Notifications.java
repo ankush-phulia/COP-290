@@ -1,5 +1,6 @@
 package com.ribieroboys.moodleplus;
 
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,13 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
-public class Dashboard extends Fragment {
+public class Notifications extends Fragment {
 
     String user;
     String pass;
 
-    public Dashboard() {
+    public Notifications() {
         // Required empty public constructor
     }
 
@@ -31,7 +31,7 @@ public class Dashboard extends Fragment {
         user=getArguments().getString("user");
         pass=getArguments().getString("pass");
         TextView welcome=(TextView) rootView.findViewById(R.id.textView14);
-        welcome.setText("Welcome " + user);
+        welcome.setText("Notifications");
         return rootView;
     }
 

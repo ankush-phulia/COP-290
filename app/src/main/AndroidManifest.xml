@@ -15,7 +15,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".splash_screen"
             android:label="MoodlePlus"
@@ -47,26 +46,6 @@
 
 
 
-        <activity
-            android:name=".Dashboard"
-            android:label="@string/title_activity_dashboard"
-            android:parentActivityName=".Login"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ribieroboys.moodleplus.Login" />
-        </activity>
-        <activity
-            android:name=".ScreenSlidePager"
-            android:label="@string/title_activity_dashboard"
-            android:parentActivityName=".Login"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ribieroboys.moodleplus.Login" />
-        </activity>
-
-
 
         <activity
             android:name=".Login"
@@ -80,11 +59,20 @@
         <activity
             android:name=".Profile"
             android:label="@string/title_activity_profile"
-            android:parentActivityName=".Dashboard"
+            android:parentActivityName=".Main"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ribieroboys.moodleplus.Dashboard" />
+                android:value="com.ribieroboys.moodleplus.Main" />
+        </activity>
+        <activity
+            android:name=".Main"
+            android:label="Dashboard"
+            android:parentActivityName=".Login"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ribieroboys.moodleplus.Login" />
         </activity>
     </application>
 

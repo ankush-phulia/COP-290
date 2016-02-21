@@ -23,4 +23,9 @@
     <string name="logout">Settings</string>
     <string name="title_activity_login">Login</string>
     <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_main">Main</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main_activity">main_activity</string>
 </resources>
