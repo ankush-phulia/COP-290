@@ -24,10 +24,10 @@ public class Course extends Fragment {
         View view = inflater.inflate(R.layout.fragment_parent, container, false);
         getIDs(view);
         setEvents();
-        this.addPage("Course 1");
-        Log.d("addPage1", "3");
-        this.addPage("Course 2");
-        this.addPage("Course 3");
+        this.addPage("Overview");
+        this.addPage("Assignments");
+        this.addPage("Grades");
+        this.addPage("Threads");
         return view;
     }
 

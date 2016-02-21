@@ -42,9 +42,25 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public View getTabView(int position) {
         View view = LayoutInflater.from(context).inflate(R.layout.custom_tab_item, null);
         TextView tabItemName = (TextView) view.findViewById(R.id.textViewTabItemName);
+        ImageView tabImage = (ImageView) view.findViewById(R.id.imageViewTabItem);
 
         tabItemName.setText(mFragmentTitleList.get(position));
         tabItemName.setTextColor(context.getResources().getColor(android.R.color.background_light));
+
+        switch (mFragmentTitleList.get(position)) {
+            case "Overview":
+                tabImage.setImageResource(R.mipmap.ic_overview);
+                break;
+            case "Grades":
+                tabImage.setImageResource(R.mipmap.ic_grades);
+                break;
+            case "Assignments":
+                tabImage.setImageResource(R.mipmap.ic_assignment);
+                break;
+            case "Threads":
+                tabImage.setImageResource(R.mipmap.ic_threads);
+                break;
+        }
 
         return view;
     }
