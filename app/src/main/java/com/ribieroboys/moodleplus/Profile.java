@@ -8,14 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.TextView;
 
 public class Profile extends AppCompatActivity {
 
-    String user;
-    String pass;
-    Button back;
+    //Button back;
+    Bundle profileInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,13 +22,17 @@ public class Profile extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Intent data = getIntent();
-        user = data.getStringExtra("user");
-        pass = data.getStringExtra("pass");
-        TextView username= (TextView) findViewById(R.id.textView11);
-        username.setText(user);
-        TextView fullname= (TextView) findViewById(R.id.textView13);
-        fullname.setText(" ");
+        Intent dataReceived = getIntent();
+        profileInfo = dataReceived.getBundleExtra("profileInfo");
+
+        TextView username = (TextView) findViewById(R.id.profile_username);
+        username.setText(profileInfo.getString("user"));
+        TextView fullname = (TextView) findViewById(R.id.profile_fullname);
+        fullname.setText(profileInfo.getString("firstName") + " " + profileInfo.getString("lastName"));
+        TextView entryNo = (TextView) findViewById(R.id.profile_entryno);
+        entryNo.setText(profileInfo.getString("entryNo"));
+        TextView email = (TextView) findViewById(R.id.profile_email);
+        email.setText(profileInfo.getString("email"));
 
 /*        back=(Button) findViewById(R.id.button);
 
@@ -63,12 +65,12 @@ public class Profile extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_settings:
-                final Intent intent1 = new Intent(Profile.this, Profile.class);
-                intent1.putExtra("user",user);
-                intent1.putExtra("pass",pass);
-                startActivity(intent1);
+                final Intent goToProfile = new Intent(Profile.this, Profile.class);
+                goToProfile.putExtra("profileInfo", profileInfo);
+                startActivity(goToProfile);
                 end();
                 return true;
+
             case R.id.logout:
                 final Intent intent2 = new Intent(Profile.this, Login.class);
                 new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK)
@@ -86,6 +88,7 @@ public class Profile extends AppCompatActivity {
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }

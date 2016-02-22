@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 public class Notifications extends Fragment {
 
@@ -27,11 +26,9 @@ public class Notifications extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_notifications, container, false);
         user=getArguments().getString("user");
         pass=getArguments().getString("pass");
-        TextView welcome=(TextView) rootView.findViewById(R.id.textView14);
-        welcome.setText("Notifications");
         return rootView;
     }
 

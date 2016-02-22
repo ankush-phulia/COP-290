@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -22,6 +23,8 @@ import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 public class Login extends Activity implements OnClickListener {
 
@@ -33,6 +36,9 @@ public class Login extends Activity implements OnClickListener {
     SharedPreferences.Editor loginPrefsEditor;
     Boolean saveUser;
     Boolean savePass;
+    TextView wrongCredential;
+    JSONObject userJSON;
+    Bundle infoToPass;
 
     //final String url = "http://tapi.cse.iitd.ernet.in:1805";
     final String url = "127.0.0.1:8000";
@@ -42,13 +48,8 @@ public class Login extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        log = (Button) findViewById(R.id.buttonLogin);
         log.setOnClickListener(this);
-        editTextUsername = (EditText) findViewById(R.id.editTextUsername);
-        editTextPassword = (EditText) findViewById(R.id.editTextPassword);
-        saveLoginCheckBox = (CheckBox) findViewById(R.id.saveLoginCheckBox);
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor = loginPreferences.edit();
 
@@ -65,6 +66,14 @@ public class Login extends Activity implements OnClickListener {
 
     }
 
+    private void getIDs() {
+        log = (Button) findViewById(R.id.buttonLogin);
+        editTextUsername = (EditText) findViewById(R.id.editTextUsername);
+        editTextPassword = (EditText) findViewById(R.id.editTextPassword);
+        saveLoginCheckBox = (CheckBox) findViewById(R.id.saveLoginCheckBox);
+        wrongCredential = (TextView) findViewById(R.id.wrongCredential);
+    }
+
     public void onClick(View view) {
         if (view == log) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -74,9 +83,9 @@ public class Login extends Activity implements OnClickListener {
             password = editTextPassword.getText().toString();
 
             // check for validity of credentials
-            /*String tempURL = url + "/default/login.json?userid=" + username + "&password=" + password;
+            String loginURL = url + "/default/login.json?userid=" + username + "&password=" + password;
             StringRequest getReq = new StringRequest(Request.Method.GET,
-                    tempURL,
+                    loginURL,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -84,6 +93,7 @@ public class Login extends Activity implements OnClickListener {
                             try {
                                 JSONObject jsonResponse = new JSONObject(response);
                                 success = jsonResponse.get("success").toString().equals("true");
+                                userJSON = jsonResponse.getJSONObject("user");
                             }
                             catch (JSONException e) {
                                 e.printStackTrace();
@@ -97,14 +107,33 @@ public class Login extends Activity implements OnClickListener {
                         }
                 });
 
+            // send the request to RequestQ
             RequestQ.getInstance().addToRequestQ(getReq);
-            if(!success)
-                return;*/
+
+            if(!success) {
+                wrongCredential.setText("Invalid Credentials");
+                return;
+            } else {
+                wrongCredential.setText("");
+                // put the information to pass
+                infoToPass.putString("user", username);
+                infoToPass.putString("pass", password);
+                infoToPass.putString("url", url);
+                try {
+                    infoToPass.putString("firstName", userJSON.getString("first_name"));
+                    infoToPass.putString("lastName", userJSON.getString("last_name"));
+                    infoToPass.putString("entryNo", userJSON.getString("entry_no"));
+                    infoToPass.putString("email", userJSON.getString("email"));
+                    infoToPass.putInt("id", userJSON.getInt("id"));
+                    infoToPass.putBoolean("isStudent", userJSON.getInt("type_") == 0);
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
 
             final Intent intent = new Intent(Login.this, Main.class);
-
-            intent.putExtra("user",username);
-            intent.putExtra("pass", password);
+            intent.putExtra("loginResponse", infoToPass);
 
             if (saveLoginCheckBox.isChecked()) {
                 loginPrefsEditor.putBoolean("saveUser", true);

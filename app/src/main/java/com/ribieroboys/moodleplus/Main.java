@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,6 +18,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +41,9 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
     private DrawerLayout drawer;
+    List<String> Courses = new ArrayList<String>();
+    Bundle profileInfo;
+    JSONArray coursesJSON;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,21 +60,18 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Intent data = getIntent();
-        user = data.getStringExtra("user");
-        pass = data.getStringExtra("pass");
-
-        final Bundle args = new Bundle();
-        args.putString("user", user);
-        args.putString("pass", pass);
+        Intent dataReceived = getIntent();
+        profileInfo = dataReceived.getBundleExtra("loginResponse");
+        user = profileInfo.getString("user");
+        pass = profileInfo.getString("pass");
 
         Dashboard firstFragment = new Dashboard();
-        firstFragment.setArguments(data.getExtras());
+        firstFragment.setArguments(profileInfo);
 
         getSupportFragmentManager().beginTransaction().add(R.id.frame_container, firstFragment).commit();
 
         expListView = (ExpandableListView) findViewById(R.id.expandableListView);
-        prepareListData();
+        prepareListData(Courses);
         listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
         expListView.setAdapter(listAdapter);
 
@@ -69,17 +79,21 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                Toast.makeText(
-                        getApplicationContext(),
-                        listDataHeader.get(groupPosition)
-                                + " : "
-                                + listDataChild.get(
-                                listDataHeader.get(groupPosition)).get(
-                                childPosition), Toast.LENGTH_SHORT)
-                        .show();
-
-
-                return false;
+                //Fragment oldFragment = getSupportFragmentManager().findFragmentById(R.id.frame_container);
+                Course fragCourse = new Course();
+                Bundle args2 = new Bundle();
+                args2.putString("user", user);
+                args2.putString("pass", pass);
+                args2.putString("course", listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition));
+                //Log.e("litem", listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition));
+                fragCourse.setArguments(args2);
+                FragmentTransaction transaction4 = getSupportFragmentManager().beginTransaction();
+                transaction4.replace(R.id.frame_container, fragCourse);
+                transaction4.addToBackStack(null);
+                transaction4.commit();
+                drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawers();
+                return true;
             }
         });
 
@@ -90,45 +104,37 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 switch (groupPosition) {
                     case 0:
-                        Dashboard newf = new Dashboard();
-                        newf.setArguments(args);
+                        Dashboard fragDashboard = new Dashboard();
+                        fragDashboard.setArguments(profileInfo);
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                        transaction.replace(R.id.frame_container, newf);
+                        transaction.replace(R.id.frame_container, fragDashboard);
                         transaction.addToBackStack(null);
                         transaction.commit();
                         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                         drawer.closeDrawers();
                         return true;
                     case 1:
-                        Notifications newf2 = new Notifications();
-                        newf2.setArguments(args);
+                        Notifications fragNotifications = new Notifications();
+                        fragNotifications.setArguments(profileInfo);
                         FragmentTransaction transaction2 = getSupportFragmentManager().beginTransaction();
-                        transaction2.replace(R.id.frame_container, newf2);
+                        transaction2.replace(R.id.frame_container, fragNotifications);
                         transaction2.addToBackStack(null);
                         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                         drawer.closeDrawers();
                         transaction2.commit();
                         return true;
                     case 2:
-                        Grades newf3 = new Grades();
-                        newf3.setArguments(args);
+                        Grades fragGrades = new Grades();
+                        fragGrades.setArguments(profileInfo);
                         FragmentTransaction transaction3 = getSupportFragmentManager().beginTransaction();
-                        transaction3.replace(R.id.frame_container, newf3);
+                        transaction3.replace(R.id.frame_container, fragGrades);
                         transaction3.addToBackStack(null);
                         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                         drawer.closeDrawers();
                         transaction3.commit();
                         return true;
                     case 3:
-                        Course newf4 = new Course();
-                        newf4.setArguments(args);
-                        FragmentTransaction transaction4 = getSupportFragmentManager().beginTransaction();
-                        transaction4.replace(R.id.frame_container, newf4);
-                        transaction4.addToBackStack(null);
-                        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                        drawer.closeDrawers();
-                        transaction4.commit();
-                        return true;
+                        return false;
                     default:
                         return true;
                 }
@@ -140,9 +146,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
             @Override
             public void onGroupExpand(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
-                        listDataHeader.get(groupPosition) + " Expanded",
-                        Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -150,15 +153,11 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
             @Override
             public void onGroupCollapse(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
-                        listDataHeader.get(groupPosition) + " Collapsed",
-                        Toast.LENGTH_SHORT).show();
-
             }
         });
     }
 
-    private void prepareListData() {
+    private void prepareListData(List<String> Courses) {
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
 
@@ -167,13 +166,44 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         listDataHeader.add("Grades");
         listDataHeader.add("Courses");
 
+        // Get course list information
+        String courseURL = profileInfo.getString("url") + "/courses/list.json";
+        StringRequest getReq = new StringRequest(Request.Method.GET,
+                courseURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // receive reply from server
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            coursesJSON = jsonResponse.getJSONArray("courses");
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(Main.this, "Connection Error", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        int noOfCourses = coursesJSON.length();
+        for(int i=0; i<noOfCourses; i++) {
+            try {
+                JSONObject course = (JSONObject) coursesJSON.get(i);
+                Courses.add(course.getString("code"));
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
         List<String> Overview = new ArrayList<String>();
         List<String> Notifications = new ArrayList<String>();
         List<String> Grades = new ArrayList<String>();
-        List<String> Courses = new ArrayList<String>();
-        Courses.add("1");
-        Courses.add("2");
-        Courses.add("3");
         listDataChild.put(listDataHeader.get(0), Overview);
         listDataChild.put(listDataHeader.get(1), Notifications);
         listDataChild.put(listDataHeader.get(2), Grades);
@@ -192,11 +222,11 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_settings:
-                final Intent intent1 = new Intent(Main.this, Profile.class);
-                intent1.putExtra("user",user);
-                intent1.putExtra("pass",pass);
-                startActivity(intent1);
+                final Intent goToProfile = new Intent(Main.this, Profile.class);
+                goToProfile.putExtra("profileInfo", profileInfo);
+                startActivity(goToProfile);
                 return true;
+
             case R.id.logout:
                 final Intent intent2 = new Intent(Main.this, Login.class);
                 new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK)
@@ -214,6 +244,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
