@@ -17,12 +17,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,9 +44,11 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
     private DrawerLayout drawer;
-    List<String> Courses = new ArrayList<String>();
+    List<String> Courses;
     Bundle profileInfo;
-    JSONArray coursesJSON;
+    String notiJSON;
+    String gradesJSON;
+    String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +67,13 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
         Intent dataReceived = getIntent();
         profileInfo = dataReceived.getBundleExtra("loginResponse");
+        Courses = dataReceived.getStringArrayListExtra("courseListCodes");
         user = profileInfo.getString("user");
         pass = profileInfo.getString("pass");
+        url = dataReceived.getStringExtra("URL");
+
+        notiJSON = (dataReceived.getStringExtra("/default/notifications.json"));
+        gradesJSON = (dataReceived.getStringExtra("/default/grades.json"));
 
         Dashboard firstFragment = new Dashboard();
         firstFragment.setArguments(profileInfo);
@@ -79,20 +89,21 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                //Fragment oldFragment = getSupportFragmentManager().findFragmentById(R.id.frame_container);
                 Course fragCourse = new Course();
-                Bundle args2 = new Bundle();
-                args2.putString("user", user);
-                args2.putString("pass", pass);
-                args2.putString("course", listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition));
-                //Log.e("litem", listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition));
-                fragCourse.setArguments(args2);
-                FragmentTransaction transaction4 = getSupportFragmentManager().beginTransaction();
-                transaction4.replace(R.id.frame_container, fragCourse);
-                transaction4.addToBackStack(null);
-                transaction4.commit();
+                Bundle courseCode = new Bundle();
+                courseCode.putString("user", user);
+                courseCode.putString("pass", pass);
+                courseCode.putString("course", listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition));
+                fragCourse.setArguments(courseCode);
+
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame_container, fragCourse);
+                transaction.addToBackStack(null);
+                transaction.commit();
+
                 drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawers();
+
                 return true;
             }
         });
@@ -113,9 +124,12 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                         drawer.closeDrawers();
                         return true;
+
                     case 1:
                         Notifications fragNotifications = new Notifications();
-                        fragNotifications.setArguments(profileInfo);
+                        Bundle notiBundle = new Bundle();
+                        notiBundle.putString("/default/notifications.json", notiJSON);
+                        fragNotifications.setArguments(notiBundle);
                         FragmentTransaction transaction2 = getSupportFragmentManager().beginTransaction();
                         transaction2.replace(R.id.frame_container, fragNotifications);
                         transaction2.addToBackStack(null);
@@ -123,6 +137,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                         drawer.closeDrawers();
                         transaction2.commit();
                         return true;
+
                     case 2:
                         Grades fragGrades = new Grades();
                         fragGrades.setArguments(profileInfo);
@@ -133,8 +148,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                         drawer.closeDrawers();
                         transaction3.commit();
                         return true;
+
                     case 3:
                         return false;
+
                     default:
                         return true;
                 }
@@ -166,41 +183,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         listDataHeader.add("Grades");
         listDataHeader.add("Courses");
 
-        // Get course list information
-        String courseURL = profileInfo.getString("url") + "/courses/list.json";
-        StringRequest getReq = new StringRequest(Request.Method.GET,
-                courseURL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // receive reply from server
-                        try {
-                            JSONObject jsonResponse = new JSONObject(response);
-                            coursesJSON = jsonResponse.getJSONArray("courses");
-                        }
-                        catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(Main.this, "Connection Error", Toast.LENGTH_LONG).show();
-                    }
-                });
-
-        int noOfCourses = coursesJSON.length();
-        for(int i=0; i<noOfCourses; i++) {
-            try {
-                JSONObject course = (JSONObject) coursesJSON.get(i);
-                Courses.add(course.getString("code"));
-            }
-            catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
         List<String> Overview = new ArrayList<String>();
         List<String> Notifications = new ArrayList<String>();
         List<String> Grades = new ArrayList<String>();
@@ -228,7 +210,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 return true;
 
             case R.id.logout:
-                final Intent intent2 = new Intent(Main.this, Login.class);
+                final Intent logout = new Intent(Main.this, Login.class);
                 new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK)
                         .setTitle("Logout")
                         .setMessage("Do you wish to log out?")
@@ -238,7 +220,26 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                         })
                         .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                startActivity(intent2);
+
+                                String logoutURL = url + "/default/logout.json";
+                                StringRequest getReq = new StringRequest(Request.Method.GET,
+                                        logoutURL,
+                                        new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+
+                                            }
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                Toast.makeText(Main.this, "Connection Error", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+
+                                // send the request to RequestQ
+                                RequestQ.getInstance().addToRequestQ(getReq);
+                                startActivity(logout);
                             }
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)

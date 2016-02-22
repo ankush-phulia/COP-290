@@ -1,15 +1,13 @@
 package com.ribieroboys.moodleplus;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -19,12 +17,19 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 public class Login extends Activity implements OnClickListener {
 
@@ -38,16 +43,20 @@ public class Login extends Activity implements OnClickListener {
     Boolean savePass;
     TextView wrongCredential;
     JSONObject userJSON;
+    JSONArray courseJSON;
     Bundle infoToPass;
+    ArrayList<String> courseListCodes;
 
     //final String url = "http://tapi.cse.iitd.ernet.in:1805";
-    final String url = "127.0.0.1:8000";
-    public boolean success = false;
+    final String url = "http://192.168.43.186:8000";
+    public boolean success;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
+
+        getIDs();
 
         log.setOnClickListener(this);
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
@@ -72,15 +81,19 @@ public class Login extends Activity implements OnClickListener {
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         saveLoginCheckBox = (CheckBox) findViewById(R.id.saveLoginCheckBox);
         wrongCredential = (TextView) findViewById(R.id.wrongCredential);
+        success = false;
     }
 
     public void onClick(View view) {
         if (view == log) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(editTextUsername.getWindowToken(), 0);
-
+            final Intent intent = new Intent(Login.this, TimePass.class);
             username = editTextUsername.getText().toString();
             password = editTextPassword.getText().toString();
+
+            infoToPass = new Bundle();
+            infoToPass.putString("user", username);
+            infoToPass.putString("pass", password);
+            infoToPass.putString("url", url);
 
             // check for validity of credentials
             String loginURL = url + "/default/login.json?userid=" + username + "&password=" + password;
@@ -92,8 +105,19 @@ public class Login extends Activity implements OnClickListener {
                             // receive reply from server
                             try {
                                 JSONObject jsonResponse = new JSONObject(response);
+                                System.out.println(jsonResponse.has("success"));
                                 success = jsonResponse.get("success").toString().equals("true");
                                 userJSON = jsonResponse.getJSONObject("user");
+
+                                // put the information to pass
+                                infoToPass.putString("firstName", userJSON.getString("first_name"));
+                                System.out.println(userJSON.getString("first_name"));
+                                infoToPass.putString("lastName", userJSON.getString("last_name"));
+                                infoToPass.putString("entryNo", userJSON.getString("entry_no"));
+                                infoToPass.putString("email", userJSON.getString("email"));
+                                infoToPass.putInt("id", userJSON.getInt("id"));
+                                infoToPass.putBoolean("isStudent", userJSON.getInt("type_") == 0);
+                                intent.putExtra("loginResponse", infoToPass);
                             }
                             catch (JSONException e) {
                                 e.printStackTrace();
@@ -111,29 +135,84 @@ public class Login extends Activity implements OnClickListener {
             RequestQ.getInstance().addToRequestQ(getReq);
 
             if(!success) {
-                wrongCredential.setText("Invalid Credentials");
                 return;
-            } else {
-                wrongCredential.setText("");
-                // put the information to pass
-                infoToPass.putString("user", username);
-                infoToPass.putString("pass", password);
-                infoToPass.putString("url", url);
-                try {
-                    infoToPass.putString("firstName", userJSON.getString("first_name"));
-                    infoToPass.putString("lastName", userJSON.getString("last_name"));
-                    infoToPass.putString("entryNo", userJSON.getString("entry_no"));
-                    infoToPass.putString("email", userJSON.getString("email"));
-                    infoToPass.putInt("id", userJSON.getInt("id"));
-                    infoToPass.putBoolean("isStudent", userJSON.getInt("type_") == 0);
-                }
-                catch (JSONException e) {
-                    e.printStackTrace();
-                }
             }
 
-            final Intent intent = new Intent(Login.this, Main.class);
-            intent.putExtra("loginResponse", infoToPass);
+
+            String courseURL = url + "/courses/list.json";
+            StringRequest Req = new StringRequest(Request.Method.GET,
+                    courseURL,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            // receive reply from server
+                            try {
+                                JSONObject jsonResponse = new JSONObject(response);
+                                courseJSON = jsonResponse.getJSONArray("courses");
+
+                                // Extract the course list codes
+                                courseListCodes = new ArrayList<>();
+                                for(int i=0; i<courseJSON.length(); i++) {
+                                    JSONObject course = (JSONObject) courseJSON.get(i);
+                                    courseListCodes.add(course.getString("code"));
+                                    intent.putStringArrayListExtra("courseListCodes", courseListCodes);
+                                }
+                                intent.putExtra("/courses/list.json", response);
+                            }
+                            catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(Login.this, "Connection Error", Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+            RequestQ.getInstance().addToRequestQ(Req);
+
+
+            String notiURL = url + "/default/notifications.json";
+            Req = new StringRequest(Request.Method.GET,
+                    notiURL,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            intent.putExtra("/default/notifications.json", response);
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(Login.this, "Connection Error", Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+            RequestQ.getInstance().addToRequestQ(Req);
+
+
+            String gradesURL = url + "/default/grades.json";
+            Req = new StringRequest(Request.Method.GET,
+                    gradesURL,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            intent.putExtra("/default/grades.json", response);
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(Login.this, "Connection Error", Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+            RequestQ.getInstance().addToRequestQ(Req);
+
+            intent.putExtra("nextIntent", "Main");
+            intent.putExtra("URL", url);
 
             if (saveLoginCheckBox.isChecked()) {
                 loginPrefsEditor.putBoolean("saveUser", true);

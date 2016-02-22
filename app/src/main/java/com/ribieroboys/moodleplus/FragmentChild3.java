@@ -28,7 +28,7 @@ public class FragmentChild3 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_child3, container, false);
         getIDs(view);
-        setEvents();
+
         return view;
     }
 
@@ -37,7 +37,4 @@ public class FragmentChild3 extends Fragment {
         textViewChildName.setText(course + "\n" + childname);
     }
 
-    private void setEvents() {
-
-    }
 }

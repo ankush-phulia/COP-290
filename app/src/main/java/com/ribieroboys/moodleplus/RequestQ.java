@@ -1,10 +1,14 @@
 package com.ribieroboys.moodleplus;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+
+import java.net.CookieHandler;
+import java.net.CookieManager;
 
 public class RequestQ extends Application {
 
@@ -13,10 +17,15 @@ public class RequestQ extends Application {
     RequestQueue rq;
     static RequestQ RQinstance;
 
+    CookieManager cMan;
+
     @Override
     public void onCreate(){
         super.onCreate();
         RQinstance = this;
+        rq = Volley.newRequestQueue(getApplicationContext());
+        cMan = new CookieManager();
+        CookieHandler.setDefault(cMan);
     }
 
     public static synchronized RequestQ getInstance() {
@@ -24,16 +33,13 @@ public class RequestQ extends Application {
     }
 
     public RequestQueue getRequestQueue() {
-        //fetches the current request queue or creates a new one till the app lifecycle does not terminate in its entirety
-        if (rq == null) {
-            rq = Volley.newRequestQueue(getApplicationContext());
-        }
         return rq;
     }
 
     public <T> void addToRequestQ(Request<T> request){
         //to add any type of request to the queue
         this.getRequestQueue().add(request);
+        Log.d("addToRequestQ", "4");
     }
 
 }

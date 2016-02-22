@@ -17,8 +17,8 @@ public class FragmentChild extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         Bundle bundle = getArguments();
         childname = bundle.getString("data");
-        course=bundle.getString("course");
-        //Log.e("child", course);
+        course = bundle.getString("course");
+
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
@@ -28,7 +28,7 @@ public class FragmentChild extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_child, container, false);
         getIDs(view);
-        setEvents();
+
         return view;
     }
 
@@ -37,7 +37,4 @@ public class FragmentChild extends Fragment {
         textViewChildName.setText(course + "\n" + childname);
     }
 
-    private void setEvents() {
-
-    }
 }
