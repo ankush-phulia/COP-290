@@ -8,17 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+
 public class FragmentChild1 extends Fragment {
-    String childname;
-    String course;
-    TextView textViewChildName;
+    TextView assignView;
+    JSONArray assignJSON;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
-        Bundle bundle = getArguments();
-        childname = bundle.getString("data");
-        course=bundle.getString("course");
-        //Log.e("child", course);
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
@@ -27,14 +24,18 @@ public class FragmentChild1 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_child1, container, false);
-        getIDs(view);
+        assignView = (TextView) view.findViewById(R.id.textViewChild1);
+
+        try {
+            assignJSON = new JSONArray(getArguments().getString("Assignments"));
+            //do something here
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return view;
-    }
-
-    private void getIDs(View view) {
-        textViewChildName = (TextView) view.findViewById(R.id.textViewChild1);
-        textViewChildName.setText(course + "\n" + childname);
     }
 
 }

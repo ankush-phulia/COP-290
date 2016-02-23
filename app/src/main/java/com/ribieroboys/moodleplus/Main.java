@@ -37,14 +37,16 @@ import java.util.List;
 
 public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    String user;
-    String pass;
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
     private DrawerLayout drawer;
     List<String> Courses;
+    ArrayList<String> CourseOverviewData;
+    ArrayList<String> CourseAssignmentsData;
+    ArrayList<String> CourseGradesData;
+    ArrayList<String> CourseThreadsData;
     Bundle profileInfo;
     String notiJSON;
     String gradesJSON;
@@ -65,11 +67,9 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Intent dataReceived = getIntent();
+        final Intent dataReceived = getIntent();
         profileInfo = dataReceived.getBundleExtra("loginResponse");
         Courses = dataReceived.getStringArrayListExtra("courseListCodes");
-        user = profileInfo.getString("user");
-        pass = profileInfo.getString("pass");
         url = dataReceived.getStringExtra("URL");
 
         notiJSON = (dataReceived.getStringExtra("/default/notifications.json"));
@@ -90,11 +90,14 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 Course fragCourse = new Course();
-                Bundle courseCode = new Bundle();
-                courseCode.putString("user", user);
-                courseCode.putString("pass", pass);
-                courseCode.putString("course", listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition));
-                fragCourse.setArguments(courseCode);
+                Bundle courseDetails = new Bundle();
+                courseDetails.putString("courseCode", Courses.get(childPosition));
+                courseDetails.putString("Overview", CourseOverviewData.get(childPosition));
+                courseDetails.putString("Assignments", CourseAssignmentsData.get(childPosition));
+                courseDetails.putString("Grades", CourseGradesData.get(childPosition));
+                courseDetails.putString("Threads", CourseThreadsData.get(childPosition));
+
+                fragCourse.setArguments(courseDetails);
 
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.frame_container, fragCourse);
@@ -140,7 +143,9 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
                     case 2:
                         Grades fragGrades = new Grades();
-                        fragGrades.setArguments(profileInfo);
+                        Bundle gradesBundle = new Bundle();
+                        gradesBundle.putString("/default/grades.json", gradesJSON);
+                        fragGrades.setArguments(gradesBundle);
                         FragmentTransaction transaction3 = getSupportFragmentManager().beginTransaction();
                         transaction3.replace(R.id.frame_container, fragGrades);
                         transaction3.addToBackStack(null);
@@ -150,6 +155,100 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                         return true;
 
                     case 3:
+                        JSONArray courseList;
+                        try {
+                            courseList = (new JSONObject(dataReceived.getStringExtra("/courses/list.json"))).getJSONArray("courses");
+
+                            CourseOverviewData = new ArrayList<String>();
+                            CourseGradesData = new ArrayList<String>();
+                            CourseAssignmentsData = new ArrayList<String>();
+                            CourseThreadsData = new ArrayList<String>();
+
+                            for (int courseNo = 0; courseNo < Courses.size(); courseNo++) {
+                                CourseOverviewData.add(courseList.getString(courseNo));
+                                String CourseCode = Courses.get(courseNo);
+
+                                String assignmentURL = url + "/courses/course.json/" + CourseCode + "/assignments";
+                                StringRequest assignReq = new StringRequest(Request.Method.GET,
+                                        assignmentURL,
+                                        new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                // receive reply from server
+                                                try {
+                                                    JSONObject jsonResponse = new JSONObject(response);
+                                                    CourseAssignmentsData.add(jsonResponse.getJSONArray("assignments").toString());
+                                                }
+                                                catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                Toast.makeText(Main.this, "Connection Error", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+
+                                RequestQ.getInstance().addToRequestQ(assignReq);
+
+                                String gradesURL = url + "/courses/course.json/" + CourseCode + "/grades";
+                                StringRequest gradesReq = new StringRequest(Request.Method.GET,
+                                        gradesURL,
+                                        new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                // receive reply from server
+                                                try {
+                                                    JSONObject jsonResponse = new JSONObject(response);
+                                                    CourseGradesData.add(jsonResponse.getJSONArray("grades").toString());
+                                                }
+                                                catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                Toast.makeText(Main.this, "Connection Error", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+
+                                RequestQ.getInstance().addToRequestQ(gradesReq);
+
+                                String threadsURL = url + "/courses/course.json/" + CourseCode + "/threads";
+                                StringRequest threadsReq = new StringRequest(Request.Method.GET,
+                                        threadsURL,
+                                        new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                // receive reply from server
+                                                try {
+                                                    JSONObject jsonResponse = new JSONObject(response);
+                                                    CourseThreadsData.add(jsonResponse.getJSONArray("course_threads").toString());
+                                                }
+                                                catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                Toast.makeText(Main.this, "Connection Error", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+
+                                RequestQ.getInstance().addToRequestQ(threadsReq);
+
+                            }
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
                         return false;
 
                     default:

@@ -8,11 +8,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Grades extends Fragment {
-
-    String user;
-    String pass;
+    TextView grades;
+    JSONArray gradesJSON, coursesJSON;
 
     public Grades() {
         // Required empty public constructor
@@ -28,8 +31,36 @@ public class Grades extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_grades, container, false);
-        user=getArguments().getString("user");
-        pass=getArguments().getString("pass");
+        grades = (TextView) rootView.findViewById(R.id.grades);
+
+        try {
+            gradesJSON = (new JSONObject(getArguments().getString("/default/grades.json"))).getJSONArray("grades");
+            coursesJSON = (new JSONObject(getArguments().getString("/default/grades.json"))).getJSONArray("courses");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if(gradesJSON.length() > 0) {
+            String textToSet = "";
+            try {
+                for (int i = 0; i < gradesJSON.length(); i++) {
+                    textToSet += Integer.toString(i + 1) + ". ";
+                    textToSet += ((JSONObject) coursesJSON.get(i)).getString("code") + "\n";
+                    JSONObject grades = ((JSONObject) gradesJSON.get(i));
+                    textToSet += "\tScored " + grades.getString("score") + " / " + grades.getString("out_of") + " in " + grades.getString("name") + "\n";
+                    textToSet += "\t(Weightage:\t" + grades.getString("weightage") + ")\n\n";
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            grades.setText(textToSet);
+        }
+        else {
+            grades.setText("No grades available yet!");
+        }
+
         return rootView;
     }
 

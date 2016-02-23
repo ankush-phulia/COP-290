@@ -14,15 +14,11 @@ public class Course extends Fragment {
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
 
-    String user;
-    String pass;
-    String course;
+    String courseCode;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
-        user = getArguments().getString("user");
-        pass = getArguments().getString("pass");
-        course = getArguments().getString("course");
+        courseCode = getArguments().getString("courseCode");
 
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
@@ -71,35 +67,31 @@ public class Course extends Fragment {
     }
 
     public void addPage(String pagename, int i) {
-        Bundle bundle = new Bundle();
-        bundle.putString("data", pagename);
-        bundle.putString("course", course);
-
         switch(i){
             case 0:
                 FragmentChild fragmentChild = new FragmentChild();
-                fragmentChild.setArguments(bundle);
+                fragmentChild.setArguments(getArguments());
                 adapter.addFrag(fragmentChild, pagename);
                 notifyAdapterAndPager();
                 break;
 
             case 1:
                 FragmentChild1 fragmentChild1 = new FragmentChild1();
-                fragmentChild1.setArguments(bundle);
+                fragmentChild1.setArguments(getArguments());
                 adapter.addFrag(fragmentChild1, pagename);
                 notifyAdapterAndPager();
                 break;
 
             case 2:
                 FragmentChild2 fragmentChild2 = new FragmentChild2();
-                fragmentChild2.setArguments(bundle);
+                fragmentChild2.setArguments(getArguments());
                 adapter.addFrag(fragmentChild2, pagename);
                 notifyAdapterAndPager();
                 break;
 
             case 3:
                 FragmentChild3 fragmentChild3 = new FragmentChild3();
-                fragmentChild3.setArguments(bundle);
+                fragmentChild3.setArguments(getArguments());
                 adapter.addFrag(fragmentChild3, pagename);
                 notifyAdapterAndPager();
                 break;
