@@ -113,7 +113,6 @@ public class Login extends Activity implements OnClickListener {
                             saveLoginCheckBox.setChecked(true);
                             break ;
                         }
-                        editTextPassword.setText("");
                     }
                 }
             }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +16,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private Context _context;
     private List<String> _listDataHeader;
     private HashMap<String, List<String>> _listDataChild;
-
+    int[] images = {R.mipmap.icon_overview,R.mipmap.icon_notification,R.mipmap.icon_grades,R.mipmap.icon_courses} ;
     public ExpandableListAdapter(Context context, List<String> listDataHeader,HashMap<String, List<String>> listChildData) {
         this._context = context;
         this._listDataHeader = listDataHeader;
@@ -80,6 +81,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         TextView lblListHeader = (TextView) convertView.findViewById(R.id.lblListHeader);
         lblListHeader.setTypeface(null, Typeface.BOLD);
         lblListHeader.setText(headerTitle);
+        ImageView v = (ImageView) convertView.findViewById(R.id.iconListHeader);
+        v.setImageResource(images[groupPosition]);
         if (getChildrenCount(groupPosition)==0){
 
         }
