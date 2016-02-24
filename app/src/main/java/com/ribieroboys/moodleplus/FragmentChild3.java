@@ -36,7 +36,7 @@ public class FragmentChild3 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_child3, container, false);
-        threadsView = (TextView) view.findViewById(R.id.textViewChild3);
+        threadsView = (TextView) view.findViewById(R.id.textView3);
 
         try {
             threadsJSON = new JSONArray(getArguments().getString("Threads"));

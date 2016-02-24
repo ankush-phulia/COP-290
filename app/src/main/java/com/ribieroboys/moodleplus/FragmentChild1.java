@@ -33,7 +33,7 @@ public class FragmentChild1 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_child1, container, false);
-        assignView = (TextView) view.findViewById(R.id.textViewChild1);
+        assignView = (TextView) view.findViewById(R.id.textView9);
 
         try {
             assignJSON = new JSONArray(getArguments().getString("Assignments"));
