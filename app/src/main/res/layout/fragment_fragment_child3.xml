@@ -18,7 +18,7 @@
                 android:layout_gravity="center">
 
                 <ExpandableListView
-                    android:id="@+id/threads"
+                    android:id="@+id/expandableListViewThreads"
                     android:layout_height="409dp"
                     android:layout_width="match_parent"
                     android:groupIndicator="@android:color/black"
@@ -50,8 +50,9 @@
                     app:fabSize="normal"
                     android:onClick="submit"
                     app:rippleColor="@color/colorPrimaryDark"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignEnd="@+id/textView8">
+                    android:layout_alignBottom="@+id/expandableListViewThreads"
+                    android:layout_alignEnd="@+id/textView8"
+                    android:layout_marginBottom="47dp">
 
                 </android.support.design.widget.FloatingActionButton>
 

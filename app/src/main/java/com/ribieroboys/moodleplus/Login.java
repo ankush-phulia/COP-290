@@ -48,7 +48,7 @@ public class Login extends Activity implements OnClickListener {
     ArrayList<String> courseListCodes;
 
     //final String url = "http://tapi.cse.iitd.ernet.in:1805";
-    final String url = "http://192.168.43.186:8000";
+    final String url = "http://192.168.1.248:8000";
     public boolean success;
 
     @Override
@@ -213,6 +213,7 @@ public class Login extends Activity implements OnClickListener {
 
             intent.putExtra("nextIntent", "Main");
             intent.putExtra("URL", url);
+            intent.putExtra("fromNewThread", false);
 
             if (saveLoginCheckBox.isChecked()) {
                 loginPrefsEditor.putBoolean("saveUser", true);

@@ -19,18 +19,8 @@ public class TimePass extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                final Intent prevIntent = getIntent();
-                String nextIntent = prevIntent.getStringExtra("nextIntent");
-                prevIntent.removeExtra("nextIntent");
-
-                Intent next = new Intent(prevIntent);
-                Class cls = Login.class;
-                switch (nextIntent) {
-                    case "Main":
-                        cls = Main.class;
-                        next.setClass(TimePass.this, cls);
-                        break;
-                }
+                Intent next = new Intent(getIntent());
+                next.setClass(TimePass.this, Main.class);
 
                 startActivity(next);
                 finish();

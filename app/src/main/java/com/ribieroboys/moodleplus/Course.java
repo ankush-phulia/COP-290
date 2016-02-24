@@ -46,6 +46,7 @@ public class Course extends Fragment {
         adapter = new ViewPagerAdapter(getFragmentManager(), getActivity());
         viewPager.setAdapter(adapter);
         tabLayout = (TabLayout) view.findViewById(R.id.my_tab_layout);
+        getArguments().getString("courseCode");
     }
 
     int selectedTabPosition;

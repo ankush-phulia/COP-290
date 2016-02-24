@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -16,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class FragmentChild1 extends Fragment {
-    TextView assignView;
     JSONArray assignJSON;
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
@@ -33,16 +31,15 @@ public class FragmentChild1 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_child1, container, false);
-        assignView = (TextView) view.findViewById(R.id.textViewChild1);
 
         try {
             assignJSON = new JSONArray(getArguments().getString("Assignments"));
 
-            expListView = (ExpandableListView) view.findViewById(R.id.expandableListView);
+            expListView = (ExpandableListView) view.findViewById(R.id.expandableListViewAssign);
 
+            prepareListData();
             listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild);
             expListView.setAdapter(listAdapter);
-            prepareListData();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -65,7 +62,7 @@ public class FragmentChild1 extends Fragment {
                 switch (groupPosition) {
 
                     default:
-                        return true;
+                        return false;
                 }
 
             }
@@ -90,10 +87,10 @@ public class FragmentChild1 extends Fragment {
     }
 
     private void prepareListData() {
-        try {
-            listDataHeader = new ArrayList<String>();
-            listDataChild = new HashMap<String, List<String>>();
+        listDataHeader = new ArrayList<String>();
+        listDataChild = new HashMap<String, List<String>>();
 
+        try {
             for (int assignNo=0; assignNo < assignJSON.length(); assignNo++) {
                 JSONObject assignment = (JSONObject) assignJSON.get(assignNo);
                 String header = assignment.getString("name");

@@ -10,21 +10,34 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class FragmentChild3 extends Fragment {
-    TextView threadsView;
     JSONArray threadsJSON;
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
     FloatingActionButton newth;
+
+    ArrayList<String> threads;
+    ArrayList<String> comments;
+    ArrayList<String> timesReadable;
+    ArrayList<String> threadID;
+    ArrayList<String> commentUsers;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -36,26 +49,32 @@ public class FragmentChild3 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_child3, container, false);
-        threadsView = (TextView) view.findViewById(R.id.textViewChild3);
 
         try {
             threadsJSON = new JSONArray(getArguments().getString("Threads"));
 
-            expListView = (ExpandableListView) view.findViewById(R.id.expandableListView);
-            newth =(FloatingActionButton) view.findViewById(R.id.add_thread);
+            expListView = (ExpandableListView) view.findViewById(R.id.expandableListViewThreads);
+            newth = (FloatingActionButton) view.findViewById(R.id.add_thread);
 
             newth.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Intent intent = new Intent(getContext(), NewThread.class);
-                    startActivity(intent);
+                    Intent newThread = new Intent(getContext(), NewThread.class);
+                    newThread.putExtra("courseCode", getArguments().getString("courseCode"));
+
+                    newThread.putExtra("URL", getArguments().getString("URL"));
+                    newThread.putExtra("/default/notifications.json", getArguments().getString("/default/notifications.json"));
+                    newThread.putExtra("/default/grades.json", getArguments().getString("/default/grades.json"));
+                    newThread.putExtra("/courses/list.json", getArguments().getString("/courses/list.json"));
+                    newThread.putStringArrayListExtra("courseListCodes", getArguments().getStringArrayList("courseListCodes"));
+                    newThread.putExtra("loginResponse", getArguments().getBundle("loginResponse"));
+                    startActivity(newThread);
                 }
             });
 
 
-
+            prepareListData();
             listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild);
             expListView.setAdapter(listAdapter);
-            prepareListData();
 
         }
         catch (Exception e) {
@@ -66,7 +85,21 @@ public class FragmentChild3 extends Fragment {
 
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                Intent newComment = new Intent(getContext(), ViewThread.class);
+                newComment.putExtra("courseCode", getArguments().getString("courseCode"));
+                newComment.putExtra("threadID", threadID.get(childPosition));
+                newComment.putExtra("threads", threads.get(childPosition));
+                newComment.putExtra("comments", comments.get(childPosition));
+                newComment.putExtra("timesReadable", timesReadable.get(childPosition));
+                newComment.putExtra("commentUsers", commentUsers.get(childPosition));
 
+                newComment.putExtra("URL", getArguments().getString("URL"));
+                newComment.putExtra("/default/notifications.json", getArguments().getString("/default/notifications.json"));
+                newComment.putExtra("/default/grades.json", getArguments().getString("/default/grades.json"));
+                newComment.putExtra("/courses/list.json", getArguments().getString("/courses/list.json"));
+                newComment.putStringArrayListExtra("courseListCodes", getArguments().getStringArrayList("courseListCodes"));
+                newComment.putExtra("loginResponse", getArguments().getBundle("loginResponse"));
+                startActivity(newComment);
                 return true;
             }
         });
@@ -79,7 +112,7 @@ public class FragmentChild3 extends Fragment {
                 switch (groupPosition) {
 
                     default:
-                        return true;
+                        return false;
                 }
 
             }
@@ -107,21 +140,68 @@ public class FragmentChild3 extends Fragment {
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
 
-        listDataHeader.add("Overview");
-        listDataHeader.add("Notifications");
-        listDataHeader.add("Grades");
-        listDataHeader.add("Courses");
+        threads = new ArrayList<>();
+        comments = new ArrayList<>();
+        timesReadable = new ArrayList<>();
+        threadID = new ArrayList<>();
+        commentUsers = new ArrayList<>();
 
-        List<String> Overview = new ArrayList<String>();
-        List<String> Notifications = new ArrayList<String>();
-        List<String> Grades = new ArrayList<String>();
-        List<String> Courses = new ArrayList<String>();
-        listDataChild.put(listDataHeader.get(0), Overview);
-        listDataChild.put(listDataHeader.get(1), Notifications);
-        listDataChild.put(listDataHeader.get(2), Grades);
-        listDataChild.put(listDataHeader.get(3), Courses);
+        try {
+            for (int threadNo=0; threadNo < threadsJSON.length(); threadNo++) {
+                JSONObject thread = (JSONObject) threadsJSON.get(threadNo);
+                threads.add(thread.toString());
+                String header = thread.getString("title");
+                listDataHeader.add(header);
+
+                List<String> childData = new ArrayList<>();
+                childData.add("Updated on: " + thread.getString("updated_at") + "\n" + thread.getString("description"));
+                listDataChild.put(listDataHeader.get(threadNo), childData);
+
+                getComments(thread.getString("id"));
+                threadID.add(thread.getString("id"));
+            }
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
+    private void getComments(String id) {
+        try {
+            String threadsURL = getArguments().getString("URL") + "/threads/thread.json/" + id;
+            StringRequest threadsReq = new StringRequest(Request.Method.GET,
+                threadsURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // receive reply from server
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            comments.add(jsonResponse.getJSONArray("comments").toString());
+                            timesReadable.add(jsonResponse.getJSONArray("times_readable").toString());
+                            commentUsers.add(jsonResponse.getJSONArray("comment_users").toString());
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //Toast.makeText(FragmentChild3.this, "Connection Error", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        RequestQ.getInstance().addToRequestQ(threadsReq);
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }

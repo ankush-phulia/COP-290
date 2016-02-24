@@ -5,10 +5,21 @@
     android:background="#ffffff">
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginTop="13dp"
+        android:text="Grades"
+        android:layout_marginEnd="17dp"
+        android:id="@+id/textView17"
+        android:layout_gravity="right|top" />
+
+    <TextView
         android:id="@+id/grades_frag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right|top"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center_horizontal|top"
         android:text="Grades"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 </FrameLayout>

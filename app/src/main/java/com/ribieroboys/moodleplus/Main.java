@@ -52,6 +52,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     String gradesJSON;
     String url;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,12 +86,20 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
         expListView.setAdapter(listAdapter);
 
+
         expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
 
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 Course fragCourse = new Course();
                 Bundle courseDetails = new Bundle();
+                courseDetails.putString("URL", url);
+                courseDetails.putString("/default/notifications.json", notiJSON);
+                courseDetails.putString("/default/grades.json", gradesJSON);
+                courseDetails.putString("/courses/list.json", dataReceived.getStringExtra("/courses/list.json"));
+                courseDetails.putStringArrayList("courseListCodes", dataReceived.getStringArrayListExtra("courseListCodes"));
+                courseDetails.putBundle("loginResponse", profileInfo);
+
                 courseDetails.putString("courseCode", Courses.get(childPosition));
                 courseDetails.putString("Overview", CourseOverviewData.get(childPosition));
                 courseDetails.putString("Assignments", CourseAssignmentsData.get(childPosition));

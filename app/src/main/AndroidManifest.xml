@@ -28,7 +28,7 @@
         <activity
             android:name=".TimePass"
             android:label="Loading"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <!--
              ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -64,7 +64,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ribieroboys.moodleplus.Login" />
         </activity>
-        <activity android:name=".NewThread"></activity>
+        <activity android:name=".NewThread" />
+        <activity android:name=".ViewThread"></activity>
     </application>
 
 </manifest>
