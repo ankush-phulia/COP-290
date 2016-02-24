@@ -3,23 +3,20 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#ffffff">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/grades_frag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Grades"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#000"/>
+    </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_marginTop="13dp"
-        android:text="Grades"
-        android:layout_marginEnd="17dp"
-        android:id="@+id/textView17"
-        android:layout_gravity="right|top" />
-
-    <TextView
-        android:id="@+id/grades_frag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_gravity="center_horizontal|top"
-        android:text="Grades"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
 </FrameLayout>
