@@ -39,7 +39,6 @@ public class FragmentChild1 extends Fragment {
             assignJSON = new JSONArray(getArguments().getString("Assignments"));
 
             expListView = (ExpandableListView) view.findViewById(R.id.expandableListView);
-
             listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild);
             expListView.setAdapter(listAdapter);
             prepareListData();
@@ -91,8 +90,6 @@ public class FragmentChild1 extends Fragment {
 
     private void prepareListData() {
         try {
-            listDataHeader = new ArrayList<String>();
-            listDataChild = new HashMap<String, List<String>>();
 
             for (int assignNo=0; assignNo < assignJSON.length(); assignNo++) {
                 JSONObject assignment = (JSONObject) assignJSON.get(assignNo);

@@ -4,31 +4,45 @@
     android:layout_height="match_parent"
     tools:context="com.ribieroboys.moodleplus.Dashboard">
 
-
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="right|top">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Grades"
-            android:id="@+id/textView14"
-            android:layout_marginTop="15dp"
-            android:textSize="25dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="5dp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|top">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Medium Text"
-            android:id="@+id/grades"
-            android:layout_below="@+id/textView14"
-            android:layout_alignParentStart="true" />
-    </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Grades"
+                android:id="@+id/textView14"
+                android:layout_marginTop="15dp"
+                android:textSize="25dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text=""
+                android:id="@+id/grades"
+                android:layout_below="@+id/textView14"
+                android:layout_alignParentStart="true" />
+
+            <!--ExpandableListView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/Grades"
+                android:layout_below="@+id/grades"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="32dp" /-->
+
+        </RelativeLayout>
+
+    </ScrollView>
 </FrameLayout>

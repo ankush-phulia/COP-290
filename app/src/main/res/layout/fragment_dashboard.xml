@@ -4,39 +4,46 @@
     android:layout_height="match_parent"
     tools:context="com.ribieroboys.moodleplus.Dashboard">
 
-
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="right|top">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Welcome"
-            android:id="@+id/textView14"
-            android:layout_marginTop="15dp"
-            android:textSize="25dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="5dp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
 
-        <CalendarView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/calendarView"
-            android:layout_marginBottom="28dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignEnd="@+id/textView7" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Welcome"
+                android:id="@+id/textView14"
+                android:layout_marginTop="15dp"
+                android:textSize="25sp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="5dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Events"
-            android:id="@+id/textView7"
-            android:layout_above="@+id/calendarView"
-            android:layout_alignEnd="@+id/textView14" />
-    </RelativeLayout>
+            <CalendarView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/calendarView"
+                android:layout_marginBottom="28dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignEnd="@+id/textView7" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Events"
+                android:id="@+id/textView7"
+                android:layout_above="@+id/calendarView"
+                android:layout_alignEnd="@+id/textView14" />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
 </FrameLayout>
