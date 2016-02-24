@@ -49,7 +49,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
                 tabImage.setImageResource(R.mipmap.ic_overview);
                 break;
             case "Grades":
-                tabImage.setImageResource(R.mipmap.ic_grades);
+                tabImage.setImageResource(R.mipmap.icon_grades);
                 break;
             case "Assignments":
                 tabImage.setImageResource(R.mipmap.ic_assignment);

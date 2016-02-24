@@ -1,6 +1,7 @@
 package com.ribieroboys.moodleplus;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,7 +14,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -23,6 +23,7 @@ import com.android.volley.toolbox.StringRequest;
 
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class Login extends Activity implements OnClickListener {
     CheckBox saveLoginCheckBox;
     SharedPreferences loginPreferences;
     SharedPreferences.Editor loginPrefsEditor;
-
+    final Context context=this;
     JSONObject userJSON;
     JSONArray courseJSON;
     Bundle infoToPass;
@@ -43,18 +44,11 @@ public class Login extends Activity implements OnClickListener {
     Intent intent;
     int attempts=0;
 
-
     int count ;
-    //final String url = "http://tapi.cse.iitd.ernet.in:1805";
     int keyvlaue = -1 ;
-    final String url = "192.168.1.248:8000";
+
+    final String url = "http://192.168.43.186:8000";
     public boolean success = false;
-
-    public boolean isValid(String entry_no){
-
-        // Using RegEx to check validity of entry no.
-        return true ;
-    }
 
     public String[] tokenize(String id){
         return id.split(":",2) ;
@@ -100,6 +94,7 @@ public class Login extends Activity implements OnClickListener {
             }
 
             @Override
+            //listener on password for autocomplete
             public void afterTextChanged(Editable s) {
                 String user = editTextUsername.getText().toString() ;
                 String user_id ;
@@ -124,13 +119,13 @@ public class Login extends Activity implements OnClickListener {
         editTextUsername = (EditText) findViewById(R.id.editTextUsername);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         saveLoginCheckBox = (CheckBox) findViewById(R.id.saveLoginCheckBox);
-        intent = new Intent(Login.this, TimePass.class);
         success = false;
     }
 
     public void onClick(View view) {
         //clcick handler for login button
         if (view == log) {
+            intent = new Intent(Login.this, TimePass.class);
 
             //extract username and password and put in the bundle to forward
             username = editTextUsername.getText().toString();
@@ -145,13 +140,13 @@ public class Login extends Activity implements OnClickListener {
                     return;
                 }
             }
-
+            //add information to bundle to pass
             infoToPass = new Bundle();
             infoToPass.putString("user", username);
             infoToPass.putString("pass", password);
             infoToPass.putString("url", url);
 
-
+            // store user ids
             String userid;
             for (int i = 1; i <= count; i++) {
                 userid = loginPreferences.getString(Integer.toString(i), "");
@@ -164,106 +159,72 @@ public class Login extends Activity implements OnClickListener {
                 }
             }
 
-            intent.putExtra("nextIntent", "Main");
             intent.putExtra("URL", url);
-            intent.putExtra("fromNewThread", false);
 
-            if (saveLoginCheckBox.isChecked()) {
-                if (keyvlaue == -1) {
-                    loginPrefsEditor.putInt("counter", (++count));
-                    loginPrefsEditor.putString(Integer.toString(count), username + ":");
-                    loginPrefsEditor.commit();
-                }
-                new AlertDialog.Builder(Login.this, AlertDialog.THEME_HOLO_DARK)
-                        .setTitle("Remember Password")
-                        .setMessage("Should the Password be saved?")
-                        .setPositiveButton("No", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
+            retreive_credentials();
 
-                                if (keyvlaue != -1) {
-                                    loginPrefsEditor.putString(Integer.toString(keyvlaue), username + ":");
-                                    loginPrefsEditor.commit();
-                                }
-
-                                endActivityAndStartNew(intent);
-                            }
-                        })
-                        .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                if (keyvlaue != -1) {
-                                    loginPrefsEditor.putString(Integer.toString(keyvlaue), username + ":" + password);
-                                    loginPrefsEditor.commit();
-                                } else {
-                                    loginPrefsEditor.putString(Integer.toString(count), username + ":" + password);
-                                    loginPrefsEditor.commit();
-                                }
-                                endActivityAndStartNew(intent);
-                            }
-                        });
-
-
-                Retreive rtr = new Retreive(url, username, password, infoToPass, success, userJSON, intent, courseJSON, courseListCodes, Login.this, attempts);
-                rtr.retreive_credentials();
-                rtr.retreive_courses();
-                rtr.retreive_notifications();
-                rtr.retreive_grades();
-                if (!success && rtr.attempts == 0) {
-                    rtr.attempts++;
-                    return;
-                } else if (!success && rtr.attempts > 0) {
-                    //show error dialog on invalid user/pass
-                    new AlertDialog.Builder(Login.this, AlertDialog.THEME_HOLO_DARK)
-                            .setTitle("Invalid Credentials")
-                            .setMessage("Username or Password")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    return;
+            if (!success && attempts == 1) {
+                attempts++;
+                return;
+            } else if (!success && attempts > 1) {
+                //show error dialog on invalid user/pass
+                new AlertDialog.Builder(Login.this, AlertDialog.THEME_HOLO_LIGHT)
+                        .setTitle("Invalid Credentials")
+                        .setMessage("Either Username or Password is Incorrect")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {return;
                                 }
                             })
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
 
-                } else {
-                    //pass things to the next activity
-                    intent.putExtra("nextIntent", "Main");
-                    intent.putExtra("URL", url);
-                    //offer to save the password if username is also set to tbe saved
-                    if (saveLoginCheckBox.isChecked()) {
-                        if (keyvlaue != -1) {
-                            loginPrefsEditor.putString(Integer.toString(keyvlaue), "");
-                            loginPrefsEditor.commit();
-                        }
-                        new AlertDialog.Builder(Login.this, AlertDialog.THEME_HOLO_DARK)
-                                .setTitle("Remember Password")
-                                .setMessage("Should the Password be saved?")
-                                .setPositiveButton("No", new DialogInterface.OnClickListener() {
+            } else {
+                retreive_courses();
+                retreive_notifications();
+                retreive_grades();
+                //offer to save the password if username is also set to tbe saved
+                if (saveLoginCheckBox.isChecked()) {
+                    if (keyvlaue != -1) {
+                        loginPrefsEditor.putString(Integer.toString(keyvlaue), "");
+                        loginPrefsEditor.commit();
+                    }
+                    new AlertDialog.Builder(Login.this, AlertDialog.THEME_HOLO_LIGHT)
+                            .setTitle("Remember Password")
+                            .setMessage("Should the Password be saved?")
+                            .setPositiveButton("No", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
-                                        loginPrefsEditor.putBoolean("savePass", false);
+                                    if (keyvlaue != -1) {
+                                        loginPrefsEditor.putString(Integer.toString(keyvlaue), username + ":");
                                         loginPrefsEditor.commit();
+                                    }
                                         endActivityAndStartNew(intent);
                                     }
                                 })
-                                .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                            .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
-                                        loginPrefsEditor.putBoolean("savePass", true);
-                                        loginPrefsEditor.putString("password", password);
-                                        loginPrefsEditor.commit();
-                                        endActivityAndStartNew(intent);
-                                    }
+                                  if (keyvlaue != -1) {
+                                      loginPrefsEditor.putString(Integer.toString(keyvlaue), username + ":" + password);
+                                      loginPrefsEditor.commit();
+                                  } else {
+                                      loginPrefsEditor.putString(Integer.toString(count), username + ":" + password);
+                                      loginPrefsEditor.commit();
+                                  }
+                                      endActivityAndStartNew(intent);
+                                }
                                 })
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
-                    } else {
-                        loginPrefsEditor.clear();
-                        loginPrefsEditor.commit();
-                        endActivityAndStartNew(intent);
-                    }
+                } else {
+                    loginPrefsEditor.clear();
+                    loginPrefsEditor.commit();
+                    endActivityAndStartNew(intent);
                 }
-
             }
+
         }
+
     }
+
 
     private void endActivityAndStartNew(Intent i) {
         startActivity(i);
@@ -272,6 +233,128 @@ public class Login extends Activity implements OnClickListener {
 
     @Override
     public void onBackPressed() {
+    }
+
+    public void retreive_credentials(){
+        // check for validity of credentials
+        attempts++;
+        String loginURL = url + "/default/login.json?userid=" + username + "&password=" + password;
+        StringRequest getReq = new StringRequest(Request.Method.GET,
+                loginURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // receive reply from server
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            System.out.println(jsonResponse.has("success"));
+                            success = jsonResponse.get("success").toString().equals("true");
+                            userJSON = jsonResponse.getJSONObject("user");
+
+                            // put the information to pass
+                            infoToPass.putString("firstName", userJSON.getString("first_name"));
+                            System.out.println(userJSON.getString("first_name"));
+                            infoToPass.putString("lastName", userJSON.getString("last_name"));
+                            infoToPass.putString("entryNo", userJSON.getString("entry_no"));
+                            infoToPass.putString("email", userJSON.getString("email"));
+                            infoToPass.putInt("id", userJSON.getInt("id"));
+                            infoToPass.putBoolean("isStudent", userJSON.getInt("type_") == 0);
+                            intent.putExtra("loginResponse", infoToPass);
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, "Connection Error", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        // send the request to global request queue
+        RequestQ.getInstance().addToRequestQ(getReq);
+    }
+
+    public void retreive_courses(){
+        //retreive course lists
+        String courseURL = url + "/courses/list.json";
+        StringRequest Req = new StringRequest(Request.Method.GET,
+                courseURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // receive reply from server
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            System.out.println(response);
+                            courseJSON = jsonResponse.getJSONArray("courses");
+
+                            // Extract the course list codes
+                            courseListCodes = new ArrayList<>();
+                            for(int i=0; i<courseJSON.length(); i++) {
+                                JSONObject course = (JSONObject) courseJSON.get(i);
+                                courseListCodes.add(course.getString("code"));
+                                intent.putStringArrayListExtra("courseListCodes", courseListCodes);
+                            }
+                            intent.putExtra("/courses/list.json", response);
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, "Connection Error", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        RequestQ.getInstance().addToRequestQ(Req);
+    }
+
+    public void retreive_notifications(){
+        //retrieve notifications
+        String notiURL = url + "/default/notifications.json";
+        StringRequest Req = new StringRequest(Request.Method.GET,
+                notiURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        intent.putExtra("/default/notifications.json", response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, "Connection Error", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        RequestQ.getInstance().addToRequestQ(Req);
+    }
+
+    public void retreive_grades(){
+        //retrieve grades
+        String gradesURL = url + "/default/grades.json";
+        StringRequest Req = new StringRequest(Request.Method.GET,
+                gradesURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        intent.putExtra("/default/grades.json", response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, "Connection Error", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        RequestQ.getInstance().addToRequestQ(Req);
     }
 
 }

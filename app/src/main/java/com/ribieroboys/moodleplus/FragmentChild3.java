@@ -26,7 +26,7 @@ import java.util.List;
 
 public class FragmentChild3 extends Fragment {
     JSONArray threadsJSON;
-    ExpandableListAdapter listAdapter;
+    ExpandableListAdapterSecond listAdapter;
     ExpandableListView expListView;
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
@@ -73,7 +73,7 @@ public class FragmentChild3 extends Fragment {
 
 
             prepareListData();
-            listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild);
+            listAdapter = new ExpandableListAdapterSecond(this.getContext(), listDataHeader, listDataChild);
             expListView.setAdapter(listAdapter);
 
         }
@@ -87,11 +87,11 @@ public class FragmentChild3 extends Fragment {
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 Intent newComment = new Intent(getContext(), ViewThread.class);
                 newComment.putExtra("courseCode", getArguments().getString("courseCode"));
-                newComment.putExtra("threadID", threadID.get(childPosition));
-                newComment.putExtra("threads", threads.get(childPosition));
-                newComment.putExtra("comments", comments.get(childPosition));
-                newComment.putExtra("timesReadable", timesReadable.get(childPosition));
-                newComment.putExtra("commentUsers", commentUsers.get(childPosition));
+                newComment.putExtra("threadID", threadID.get(groupPosition));
+                newComment.putExtra("threads", threads.get(groupPosition));
+                newComment.putExtra("comments", comments.get(groupPosition));
+                newComment.putExtra("timesReadable", timesReadable.get(groupPosition));
+                newComment.putExtra("commentUsers", commentUsers.get(groupPosition));
 
                 newComment.putExtra("URL", getArguments().getString("URL"));
                 newComment.putExtra("/default/notifications.json", getArguments().getString("/default/notifications.json"));

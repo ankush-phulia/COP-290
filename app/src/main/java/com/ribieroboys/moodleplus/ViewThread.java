@@ -117,6 +117,7 @@ public class ViewThread extends AppCompatActivity implements View.OnClickListene
             backToMain.setClass(ViewThread.this, Main.class);
             backToMain.putExtra("fromNewThread", true);
             startActivity(backToMain);
+            this.finish();
         }
     }
 

@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/comment"
+    android:background="@drawable/grades"
     tools:context="com.ribieroboys.moodleplus.NewThread">
 
     <Button
@@ -17,6 +17,8 @@
         android:id="@+id/post"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
+        android:textColor="#ffffff"
+        android:background="#800517"
         android:layout_alignParentEnd="true" />
 
     <TextView
@@ -25,6 +27,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Start a Discussion"
         android:id="@+id/textView11"
+        android:textColor="#800517"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:textSize="28dp" />
@@ -34,6 +37,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/editText"
         android:layout_marginTop="75dp"
+        android:textColor="#800517"
         android:layout_below="@+id/textView11"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true" />
@@ -44,6 +48,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Title"
         android:id="@+id/textView13"
+        android:textColor="#800517"
         android:layout_below="@+id/textView11"
         android:layout_alignParentStart="true"
         android:layout_marginTop="42dp"
@@ -55,6 +60,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Description"
         android:id="@+id/textView15"
+        android:textColor="#800517"
         android:layout_below="@+id/editText"
         android:layout_alignParentStart="true"
         android:layout_marginTop="23dp"
@@ -66,6 +72,7 @@
         android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/editText2"
+        android:textColor="#800517"
         android:layout_below="@+id/textView15"
         android:layout_alignParentStart="true"
         android:layout_alignEnd="@+id/editText" />

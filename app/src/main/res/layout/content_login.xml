@@ -27,6 +27,7 @@
                 android:inputType="textNoSuggestions"
                 android:imeOptions="actionNext"
                 android:layout_below="@+id/textView3"
+                android:textColor="#800517"
                 android:layout_alignParentStart="true" />
 
             <EditText
@@ -37,6 +38,7 @@
                 android:inputType="textPassword"
                 android:imeOptions="actionDone"
                 android:layout_below="@+id/textView4"
+                android:textColor="#800517"
                 android:layout_alignParentStart="true" />
 
             <CheckBox
@@ -44,8 +46,9 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Remember Me"
+
                 android:textStyle="bold"
-                android:textColor="#000"
+                android:textColor="#800517"
                 android:layout_below="@+id/textView6"
                 android:layout_alignParentEnd="true" />
 
@@ -55,14 +58,18 @@
                 android:layout_height="wrap_content"
                 android:text="Login"
                 android:textStyle="bold"
+                android:textColor="#ffffff"
+                android:background="#800517"
                 android:layout_below="@+id/wrongCredential"
-                android:layout_centerHorizontal="true" />
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Login to MoodlePlus"
+                android:textColor="#800517"
                 android:id="@+id/textView2"
                 android:textStyle="bold"
                 android:layout_alignParentTop="true"
@@ -74,6 +81,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Username"
+                android:textColor="#800517"
                 android:textStyle="bold"
                 android:id="@+id/textView3"
                 android:layout_below="@+id/textView2"
@@ -86,6 +94,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Password"
                 android:textStyle="bold"
+                android:textColor="#800517"
                 android:id="@+id/textView4"
                 android:layout_below="@+id/textView5"
                 android:layout_alignParentStart="true" />
@@ -95,6 +104,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text=" "
+                android:textColor="#800517"
                 android:id="@+id/textView5"
                 android:layout_below="@+id/editTextUsername"
                 android:layout_alignParentStart="true"
@@ -105,6 +115,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="           "
+                android:textColor="#800517"
                 android:id="@+id/textView6"
                 android:layout_below="@+id/editTextPassword"
                 android:layout_toEndOf="@+id/textView5" />

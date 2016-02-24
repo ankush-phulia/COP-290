@@ -16,7 +16,7 @@ import java.util.List;
 
 public class FragmentChild1 extends Fragment {
     JSONArray assignJSON;
-    ExpandableListAdapter listAdapter;
+    ExpandableListAdapterSecond listAdapter;
     ExpandableListView expListView;
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
@@ -38,7 +38,7 @@ public class FragmentChild1 extends Fragment {
             expListView = (ExpandableListView) view.findViewById(R.id.expandableListViewAssign);
 
             prepareListData();
-            listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild);
+            listAdapter = new ExpandableListAdapterSecond(this.getContext(), listDataHeader, listDataChild);
             expListView.setAdapter(listAdapter);
         }
         catch (Exception e) {

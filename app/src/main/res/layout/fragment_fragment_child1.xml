@@ -2,14 +2,11 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#ffffff">
+    android:background="@drawable/coverpage2">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="510dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center">
 
                <ExpandableListView
@@ -21,8 +18,8 @@
                     android:dividerHeight="0dp"
                     xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_gravity="center_horizontal|bottom"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentStart="true" />
+                   android:layout_below="@+id/textView9"
+                   android:layout_alignParentStart="true" />
 
                 <TextView
                     android:id="@+id/textViewChild1"
@@ -33,12 +30,18 @@
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="17dp"
+                    android:textColor="#800517"
                     android:layout_marginTop="30dp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text=" "
+                android:id="@+id/textView9"
+                android:layout_below="@+id/textViewChild1"
+                android:layout_alignParentEnd="true" />
 
         </RelativeLayout>
-
-    </ScrollView>
-
 
 </FrameLayout>

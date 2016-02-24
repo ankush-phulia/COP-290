@@ -12,7 +12,25 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center">
+        android:layout_gravity="right|top">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#000"
+            android:textColor="#800517"
+            android:layout_below="@id/textView14"
+            android:id="@+id/ruler1"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text=""
+            android:id="@+id/notifications"
+            android:layout_below="@+id/ruler1"
+            android:textColor="#800517"
+            android:layout_toStartOf="@+id/textView14"
+            android:layout_marginTop="41dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -24,24 +42,14 @@
             android:textSize="25sp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="5dp" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#000"
-            android:layout_below="@id/textView14"
-            android:id="@+id/ruler1"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text=""
-            android:id="@+id/notifications"
-            android:layout_below="@+id/ruler1"
-            android:layout_toStartOf="@+id/textView14"
-            android:layout_marginTop="41dp" />
+            android:textColor="#800517"
+            android:layout_marginEnd="5dp"
+            android:layout_gravity="right|top" />
     </RelativeLayout>
 
 </ScrollView>
 
+
+
 </FrameLayout>
+

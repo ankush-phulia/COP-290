@@ -102,7 +102,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 transaction.replace(R.id.frame_container, fragCourse);
                 transaction.addToBackStack(null);
                 transaction.commit();
-                expListView.collapseGroup(groupPosition);
 
                 drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawers();
@@ -326,7 +325,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             case R.id.logout:
                 //Logout selected
                 final Intent logout = new Intent(Main.this, Login.class);
-                new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK)
+                new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_LIGHT)
                         .setTitle("Logout")
                         .setMessage("Do you wish to log out?")
                         .setPositiveButton("No", new DialogInterface.OnClickListener() {
