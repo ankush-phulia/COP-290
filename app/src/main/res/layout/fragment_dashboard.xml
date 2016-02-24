@@ -9,18 +9,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="right|top">
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Welcome"
-            android:id="@+id/textView14"
-            android:layout_marginTop="15dp"
-            android:textSize="25dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="5dp" />
+            android:id="@+id/view10"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Welcome"
+                android:textStyle="bold"
+                android:id="@+id/textView14"
+                android:layout_marginTop="15dp"
+                android:textSize="25dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="5dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#000"/>
+        </LinearLayout>
+
 
         <CalendarView
             android:layout_width="wrap_content"
@@ -35,8 +47,9 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Events"
+            android:textStyle="bold"
             android:id="@+id/textView7"
             android:layout_above="@+id/calendarView"
-            android:layout_alignEnd="@+id/textView14" />
+            android:layout_alignEnd="@+id/view10" />
     </RelativeLayout>
 </FrameLayout>
