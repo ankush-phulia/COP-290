@@ -5,30 +5,24 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -59,27 +53,23 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //set up th navigation Drawer
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         final Intent dataReceived = getIntent();
-        profileInfo = dataReceived.getBundleExtra("loginResponse");
-        Courses = dataReceived.getStringArrayListExtra("courseListCodes");
-        url = dataReceived.getStringExtra("URL");
+        receive_data(dataReceived);
 
-        notiJSON = (dataReceived.getStringExtra("/default/notifications.json"));
-        gradesJSON = (dataReceived.getStringExtra("/default/grades.json"));
-
+        //Open Overview first
         Dashboard firstFragment = new Dashboard();
         firstFragment.setArguments(profileInfo);
-
         getSupportFragmentManager().beginTransaction().add(R.id.frame_container, firstFragment).commit();
 
+        //populate the expandable list of the drawer
         expListView = (ExpandableListView) findViewById(R.id.expandableListView);
         prepareListData(Courses);
         listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
@@ -103,6 +93,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 transaction.replace(R.id.frame_container, fragCourse);
                 transaction.addToBackStack(null);
                 transaction.commit();
+                expListView.collapseGroup(groupPosition);
 
                 drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawers();
@@ -118,6 +109,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 switch (groupPosition) {
                     case 0:
+                        //Go tot Overview
                         Dashboard fragDashboard = new Dashboard();
                         fragDashboard.setArguments(profileInfo);
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -129,6 +121,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                         return true;
 
                     case 1:
+                        //Go to Notifications
                         Notifications fragNotifications = new Notifications();
                         Bundle notiBundle = new Bundle();
                         notiBundle.putString("/default/notifications.json", notiJSON);
@@ -142,6 +135,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                         return true;
 
                     case 2:
+                        //Go to Grades
                         Grades fragGrades = new Grades();
                         Bundle gradesBundle = new Bundle();
                         gradesBundle.putString("/default/grades.json", gradesJSON);
@@ -155,6 +149,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                         return true;
 
                     case 3:
+                        //Open Course List
                         JSONArray courseList;
                         try {
                             courseList = (new JSONObject(dataReceived.getStringExtra("/courses/list.json"))).getJSONArray("courses");
@@ -273,7 +268,17 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         });
     }
 
+    public void receive_data(Intent dataReceived){
+        //receive data from login page
+        profileInfo = dataReceived.getBundleExtra("loginResponse");
+        Courses = dataReceived.getStringArrayListExtra("courseListCodes");
+        url = dataReceived.getStringExtra("URL");
+        notiJSON = (dataReceived.getStringExtra("/default/notifications.json"));
+        gradesJSON = (dataReceived.getStringExtra("/default/grades.json"));
+    }
+
     private void prepareListData(List<String> Courses) {
+        //Populate the expandable list
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
 
@@ -303,12 +308,14 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_settings:
+                //Profile selected
                 final Intent goToProfile = new Intent(Main.this, Profile.class);
                 goToProfile.putExtra("profileInfo", profileInfo);
                 startActivity(goToProfile);
                 return true;
 
             case R.id.logout:
+                //Logout selected
                 final Intent logout = new Intent(Main.this, Login.class);
                 new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK)
                         .setTitle("Logout")
@@ -352,6 +359,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
     @Override
     public void onBackPressed() {
+        //Close the drawer and do nothing else
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);

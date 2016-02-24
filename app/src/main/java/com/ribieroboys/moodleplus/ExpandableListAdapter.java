@@ -10,6 +10,8 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.List;
 
+//assisted by androidhive.com
+
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     private Context _context;

@@ -31,7 +31,7 @@
                     android:layout_marginBottom="26dp" />
 
                 <TextView
-                    android:id="@+id/textView8"
+                    android:id="@+id/textViewChild3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|top"

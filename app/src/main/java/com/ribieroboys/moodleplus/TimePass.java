@@ -30,6 +30,9 @@ public class TimePass extends AppCompatActivity {
                         cls = Main.class;
                         next.setClass(TimePass.this, cls);
                         break;
+                    default:
+                        cls = Main.class;
+                        next.setClass(TimePass.this, cls);
                 }
 
                 startActivity(next);
