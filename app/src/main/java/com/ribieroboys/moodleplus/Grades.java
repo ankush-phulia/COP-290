@@ -34,6 +34,7 @@ public class Grades extends Fragment {
         grades = (TextView) rootView.findViewById(R.id.grades);
 
         try {
+            //retreive grades
             gradesJSON = (new JSONObject(getArguments().getString("/default/grades.json"))).getJSONArray("grades");
             coursesJSON = (new JSONObject(getArguments().getString("/default/grades.json"))).getJSONArray("courses");
         }
@@ -42,6 +43,7 @@ public class Grades extends Fragment {
         }
 
         if(gradesJSON.length() > 0) {
+            //parse the grades JSON
             String textToSet = "";
             try {
                 for (int i = 0; i < gradesJSON.length(); i++) {

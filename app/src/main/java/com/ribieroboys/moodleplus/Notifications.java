@@ -33,6 +33,7 @@ public class Notifications extends Fragment {
         notifications = (TextView) rootView.findViewById(R.id.notifications);
 
         try {
+            //retreive notifications
             notiJSON = (new JSONObject(getArguments().getString("/default/notifications.json"))).getJSONArray("notifications");
         }
         catch (Exception e) {
@@ -40,6 +41,7 @@ public class Notifications extends Fragment {
         }
 
         if(notiJSON.length() > 0) {
+            //Parse the Notifications JSON
             String textToSet = "";
             try {
                 for (int i = 0; i < notiJSON.length(); i++) {
