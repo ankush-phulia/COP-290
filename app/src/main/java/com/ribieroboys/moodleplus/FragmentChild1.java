@@ -87,9 +87,9 @@ public class FragmentChild1 extends Fragment {
     }
 
     private void prepareListData() {
+
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
-
         try {
             for (int assignNo=0; assignNo < assignJSON.length(); assignNo++) {
                 JSONObject assignment = (JSONObject) assignJSON.get(assignNo);

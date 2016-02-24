@@ -12,103 +12,114 @@
     tools:context="com.ribieroboys.moodleplus.Login"
     tools:showIn="@layout/activity_login2">
 
-    <EditText
-        android:id="@+id/editTextUsername"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter your Username"
-        android:inputType="textNoSuggestions"
-        android:imeOptions="actionNext"
-        android:layout_below="@+id/textView3"
-        android:layout_alignParentStart="true" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter your Password"
-        android:inputType="textPassword"
-        android:imeOptions="actionDone"
-        android:layout_below="@+id/textView4"
-        android:layout_alignParentStart="true" />
+            <EditText
+                android:id="@+id/editTextUsername"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter your Username"
+                android:inputType="textNoSuggestions"
+                android:imeOptions="actionNext"
+                android:layout_below="@+id/textView3"
+                android:layout_alignParentStart="true" />
 
-    <CheckBox
-        android:id="@+id/saveLoginCheckBox"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Remember Me"
-        android:textStyle="bold"
-        android:textColor="#000"
-        android:layout_below="@+id/textView6"
-        android:layout_alignParentEnd="true" />
+            <EditText
+                android:id="@+id/editTextPassword"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter your Password"
+                android:inputType="textPassword"
+                android:imeOptions="actionDone"
+                android:layout_below="@+id/textView4"
+                android:layout_alignParentStart="true" />
 
-    <Button
-        android:id="@+id/buttonLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        android:textStyle="bold"
-        android:layout_below="@+id/wrongCredential"
-        android:layout_centerHorizontal="true" />
+            <CheckBox
+                android:id="@+id/saveLoginCheckBox"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Remember Me"
+                android:textStyle="bold"
+                android:textColor="#000"
+                android:layout_below="@+id/textView6"
+                android:layout_alignParentEnd="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Login to MoodlePlus"
-        android:id="@+id/textView2"
-        android:textStyle="bold"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textSize="28dp" />
+            <Button
+                android:id="@+id/buttonLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Login"
+                android:textStyle="bold"
+                android:layout_below="@+id/wrongCredential"
+                android:layout_centerHorizontal="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Username"
-        android:textStyle="bold"
-        android:id="@+id/textView3"
-        android:layout_below="@+id/textView2"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Login to MoodlePlus"
+                android:id="@+id/textView2"
+                android:textStyle="bold"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:textSize="28dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Password"
-        android:textStyle="bold"
-        android:id="@+id/textView4"
-        android:layout_below="@+id/textView5"
-        android:layout_alignParentStart="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Username"
+                android:textStyle="bold"
+                android:id="@+id/textView3"
+                android:layout_below="@+id/textView2"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="30dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text=" "
-        android:id="@+id/textView5"
-        android:layout_below="@+id/editTextUsername"
-        android:layout_alignParentStart="true"
-        android:textSize="8dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Password"
+                android:textStyle="bold"
+                android:id="@+id/textView4"
+                android:layout_below="@+id/textView5"
+                android:layout_alignParentStart="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="           "
-        android:id="@+id/textView6"
-        android:layout_below="@+id/editTextPassword"
-        android:layout_toEndOf="@+id/textView5" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text=" "
+                android:id="@+id/textView5"
+                android:layout_below="@+id/editTextUsername"
+                android:layout_alignParentStart="true"
+                android:textSize="8dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/Red"
-        android:id="@+id/wrongCredential"
-        android:layout_below="@+id/saveLoginCheckBox"
-        android:layout_toEndOf="@+id/textView5" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="           "
+                android:id="@+id/textView6"
+                android:layout_below="@+id/editTextPassword"
+                android:layout_toEndOf="@+id/textView5" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/Red"
+                android:id="@+id/wrongCredential"
+                android:layout_below="@+id/saveLoginCheckBox"
+                android:layout_toEndOf="@+id/textView5" />
+
+        </RelativeLayout>
+
+    </ScrollView>
 
 </RelativeLayout>

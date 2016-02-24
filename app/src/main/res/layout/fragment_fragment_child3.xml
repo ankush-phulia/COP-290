@@ -48,22 +48,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
                         android:background="#000"/>
+
                 </LinearLayout>
 
-
-                <android.support.design.widget.FloatingActionButton
+                <TextView
+                    android:id="@+id/textViewChild3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/add_thread"
-                    app:borderWidth="2dp"
-                    app:fabSize="normal"
-                    android:onClick="submit"
-                    app:rippleColor="@color/colorPrimaryDark"
-                    android:layout_alignBottom="@+id/expandableListViewThreads"
-                    android:layout_alignEnd="@+id/textView8"
-                    android:layout_marginBottom="47dp">
-
-                </android.support.design.widget.FloatingActionButton>
+                    android:layout_gravity="right|top"
+                    android:text="Threads"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginTop="13dp" />
 
             </RelativeLayout>
 
@@ -71,5 +69,20 @@
 
 
     </ScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_thread"
+        app:borderWidth="2dp"
+        app:fabSize="normal"
+        android:onClick="submit"
+        app:rippleColor="@color/colorPrimaryDark"
+        android:layout_alignBottom="@+id/expandableListViewThreads"
+        android:layout_alignEnd="@+id/textView8"
+        android:layout_marginBottom="47dp"
+        android:layout_gravity="right|bottom">
+
+    </android.support.design.widget.FloatingActionButton>
 
 </FrameLayout>

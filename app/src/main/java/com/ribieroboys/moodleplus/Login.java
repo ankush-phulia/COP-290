@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,16 +21,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import java.sql.Time;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 public class Login extends Activity implements OnClickListener {
 
@@ -39,11 +35,13 @@ public class Login extends Activity implements OnClickListener {
     CheckBox saveLoginCheckBox;
     SharedPreferences loginPreferences;
     SharedPreferences.Editor loginPrefsEditor;
-    TextView wrongCredential;
+
     JSONObject userJSON;
     JSONArray courseJSON;
     Bundle infoToPass;
     ArrayList<String> courseListCodes;
+    Intent intent;
+    int attempts=0;
 
 
     int count ;
@@ -63,9 +61,6 @@ public class Login extends Activity implements OnClickListener {
     }
 
     @Override
-
-
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
@@ -73,11 +68,11 @@ public class Login extends Activity implements OnClickListener {
         getIDs();
 
         log.setOnClickListener(this);
+
+        // Setup shared preferneces to store USername and pasword if required
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor = loginPreferences.edit();
         count = loginPreferences.getInt("counter",0) ;
-
-
 
         int j = count ;
         while (j != 0) {
@@ -124,169 +119,47 @@ public class Login extends Activity implements OnClickListener {
     }
 
     private void getIDs() {
+        // fetch all UI elements
         log = (Button) findViewById(R.id.buttonLogin);
         editTextUsername = (EditText) findViewById(R.id.editTextUsername);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         saveLoginCheckBox = (CheckBox) findViewById(R.id.saveLoginCheckBox);
-        wrongCredential = (TextView) findViewById(R.id.wrongCredential);
+        intent = new Intent(Login.this, TimePass.class);
         success = false;
     }
 
     public void onClick(View view) {
-
+        //clcick handler for login button
         if (view == log) {
-            final Intent intent = new Intent(Login.this, TimePass.class);
+
+            //extract username and password and put in the bundle to forward
             username = editTextUsername.getText().toString();
             password = editTextPassword.getText().toString();
+
             if (username.equals("") || password.equals("")) {
                 if (username.equals("")) {
                     Toast.makeText(Login.this, "Username field Empty", Toast.LENGTH_LONG).show();
-                    return  ;
-                }
-                else {
+                    return;
+                } else {
                     Toast.makeText(Login.this, "Password field Empty", Toast.LENGTH_LONG).show();
-                    return ;
+                    return;
                 }
             }
-
 
             infoToPass = new Bundle();
             infoToPass.putString("user", username);
             infoToPass.putString("pass", password);
             infoToPass.putString("url", url);
 
-            if (!isValid(username)) {
-                Toast.makeText(Login.this, "Invalid username", Toast.LENGTH_LONG).show();
-                editTextUsername.setText("");
-                editTextPassword.setText("");
-                editTextUsername.requestFocus() ;
-                return ;
-            }
 
-            // check for validity of credentials
-            String loginURL = url + "/default/login.json?userid=" + username + "&password=" + password;
-            StringRequest getReq = new StringRequest(Request.Method.GET,
-                    loginURL,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            // receive reply from server
-                            try {
-                                JSONObject jsonResponse = new JSONObject(response);
-                                System.out.println(jsonResponse.has("success"));
-                                success = jsonResponse.get("success").toString().equals("true");
-                                userJSON = jsonResponse.getJSONObject("user");
-
-                                // put the information to pass
-                                infoToPass.putString("firstName", userJSON.getString("first_name"));
-                                System.out.println(userJSON.getString("first_name"));
-                                infoToPass.putString("lastName", userJSON.getString("last_name"));
-                                infoToPass.putString("entryNo", userJSON.getString("entry_no"));
-                                infoToPass.putString("email", userJSON.getString("email"));
-                                infoToPass.putInt("id", userJSON.getInt("id"));
-                                infoToPass.putBoolean("isStudent", userJSON.getInt("type_") == 0);
-                                intent.putExtra("loginResponse", infoToPass);
-                            }
-                            catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(Login.this, "Connection Error", Toast.LENGTH_LONG).show();
-                        }
-                });
-
-            // send the request to RequestQ
-            RequestQ.getInstance().addToRequestQ(getReq);
-
-            if(!success) {
-                return;
-            }
-
-
-            String courseURL = url + "/courses/list.json";
-            StringRequest Req = new StringRequest(Request.Method.GET,
-                    courseURL,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            // receive reply from server
-                            try {
-                                JSONObject jsonResponse = new JSONObject(response);
-                                courseJSON = jsonResponse.getJSONArray("courses");
-
-                                // Extract the course list codes
-                                courseListCodes = new ArrayList<>();
-                                for(int i=0; i<courseJSON.length(); i++) {
-                                    JSONObject course = (JSONObject) courseJSON.get(i);
-                                    courseListCodes.add(course.getString("code"));
-                                    intent.putStringArrayListExtra("courseListCodes", courseListCodes);
-                                }
-                                intent.putExtra("/courses/list.json", response);
-                            }
-                            catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(Login.this, "Connection Error", Toast.LENGTH_LONG).show();
-                        }
-                    });
-
-            RequestQ.getInstance().addToRequestQ(Req);
-
-
-            String notiURL = url + "/default/notifications.json";
-            Req = new StringRequest(Request.Method.GET,
-                    notiURL,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            intent.putExtra("/default/notifications.json", response);
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(Login.this, "Connection Error", Toast.LENGTH_LONG).show();
-                        }
-                    });
-
-            RequestQ.getInstance().addToRequestQ(Req);
-
-
-            String gradesURL = url + "/default/grades.json";
-            Req = new StringRequest(Request.Method.GET,
-                    gradesURL,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            intent.putExtra("/default/grades.json", response);
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(Login.this, "Connection Error", Toast.LENGTH_LONG).show();
-                        }
-                    });
-
-            RequestQ.getInstance().addToRequestQ(Req);
-
-            String userid ;
-            for (int i = 1 ; i <= count ;i++ ){
-                userid =  loginPreferences.getString(Integer.toString(i),"") ;
-                if (!userid.equals("")){
-                    String[] tokens = tokenize(userid) ;
-                    if (tokens[0].equals(username)){
-                        keyvlaue = i ;
-                        break ;
+            String userid;
+            for (int i = 1; i <= count; i++) {
+                userid = loginPreferences.getString(Integer.toString(i), "");
+                if (!userid.equals("")) {
+                    String[] tokens = tokenize(userid);
+                    if (tokens[0].equals(username)) {
+                        keyvlaue = i;
+                        break;
                     }
                 }
             }
@@ -301,15 +174,15 @@ public class Login extends Activity implements OnClickListener {
                     loginPrefsEditor.putString(Integer.toString(count), username + ":");
                     loginPrefsEditor.commit();
                 }
-                new AlertDialog.Builder(Login.this,AlertDialog.THEME_HOLO_DARK)
+                new AlertDialog.Builder(Login.this, AlertDialog.THEME_HOLO_DARK)
                         .setTitle("Remember Password")
                         .setMessage("Should the Password be saved?")
                         .setPositiveButton("No", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 
                                 if (keyvlaue != -1) {
-                                    loginPrefsEditor.putString(Integer.toString(keyvlaue),username + ":") ;
-                                    loginPrefsEditor.commit() ;
+                                    loginPrefsEditor.putString(Integer.toString(keyvlaue), username + ":");
+                                    loginPrefsEditor.commit();
                                 }
 
                                 endActivityAndStartNew(intent);
@@ -318,30 +191,77 @@ public class Login extends Activity implements OnClickListener {
                         .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 
-                                    if (keyvlaue != -1){
-                                        loginPrefsEditor.putString(Integer.toString(keyvlaue), username + ":" + password);
-                                        loginPrefsEditor.commit();
-                                    }else {
-                                        loginPrefsEditor.putString(Integer.toString(count), username + ":" + password);
-                                        loginPrefsEditor.commit();
-                                    }
-
-
+                                if (keyvlaue != -1) {
+                                    loginPrefsEditor.putString(Integer.toString(keyvlaue), username + ":" + password);
+                                    loginPrefsEditor.commit();
+                                } else {
+                                    loginPrefsEditor.putString(Integer.toString(count), username + ":" + password);
+                                    loginPrefsEditor.commit();
+                                }
                                 endActivityAndStartNew(intent);
                             }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-            }
-            else {
-                if (keyvlaue != -1) {
-                    loginPrefsEditor.putString(Integer.toString(keyvlaue),"") ;
-                    loginPrefsEditor.commit();
+                        });
+
+
+                Retreive rtr = new Retreive(url, username, password, infoToPass, success, userJSON, intent, courseJSON, courseListCodes, Login.this, attempts);
+                rtr.retreive_credentials();
+                rtr.retreive_courses();
+                rtr.retreive_notifications();
+                rtr.retreive_grades();
+                if (!success && rtr.attempts == 0) {
+                    rtr.attempts++;
+                    return;
+                } else if (!success && rtr.attempts > 0) {
+                    //show error dialog on invalid user/pass
+                    new AlertDialog.Builder(Login.this, AlertDialog.THEME_HOLO_DARK)
+                            .setTitle("Invalid Credentials")
+                            .setMessage("Username or Password")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    return;
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+
+                } else {
+                    //pass things to the next activity
+                    intent.putExtra("nextIntent", "Main");
+                    intent.putExtra("URL", url);
+                    //offer to save the password if username is also set to tbe saved
+                    if (saveLoginCheckBox.isChecked()) {
+                        if (keyvlaue != -1) {
+                            loginPrefsEditor.putString(Integer.toString(keyvlaue), "");
+                            loginPrefsEditor.commit();
+                        }
+                        new AlertDialog.Builder(Login.this, AlertDialog.THEME_HOLO_DARK)
+                                .setTitle("Remember Password")
+                                .setMessage("Should the Password be saved?")
+                                .setPositiveButton("No", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        loginPrefsEditor.putBoolean("savePass", false);
+                                        loginPrefsEditor.commit();
+                                        endActivityAndStartNew(intent);
+                                    }
+                                })
+                                .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        loginPrefsEditor.putBoolean("savePass", true);
+                                        loginPrefsEditor.putString("password", password);
+                                        loginPrefsEditor.commit();
+                                        endActivityAndStartNew(intent);
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    } else {
+                        loginPrefsEditor.clear();
+                        loginPrefsEditor.commit();
+                        endActivityAndStartNew(intent);
+                    }
                 }
 
-                endActivityAndStartNew(intent);
             }
-
         }
     }
 

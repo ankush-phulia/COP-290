@@ -34,6 +34,7 @@ public class Dashboard extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        //retreive user details
         user = getArguments().getString("user");
         pass = getArguments().getString("pass");
         TextView welcome=(TextView) rootView.findViewById(R.id.textView14);
@@ -52,9 +53,11 @@ public class Dashboard extends Fragment {
     }
 
     public void calendar_setup(View v){
+        //Setup the calendar view
         calendarview = (CalendarView) v.findViewById(R.id.calendarView);
         long d = calendarview.getDate();
         String dateString = new SimpleDateFormat("dd/MM/yyyy").format(new Date(d));
+        //set start date to be displayed
         String start="01"+dateString.substring(2);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Date date = null;
@@ -66,6 +69,7 @@ public class Dashboard extends Fragment {
         long s = date.getTime();
         calendarview.setMinDate(s);
 
+        //set end date to be displayed
         String end;
         int month =Integer.parseInt(dateString.substring(3, 5));
         if (month==2){

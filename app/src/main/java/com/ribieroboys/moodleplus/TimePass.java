@@ -21,7 +21,6 @@ public class TimePass extends AppCompatActivity {
             public void run() {
                 Intent next = new Intent(getIntent());
                 next.setClass(TimePass.this, Main.class);
-
                 startActivity(next);
                 finish();
             }

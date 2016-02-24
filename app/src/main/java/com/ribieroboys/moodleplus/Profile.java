@@ -12,8 +12,11 @@ import android.widget.TextView;
 
 public class Profile extends AppCompatActivity {
 
-    //Button back;
     Bundle profileInfo;
+    TextView username;
+    TextView fullname;
+    TextView entryNo;
+    TextView email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,24 +28,23 @@ public class Profile extends AppCompatActivity {
         Intent dataReceived = getIntent();
         profileInfo = dataReceived.getBundleExtra("profileInfo");
 
-        TextView username = (TextView) findViewById(R.id.profile_username);
+        getIDs();
+        //set the text fields as per the profile data received
         username.setText(profileInfo.getString("user"));
-        TextView fullname = (TextView) findViewById(R.id.profile_fullname);
         fullname.setText(profileInfo.getString("firstName") + " " + profileInfo.getString("lastName"));
-        TextView entryNo = (TextView) findViewById(R.id.profile_entryno);
         entryNo.setText(profileInfo.getString("entryNo"));
-        TextView email = (TextView) findViewById(R.id.profile_email);
         email.setText(profileInfo.getString("email"));
 
-/*        back=(Button) findViewById(R.id.button);
-
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                end();
-            }
-        });*/
     }
+
+    public void  getIDs(){
+        //get the UI elements
+        username = (TextView) findViewById(R.id.profile_username);
+        fullname = (TextView) findViewById(R.id.profile_fullname);
+        entryNo = (TextView) findViewById(R.id.profile_entryno);
+        email = (TextView) findViewById(R.id.profile_email);
+    }
+
 
     public void end(){
         this.finish();
@@ -50,7 +52,8 @@ public class Profile extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        this.finish();
+        //close the activity
+        end();
     }
 
     @Override
@@ -65,6 +68,7 @@ public class Profile extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_settings:
+                //profile option selected
                 final Intent goToProfile = new Intent(Profile.this, Profile.class);
                 goToProfile.putExtra("profileInfo", profileInfo);
                 startActivity(goToProfile);
@@ -72,6 +76,7 @@ public class Profile extends AppCompatActivity {
                 return true;
 
             case R.id.logout:
+                //logout option selected
                 final Intent intent2 = new Intent(Profile.this, Login.class);
                 new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK)
                         .setTitle("Logout")

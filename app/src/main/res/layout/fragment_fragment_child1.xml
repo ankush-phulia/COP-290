@@ -7,14 +7,12 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="510dp"
             android:layout_gravity="center">
 
-
-                <ExpandableListView
+               <ExpandableListView
                     android:id="@+id/expandableListViewAssign"
                     android:layout_height="409dp"
                     android:layout_width="match_parent"
@@ -27,7 +25,7 @@
                     android:layout_alignParentStart="true" />
 
                 <TextView
-                    android:id="@+id/textView9"
+                    android:id="@+id/textViewChild1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Assignments"
@@ -36,7 +34,6 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="17dp"
                     android:layout_marginTop="30dp" />
-
 
 
         </RelativeLayout>
