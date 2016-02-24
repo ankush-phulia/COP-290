@@ -8,7 +8,27 @@
         android:id="@+id/textViewChild1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="right|top"
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+
+        <ExpandableListView
+            android:id="@+id/expandableListView"
+            android:layout_height="409dp"
+            android:layout_width="match_parent"
+            android:groupIndicator="@android:color/black"
+            android:divider="@android:color/black"
+            android:dividerHeight="0dp"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true" />
+
+    </RelativeLayout>
+
 </FrameLayout>
