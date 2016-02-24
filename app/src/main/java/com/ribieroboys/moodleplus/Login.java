@@ -44,11 +44,7 @@ public class Login extends Activity implements OnClickListener {
     public boolean isValid(String entry_no){
 
         // Using RegEx to check validity of entry no.
-        String testString = entry_no.toLowerCase();
-        String Regex_Pattern = "^((bb|cs|ce|ch|ee|mt|me|tt)|[a-z][a-z][a-z])[1-7][0-9]{6}$";
-        Pattern p = Pattern.compile(Regex_Pattern);
-        Matcher m = p.matcher(testString);
-        return m.find();
+        return true ;
     }
 
     public String[] tokenize(String id){
