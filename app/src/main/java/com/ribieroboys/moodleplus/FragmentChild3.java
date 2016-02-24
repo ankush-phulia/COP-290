@@ -1,7 +1,9 @@
 package com.ribieroboys.moodleplus;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +12,6 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ public class FragmentChild3 extends Fragment {
     ExpandableListView expListView;
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
+    FloatingActionButton newth;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -40,6 +42,16 @@ public class FragmentChild3 extends Fragment {
             threadsJSON = new JSONArray(getArguments().getString("Threads"));
 
             expListView = (ExpandableListView) view.findViewById(R.id.expandableListView);
+            newth =(FloatingActionButton) view.findViewById(R.id.add_thread);
+
+            newth.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), NewThread.class);
+                    startActivity(intent);
+                }
+            });
+
+
 
             listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild);
             expListView.setAdapter(listAdapter);

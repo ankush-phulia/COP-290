@@ -1,33 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#ffffff">
 
-    <TextView
-        android:id="@+id/textViewChild3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|top"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center">
-
-        <ExpandableListView
-            android:id="@+id/threads"
-            android:layout_height="409dp"
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:groupIndicator="@android:color/black"
-            android:divider="@android:color/black"
-            android:dividerHeight="0dp"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_centerVertical="true"
-            android:layout_alignParentStart="true" />
+            android:layout_height="wrap_content">
 
-    </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="510dp"
+                android:layout_gravity="center">
+
+                <ExpandableListView
+                    android:id="@+id/threads"
+                    android:layout_height="409dp"
+                    android:layout_width="match_parent"
+                    android:groupIndicator="@android:color/black"
+                    android:divider="@android:color/black"
+                    android:dividerHeight="0dp"
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginBottom="26dp" />
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|top"
+                    android:text="Threads"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginTop="13dp" />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/add_thread"
+                    app:borderWidth="2dp"
+                    app:fabSize="normal"
+                    android:onClick="submit"
+                    app:rippleColor="@color/colorPrimaryDark"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignEnd="@+id/textView8">
+
+                </android.support.design.widget.FloatingActionButton>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
 </FrameLayout>
