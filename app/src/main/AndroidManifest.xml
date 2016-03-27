@@ -20,18 +20,37 @@
         </activity>
         <activity
             android:name=".Start"
-            android:windowSoftInputMode="adjustResize"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".Main"
-            android:label="@string/title_activity_main"
-            android:windowSoftInputMode="adjustResize"
+            android:label="CMS IITD"
             android:parentActivityName=".Start"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.ribiero_boys.assignment_2.Start" />
         </activity>
+        <activity
+            android:name=".Profile"
+            android:label="@string/title_activity_profile"
+            android:parentActivityName=".Main"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ribiero_boys.assignment_2.Main" />
+        </activity>
+        <activity
+            android:name=".Notifications"
+            android:label="@string/title_activity_notifications"
+            android:parentActivityName=".Main"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ribiero_boys.assignment_2.Main" />
+        </activity>
+        <activity android:name=".New_complaint"></activity>
     </application>
 
 </manifest>

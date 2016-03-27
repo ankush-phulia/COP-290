@@ -20,6 +20,13 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
+        >
+        <com.example.ribiero_boys.assignment_2.AnimatedExpandableListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_height="400dp" />
+
+    </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>
