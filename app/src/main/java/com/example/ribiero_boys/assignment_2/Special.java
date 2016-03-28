@@ -5,13 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -21,65 +14,45 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//CREDIT TO IDUNNOLOLZ FOR EXPANDABLELIST ADAPTER
-public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Special extends AppCompatActivity {
 
+    Bundle profileInfo;
+    boolean spl;
     AnimatedExpandableListView listView;
     ExampleAdapter adapter;
-    Bundle profileInfo;
-    FloatingActionButton fab;
-    boolean spl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //get the app bar ready
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_special);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //receive intent from Login
         profileInfo=getIntent().getBundleExtra("info");
+        final Context cont=this;
 
-        //fab for new complaint
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent newcomp=new Intent(Main.this,New_complaint.class);
-                newcomp.putExtra("info",profileInfo);
-                startActivity(newcomp);
-            }
-        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //initialise navigation drawer
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        //Open Overview first
-        Overview firstFragment = new Overview();
-        firstFragment.setArguments(profileInfo);
-        getSupportFragmentManager().beginTransaction().add(R.id.MainFragments, firstFragment).commit();
-
+        //get a list of pending users (name+designation displayed)
+        List<String> users_designation=new ArrayList<String>();
+        users_designation.add("User 1");
+        users_designation.add("User 2");
+        users_designation.add("User 3");
         // Populate our list with groups and it's children
         List<GroupItem> items = new ArrayList<GroupItem>();
-        items.add(genGroup("Pending Complaints Made"));
-        items.add(genGroup("Resolved Complaints Made"));
-        items.add(genGroup("Pending Complaints Received"));
-        items.add(genGroup("Resolved Complaints Received"));
+        for (int i=0; i<3;i++){
+            items.add(genGroup(users_designation.get(i)));
+        }
 
         adapter = new ExampleAdapter(this);
         adapter.setData(items);
 
-        listView = (AnimatedExpandableListView) findViewById(R.id.listView);
+        listView = (AnimatedExpandableListView) findViewById(R.id.listViewSplReq);
         listView.setAdapter(adapter);
 
         // In order to show animations, we need to use a custom click handler
@@ -104,46 +77,41 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 switch (childPosition) {
                     case 0:
-                        //Go to Personal Level
-                        Personal fragPersonal = new Personal();
-                        profileInfo.putString("type", adapter.getGroup(groupPosition).title);
-                        fragPersonal.setArguments(profileInfo);
-                        transaction.replace(R.id.MainFragments, fragPersonal);
-                        transaction.commit();
-                        drawer.closeDrawers();
+                        //Ask for approval
+                        new AlertDialog.Builder(cont, AlertDialog.THEME_HOLO_LIGHT)
+                                .setTitle("Aprove "+adapter.getGroup(groupPosition).title)
+                                .setMessage("Do you wish approve this user?")
+                                .setPositiveButton("No", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                })
+                                .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Toast.makeText(cont, "Special Status Granted", Toast.LENGTH_LONG).show();
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
                         return true;
 
                     case 1:
-                        //Go to Hostel Level
-                        Hostel fragHostel = new Hostel();
-                        profileInfo.putString("type", adapter.getGroup(groupPosition).title);
-                        fragHostel.setArguments(profileInfo);
-                        transaction.replace(R.id.MainFragments, fragHostel);
-                        transaction.commit();
-                        drawer.closeDrawers();
-                        return true;
-
-                    case 2:
-                        //Go to Department Level
-                        Department fragDepartment = new Department();
-                        profileInfo.putString("type",adapter.getGroup(groupPosition).title);
-                        fragDepartment.setArguments(profileInfo);
-                        transaction.replace(R.id.MainFragments, fragDepartment);
-                        transaction.commit();
-                        drawer.closeDrawers();
-                        return true;
-                    case 3:
-                        //Go to Institute Level
-                        Institute fragInstitute = new Institute();
-                        profileInfo.putString("type",adapter.getGroup(groupPosition).title);
-                        fragInstitute.setArguments(profileInfo);
-                        transaction.replace(R.id.MainFragments, fragInstitute);
-                        transaction.commit();
-                        drawer.closeDrawers();
+                        //Ask for approval
+                        new AlertDialog.Builder(cont, AlertDialog.THEME_HOLO_LIGHT)
+                                .setTitle("Reject "+adapter.getGroup(groupPosition).title)
+                                .setMessage("Do you wish to reject this user request?")
+                                .setPositiveButton("No", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                })
+                                .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Toast.makeText(cont, "Request Rejected", Toast.LENGTH_LONG).show();
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
                         return true;
 
                     default:
@@ -158,35 +126,16 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     public GroupItem genGroup(String s){
         GroupItem pcm=new GroupItem();
         pcm.title=s;
-        pcm.items.add(new ChildItem("Personal"));
-        pcm.items.add(new ChildItem("Hostel Level"));
-        pcm.items.add(new ChildItem("Department Level"));
-        pcm.items.add(new ChildItem("Institute Level"));
+        pcm.items.add(new ChildItem("Approve Special Status"));
+        pcm.items.add(new ChildItem("Reject Special Status"));
         return pcm;
-    }
-
-    //disable back navigation on main activity
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            Fragment f = getSupportFragmentManager().findFragmentById(R.id.MainFragments);
-            if (f instanceof View_complaint) {
-                super.onBackPressed();
-            }else{
-
-            }
-
-        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         Intent intent=getIntent();
-        spl=intent.getBooleanExtra("spl",true);
+        spl=intent.getBooleanExtra("spl",false);
         if (spl){
             getMenuInflater().inflate(R.menu.main2, menu);
             return true;
@@ -195,7 +144,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             getMenuInflater().inflate(R.menu.main, menu);
             return true;
         }
-
     }
 
     @Override
@@ -205,23 +153,25 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
             case R.id.notifications:
                 //Notifications selected
-                final Intent goToNotifications = new Intent(Main.this, Notifications.class);
+                final Intent goToNotifications = new Intent(Special.this, Notifications.class);
                 goToNotifications.putExtra("info",profileInfo);
                 goToNotifications.putExtra("spl",spl);
+                end();
                 startActivity(goToNotifications);
                 return true;
 
             case R.id.action_settings:
                 //Profile selected
-                final Intent goToProfile = new Intent(Main.this, Profile.class);
+                final Intent goToProfile = new Intent(Special.this, Profile.class);
                 goToProfile.putExtra("info",profileInfo);
                 goToProfile.putExtra("spl",spl);
+                end();
                 startActivity(goToProfile);
                 return true;
 
             case R.id.logout:
                 //Logout selected
-                final Intent logout = new Intent(Main.this, Login.class);
+                final Intent logout = new Intent(Special.this, Login.class);
                 new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_LIGHT)
                         .setTitle("Logout")
                         .setMessage("Do you wish to log out?")
@@ -231,7 +181,8 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                         })
                         .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                final Intent goToStart = new Intent(Main.this, Start.class);
+                                final Intent goToStart = new Intent(Special.this, Start.class);
+                                end();
                                 startActivity(goToStart);
                             }
                         })
@@ -241,10 +192,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
             case R.id.special:
                 //special selected
-                final Intent goToSpecial = new Intent(Main.this, Special.class);
-                goToSpecial.putExtra("info",profileInfo);
-                goToSpecial.putExtra("spl",spl);
-                startActivity(goToSpecial);
+                return true;
+
+            case android.R.id.home:
+                onBackPressed();
                 return true;
 
             default:
@@ -252,10 +203,14 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         }
     }
 
+    public void end() {
+        this.finish();
+    }
+
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        return true;
+    public void onBackPressed() {
+        //close the activity
+        end();
     }
 
     //custom classes meant for expandable lists and their children
@@ -374,14 +329,5 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         }
 
     }
-
-    public void showFloatingActionButton() {
-        fab.show();
-    };
-
-    public void hideFloatingActionButton() {
-        fab.hide();
-    };
-
 
 }

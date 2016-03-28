@@ -14,6 +14,7 @@ import android.view.View;
 public class Notifications extends AppCompatActivity {
 
     Bundle profileInfo;
+    boolean spl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +41,16 @@ public class Notifications extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        Intent intent=getIntent();
+        spl=intent.getBooleanExtra("spl",false);
+        if (spl){
+            getMenuInflater().inflate(R.menu.main2, menu);
+            return true;
+        }
+        else{
+            getMenuInflater().inflate(R.menu.main, menu);
+            return true;
+        }
     }
 
     @Override
@@ -57,6 +66,7 @@ public class Notifications extends AppCompatActivity {
                 //Profile selected
                 final Intent goToProfile = new Intent(Notifications.this, Profile.class);
                 goToProfile.putExtra("info",profileInfo);
+                goToProfile.putExtra("spl",spl);
                 end();
                 startActivity(goToProfile);
                 return true;
@@ -80,6 +90,15 @@ public class Notifications extends AppCompatActivity {
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
+                return true;
+
+            case R.id.special:
+                //special selected
+                final Intent goToSpecial = new Intent(Notifications.this, Special.class);
+                goToSpecial.putExtra("info",profileInfo);
+                goToSpecial.putExtra("spl",spl);
+                end();
+                startActivity(goToSpecial);
                 return true;
 
             case android.R.id.home:

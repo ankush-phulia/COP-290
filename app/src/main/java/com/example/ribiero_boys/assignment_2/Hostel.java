@@ -44,6 +44,8 @@ public class Hostel extends Fragment {
         items.add("Complaint 2");
         items.add("Complaint 3");
 
+        ((Main)getActivity()).showFloatingActionButton();
+
         listView = (ListView) view.findViewById(R.id.complaints2);
         listView.setAdapter(new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, items));
 
@@ -56,6 +58,7 @@ public class Hostel extends Fragment {
                 args.putString("complaint_title", sel_compl);
                 args.putInt("cid", idd);
                 args.putString("user", getArguments().getString("username", ""));
+                args.putString("scope","Hostel Level");
 
                 View_complaint Complaint = new View_complaint();
                 Complaint.setArguments(args);

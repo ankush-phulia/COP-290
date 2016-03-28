@@ -51,7 +51,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.ribiero_boys.assignment_2.Main" />
         </activity>
-        <activity android:name=".New_complaint"></activity>
+        <activity android:name=".New_complaint" />
+        <activity
+            android:name=".Special"
+            android:label="@string/title_activity_special"
+            android:parentActivityName=".Main"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ribiero_boys.assignment_2.Main" />
+        </activity>
     </application>
 
 </manifest>

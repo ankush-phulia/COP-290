@@ -37,6 +37,8 @@ public class Personal extends Fragment {
         TextView type=(TextView)view.findViewById(R.id.Complaint_typre);
         type.setText(getArguments().getString("type",""));
 
+        ((Main)getActivity()).showFloatingActionButton();
+
         compl_with_ids=new ArrayList<Integer>();
         compl_with_ids.add(1);
         compl_with_ids.add(2);
@@ -60,7 +62,9 @@ public class Personal extends Fragment {
                 Bundle args=new Bundle();
                 args.putString("complaint_title", sel_compl);
                 args.putInt("cid", idd);
+                args.putString("scope","Personal");
                 args.putString("user", getArguments().getString("username", ""));
+                args.putString("type",getArguments().getString("type",""));
 
                 View_complaint Complaint = new View_complaint();
                 FragmentTransaction change=getFragmentManager().beginTransaction();

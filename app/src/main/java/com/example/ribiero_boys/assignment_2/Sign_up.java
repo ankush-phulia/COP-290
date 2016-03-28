@@ -14,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,6 +127,7 @@ public class Sign_up extends Fragment implements AdapterView.OnItemSelectedListe
                     EditText addr_others=(EditText)v.getRootView().findViewById(R.id.address3);
                     break;
             }
+            Toast.makeText(getContext(), "Sign Up Successful", Toast.LENGTH_LONG).show();
             getActivity().getSupportFragmentManager().popBackStackImmediate();
 
         }

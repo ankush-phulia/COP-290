@@ -26,6 +26,7 @@ public class Profile extends AppCompatActivity {
     String password;
     String designation;
     Bundle profileInfo;
+    boolean spl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,8 +184,16 @@ public class Profile extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        Intent intent=getIntent();
+        spl=intent.getBooleanExtra("spl",false);
+        if (spl){
+            getMenuInflater().inflate(R.menu.main2, menu);
+            return true;
+        }
+        else{
+            getMenuInflater().inflate(R.menu.main, menu);
+            return true;
+        }
     }
 
     @Override
@@ -196,6 +205,7 @@ public class Profile extends AppCompatActivity {
                 //Notifications selected
                 final Intent goToNotifications = new Intent(Profile.this, Notifications.class);
                 goToNotifications.putExtra("info",profileInfo);
+                goToNotifications.putExtra("spl",spl);
                 end();
                 startActivity(goToNotifications);
                 return true;
@@ -222,6 +232,15 @@ public class Profile extends AppCompatActivity {
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
+                return true;
+
+            case R.id.special:
+                //special selected
+                final Intent goToSpecial = new Intent(Profile.this, Special.class);
+                goToSpecial.putExtra("info",profileInfo);
+                goToSpecial.putExtra("spl",spl);
+                end();
+                startActivity(goToSpecial);
                 return true;
 
             case android.R.id.home:

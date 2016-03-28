@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +62,7 @@ public class New_complaint extends AppCompatActivity implements AdapterView.OnIt
             newcompl.putString("descr",descr.getText().toString());
             scp=(TextView)scope.getSelectedView();
             newcompl.putString("scope",scp.getText().toString());
-            System.out.println(scp.getText().toString());
+            Toast.makeText(this, "Complaint Made", Toast.LENGTH_LONG).show();
             this.finish();
         }
     }
