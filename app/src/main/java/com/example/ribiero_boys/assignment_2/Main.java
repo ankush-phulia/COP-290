@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,53 +25,54 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+//CREDIT TO IDUNNOLOLZ FOR EXPANDABLELIST ADAPTER
 public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private AnimatedExpandableListView listView;
-    private ExampleAdapter adapter;
+    AnimatedExpandableListView listView;
+    ExampleAdapter adapter;
+    Bundle profileInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //get the app bar ready
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //receive intent from Login
+        profileInfo=getIntent().getBundleExtra("info");
+
+        //fab for new complaint
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent newcomp=new Intent(Main.this,New_complaint.class);
+                newcomp.putExtra("info",profileInfo);
                 startActivity(newcomp);
             }
         });
 
+        //initialise navigation drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        List<GroupItem> items = new ArrayList<GroupItem>();
+        //Open Overview first
+        Overview firstFragment = new Overview();
+        firstFragment.setArguments(profileInfo);
+        getSupportFragmentManager().beginTransaction().add(R.id.MainFragments, firstFragment).commit();
 
         // Populate our list with groups and it's children
-        for(int i = 1; i < 3; i++) {
-            GroupItem item = new GroupItem();
-
-            item.title = "Group " + i;
-
-            for(int j = 0; j < i; j++) {
-                ChildItem child = new ChildItem();
-                child.title = "Awesome item " + j;
-                child.hint = "Too awesome";
-
-                item.items.add(child);
-            }
-
-            items.add(item);
-        }
+        List<GroupItem> items = new ArrayList<GroupItem>();
+        items.add(genGroup("Pending Complaints Made"));
+        items.add(genGroup("Resolved Complaints Made"));
+        items.add(genGroup("Pending Complaints Received"));
+        items.add(genGroup("Resolved Complaints Received"));
 
         adapter = new ExampleAdapter(this);
         adapter.setData(items);
@@ -95,33 +98,84 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             }
 
         });
+
+        listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                switch (childPosition) {
+                    case 0:
+                        //Go to Personal Level
+                        Personal fragPersonal = new Personal();
+                        profileInfo.putString("type", adapter.getGroup(groupPosition).title);
+                        fragPersonal.setArguments(profileInfo);
+                        transaction.replace(R.id.MainFragments, fragPersonal);
+                        transaction.commit();
+                        drawer.closeDrawers();
+                        return true;
+
+                    case 1:
+                        //Go to Hostel Level
+                        Hostel fragHostel = new Hostel();
+                        profileInfo.putString("type", adapter.getGroup(groupPosition).title);
+                        fragHostel.setArguments(profileInfo);
+                        transaction.replace(R.id.MainFragments, fragHostel);
+                        transaction.commit();
+                        drawer.closeDrawers();
+                        return true;
+
+                    case 2:
+                        //Go to Department Level
+                        Department fragDepartment = new Department();
+                        profileInfo.putString("type",adapter.getGroup(groupPosition).title);
+                        fragDepartment.setArguments(profileInfo);
+                        transaction.replace(R.id.MainFragments, fragDepartment);
+                        transaction.commit();
+                        drawer.closeDrawers();
+                        return true;
+                    case 3:
+                        //Go to Institute Level
+                        Institute fragInstitute = new Institute();
+                        profileInfo.putString("type",adapter.getGroup(groupPosition).title);
+                        fragInstitute.setArguments(profileInfo);
+                        transaction.replace(R.id.MainFragments, fragInstitute);
+                        transaction.commit();
+                        drawer.closeDrawers();
+                        return true;
+
+                    default:
+                        return false;
+                }
+
+            }
+        });
     }
 
-    private static class GroupItem {
-        String title;
-        List<ChildItem> items = new ArrayList<ChildItem>();
+    //create group item to add to expandable list
+    public GroupItem genGroup(String s){
+        GroupItem pcm=new GroupItem();
+        pcm.title=s;
+        pcm.items.add(new ChildItem("Personal"));
+        pcm.items.add(new ChildItem("Hostel Level"));
+        pcm.items.add(new ChildItem("Department Level"));
+        pcm.items.add(new ChildItem("Institute Level"));
+        return pcm;
     }
 
-    private static class ChildItem {
-        String title;
-        String hint;
-    }
-
-    private static class ChildHolder {
-        TextView title;
-        TextView hint;
-    }
-
-    private static class GroupHolder {
-        TextView title;
-    }
-
+    //disable back navigation on main activity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            Fragment f = getSupportFragmentManager().findFragmentById(R.id.MainFragments);
+            if (f instanceof View_complaint) {
+                super.onBackPressed();
+            }else{
+
+            }
 
         }
     }
@@ -141,12 +195,14 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             case R.id.notifications:
                 //Notifications selected
                 final Intent goToNotifications = new Intent(Main.this, Notifications.class);
+                goToNotifications.putExtra("info",profileInfo);
                 startActivity(goToNotifications);
                 return true;
 
             case R.id.action_settings:
                 //Profile selected
                 final Intent goToProfile = new Intent(Main.this, Profile.class);
+                goToProfile.putExtra("info",profileInfo);
                 startActivity(goToProfile);
                 return true;
 
@@ -181,7 +237,31 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         return true;
     }
 
+    //custom classes meant for expandable lists and their children
+    private static class GroupItem {
+        String title;
+        List<ChildItem> items = new ArrayList<ChildItem>();
+    }
+
+    private static class ChildItem {
+        String title;
+
+        public ChildItem(String t){
+            this.title=t;
+        }
+    }
+
+    //placeholders used by adpater
+    private static class ChildHolder {
+        TextView title;
+    }
+
+    private static class GroupHolder {
+        TextView title;
+    }
+
     private class ExampleAdapter extends AnimatedExpandableListView.AnimatedExpandableListAdapter {
+        //custom listview adapter for the classes we have
         private LayoutInflater inflater;
 
         private List<GroupItem> items;
@@ -212,14 +292,14 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 holder = new ChildHolder();
                 convertView = inflater.inflate(R.layout.list_item, parent, false);
                 holder.title = (TextView) convertView.findViewById(R.id.textTitle);
-                holder.hint = (TextView) convertView.findViewById(R.id.textHint);
+                //holder.hint = (TextView) convertView.findViewById(R.id.textHint);
                 convertView.setTag(holder);
             } else {
                 holder = (ChildHolder) convertView.getTag();
             }
 
             holder.title.setText(item.title);
-            holder.hint.setText(item.hint);
+            //holder.hint.setText(item.hint);
 
             return convertView;
         }

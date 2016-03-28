@@ -1,2 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <item type="id" name="dep1" />
+    <item type="id" name="dep2" />
+    <item type="id" name="hostel1" />
+    <item type="id" name="hostel2" />
+    <item type="id" name="por1" />
+    <item type="id" name="por2" />
+    <item type="id" name="work" />
+    <item type="id" name="address1" />
+    <item type="id" name="address2" />
+    <item type="id" name="address3" />
+    <item type="id" name="room" />
+
+
+</resources>

@@ -13,6 +13,8 @@ import android.view.View;
 
 public class Notifications extends AppCompatActivity {
 
+    Bundle profileInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,15 +22,19 @@ public class Notifications extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        profileInfo=getIntent().getBundleExtra("info");
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent newcomp=new Intent(Notifications.this,New_complaint.class);
+                Intent newcomp = new Intent(Notifications.this, New_complaint.class);
+                newcomp.putExtra("info",profileInfo);
                 startActivity(newcomp);
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     @Override
@@ -50,6 +56,7 @@ public class Notifications extends AppCompatActivity {
             case R.id.action_settings:
                 //Profile selected
                 final Intent goToProfile = new Intent(Notifications.this, Profile.class);
+                goToProfile.putExtra("info",profileInfo);
                 end();
                 startActivity(goToProfile);
                 return true;
@@ -75,6 +82,10 @@ public class Notifications extends AppCompatActivity {
                         .show();
                 return true;
 
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -82,6 +93,12 @@ public class Notifications extends AppCompatActivity {
 
     public void end() {
         this.finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        //close the activity
+        end();
     }
 
 }

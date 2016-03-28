@@ -75,6 +75,10 @@ public class Login extends Fragment implements View.OnClickListener {
             final Intent intent=new Intent(getContext(),Main.class);
             username = editTextUsername.getText().toString();
             password = editTextPassword.getText().toString();
+            Bundle infoToPass=new Bundle();
+            infoToPass.putString("username",username);
+            infoToPass.putString("password",password);
+            intent.putExtra("info",infoToPass);
 
             if (saveLoginCheckBox.isChecked()) {
                 //save the username in shared prefs

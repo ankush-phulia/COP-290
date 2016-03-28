@@ -3,9 +3,17 @@ package com.example.ribiero_boys.assignment_2;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -13,6 +21,8 @@ import android.view.ViewGroup;
  */
 public class Hostel extends Fragment {
 
+    ListView listView;
+    ArrayList<Integer> compl_with_ids;
 
     public Hostel() {
         // Required empty public constructor
@@ -20,10 +30,43 @@ public class Hostel extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_hostel, container, false);
+        View view= inflater.inflate(R.layout.fragment_hostel, container, false);
+
+        //set complaint type
+        TextView type=(TextView)view.findViewById(R.id.textView19);
+        type.setText(getArguments().getString("type",""));
+
+        // Populate our list with groups and it's children
+        List<String> items = new ArrayList<String>();
+        items.add("Complaint 1");
+        items.add("Complaint 2");
+        items.add("Complaint 3");
+
+        listView = (ListView) view.findViewById(R.id.complaints2);
+        listView.setAdapter(new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, items));
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String sel_compl = ((TextView) view).getText().toString();
+                Integer idd = compl_with_ids.get(position);
+                Bundle args = new Bundle();
+                args.putString("complaint_title", sel_compl);
+                args.putInt("cid", idd);
+                args.putString("user", getArguments().getString("username", ""));
+
+                View_complaint Complaint = new View_complaint();
+                Complaint.setArguments(args);
+                FragmentTransaction change = getFragmentManager().beginTransaction();
+                change.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
+                change.replace(R.id.MainFragments, Complaint).addToBackStack("default");
+                change.commit();
+            }
+        });
+        return view;
     }
+
 
 }
