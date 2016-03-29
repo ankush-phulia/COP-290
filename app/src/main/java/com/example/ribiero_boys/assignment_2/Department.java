@@ -34,6 +34,8 @@ public class Department extends Fragment {
     List<String> RC = new ArrayList<String>();
     List<String> desc = new ArrayList<String>();
     String loggeduser;
+    Bundle profileInfo;
+    Boolean spl;
 
     public Department() {
         // Required empty public constructor
@@ -49,6 +51,8 @@ public class Department extends Fragment {
         ttype=getArguments().getString("type","");
         loggeduser=getArguments().getString("user");
         type.setText(ttype);
+        profileInfo=getArguments().getBundle("profileInfo");
+        spl=getArguments().getBoolean("spl");
 
         //get complaint_list
         try {
@@ -135,6 +139,8 @@ public class Department extends Fragment {
                     args.putString("type",getArguments().getString("type", ""));
                     args.putInt("votes", votes.get(position));
                     args.putString("loggeduser",loggeduser);
+                    args.putBundle("profileInfo",profileInfo);
+                    args.putBoolean("spl",spl);
 
                     View_complaint Complaint = new View_complaint();
                     FragmentTransaction change = getFragmentManager().beginTransaction();

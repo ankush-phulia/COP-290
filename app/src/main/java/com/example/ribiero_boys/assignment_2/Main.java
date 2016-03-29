@@ -130,6 +130,8 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                                             ComplList.putString("type", adapter.getGroup(groupPosition).title);
                                             ComplList.putString("cjson",complaint_list);
                                             ComplList.putString("user",profileInfo.getString("username"," "));
+                                            ComplList.putBundle("profileInfo", profileInfo);
+                                            ComplList.putBoolean("spl",spl);
                                             fragPersonal.setArguments(ComplList);
                                             transaction.replace(R.id.MainFragments, fragPersonal);
                                             transaction.commit();
@@ -142,6 +144,8 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                                             ComplList.putString("type", adapter.getGroup(groupPosition).title);
                                             ComplList.putString("cjson",complaint_list);
                                             ComplList.putString("user",profileInfo.getString("username"," "));
+                                            ComplList.putBundle("profileInfo", profileInfo);
+                                            ComplList.putBoolean("spl", spl);
                                             fragHostel.setArguments(ComplList);
                                             transaction.replace(R.id.MainFragments, fragHostel);
                                             transaction.commit();
@@ -154,6 +158,8 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                                             ComplList.putString("type",adapter.getGroup(groupPosition).title);
                                             ComplList.putString("cjson",complaint_list);
                                             ComplList.putString("user",profileInfo.getString("username"," "));
+                                            ComplList.putBundle("profileInfo", profileInfo);
+                                            ComplList.putBoolean("spl", spl);
                                             fragDepartment.setArguments(ComplList);
                                             transaction.replace(R.id.MainFragments, fragDepartment);
                                             transaction.commit();
@@ -165,6 +171,8 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                                             ComplList.putString("type",adapter.getGroup(groupPosition).title);
                                             ComplList.putString("cjson",complaint_list);
                                             ComplList.putString("user",profileInfo.getString("username"," "));
+                                            ComplList.putBundle("profileInfo",profileInfo);
+                                            ComplList.putBoolean("spl",spl);
                                             fragInstitute.setArguments(ComplList);
                                             transaction.replace(R.id.MainFragments, fragInstitute);
                                             transaction.commit();

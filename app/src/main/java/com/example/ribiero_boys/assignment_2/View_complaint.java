@@ -3,6 +3,7 @@ package com.example.ribiero_boys.assignment_2;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -18,8 +19,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -27,6 +38,9 @@ import java.util.List;
  */
 public class View_complaint extends Fragment {
 
+    String url;
+    String url2;
+    String url3;
     String user;
     String receiver;
     String topic;
@@ -40,6 +54,8 @@ public class View_complaint extends Fragment {
     TextView votes;
     String loggeduser;
     ArrayList<Integer> repl_with_ids;
+    Bundle profileInfo;
+    Boolean spl;
 
     public View_complaint() {
         // Required empty public constructor
@@ -49,16 +65,23 @@ public class View_complaint extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v= inflater.inflate(R.layout.fragment_view_complaint, container, false);
+        final View v= inflater.inflate(R.layout.fragment_view_complaint, container, false);
 
         //assign values to fields
         user=getArguments().getString("user", " ");
         topic=getArguments().getString("complaint_title", " ");
         compl_id=getArguments().getInt("cid", 0);
+        url="http://10.42.0.1:8080/commentlist?complaintId="+compl_id;
+        url2="http://10.42.0.1:8080/addcomment";
+        url3="http://10.42.0.1:8080/resolve";
         descr=getArguments().getString("desc", "");
         scope=getArguments().getString("scope", " ");
         receiver=getArguments().getString("receiver"," ");
         loggeduser=getArguments().getString("loggeduser"," ");
+        spl=getArguments().getBoolean("spl");
+        profileInfo=getArguments().getBundle("profileInfo");
+
+
         if (getArguments().getString("type").equals("Pending Complaints Made")||getArguments().getString("type").equals("Pending Complaints Received")){
             resolved="Resolved";
         }
@@ -85,8 +108,35 @@ public class View_complaint extends Fragment {
                 builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getContext(), input.getText().toString(), Toast.LENGTH_LONG).show();
-                        dialog.cancel();
+                        //create post request on OK
+                        StringRequest postReq = new StringRequest(Request.Method.POST, url2,new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                //receive reply from server and display it to the user as appropriate
+                                getActivity().onBackPressed();
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(getContext(), "Connection Error", Toast.LENGTH_LONG).show();
+                            }
+                        }) {
+                            // putting the parameters as key-value pairs to pass
+                            @Override
+                            public Map<String, String> getParams() {
+                                final Map<String, String> params = new HashMap<String, String>();
+                                params.put("complaintID",(compl_id).toString());
+                                params.put("description",input.getText().toString());
+                                return params;
+                            }
+
+                        };
+                        //Add the team details to global request queue
+                        RequestQ.getInstance().addToRequestQ(postReq);
+                        //dialog.cancel();
+
+
+
                     }
                 });
                 builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
@@ -126,6 +176,72 @@ public class View_complaint extends Fragment {
             resolved.setVisibility(View.INVISIBLE);
         }
 
+        resolved.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StringRequest postReq = new StringRequest(Request.Method.POST, url3,new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //receive reply from server and refresh main
+                        Intent intent=new Intent(getContext(),Main.class);
+                        intent.putExtra("info",profileInfo);
+                        intent.putExtra("spl",spl);
+                        getActivity().finish();
+                        startActivity(intent);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getContext(), "Connection Error", Toast.LENGTH_LONG).show();
+                    }
+                }) {
+                    // putting the parameters as key-value pairs to pass
+                    @Override
+                    public Map<String, String> getParams() {
+                        final Map<String, String> params = new HashMap<String, String>();
+                        params.put("complaintID",(compl_id).toString());
+                        return params;
+                    }
+
+                };
+                //Add the team details to global request queue
+                RequestQ.getInstance().addToRequestQ(postReq);
+            }
+        });
+
+
+
+        StringRequest gradesReq = new StringRequest(Request.Method.GET,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // receive reply from server
+                        try {
+                            JSONArray jsonResponse = new JSONArray(response);
+                            // Populate our list with groups and it's children
+                            List<String> items = new ArrayList<String>();
+                            for (int i=0;i<jsonResponse.length();i++){
+                                JSONObject comment=(JSONObject)jsonResponse.get(i);
+                                items.add(comment.getString("description")+"\n"+comment.getString("postedBy")+"\n"+comment.getString("time"));
+                            }
+                            listView = (ListView) v.findViewById(R.id.listViewReplies);
+                            listView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, items));
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getContext(), "Connection Error", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        RequestQ.getInstance().addToRequestQ(gradesReq);
+
 
         return v;
     }
@@ -145,16 +261,14 @@ public class View_complaint extends Fragment {
         votes=(TextView) v.findViewById(R.id.Votes);
         votes.setText(getArguments().getString("votes"));
 
-        // Populate our list with groups and it's children
-        List<String> items = new ArrayList<String>();
-        items.add("Reply 1");
-        items.add("Reply 2");
-        items.add("Reply 3");
-
-        listView = (ListView) v.findViewById(R.id.listViewReplies);
-        listView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, items));
 
     }
+
+    /*public static View_complaint newInstance(Bundle b){
+        View_complaint v=new View_complaint();
+        v.setArguments(b);
+        return v;
+    }*/
 
 
 }

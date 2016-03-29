@@ -16,8 +16,19 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Special extends AppCompatActivity {
 
@@ -25,6 +36,8 @@ public class Special extends AppCompatActivity {
     boolean spl;
     AnimatedExpandableListView listView;
     ExampleAdapter adapter;
+    String url="http://10.42.0.1:8080/special";
+    String url2="http://10.42.0.1:8080/approval";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,88 +51,162 @@ public class Special extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //get a list of pending users (name+designation displayed)
-        List<String> users_designation=new ArrayList<String>();
-        users_designation.add("User 1");
-        users_designation.add("User 2");
-        users_designation.add("User 3");
-        // Populate our list with groups and it's children
-        List<GroupItem> items = new ArrayList<GroupItem>();
-        for (int i=0; i<3;i++){
-            items.add(genGroup(users_designation.get(i)));
-        }
-
-        adapter = new ExampleAdapter(this);
-        adapter.setData(items);
-
-        listView = (AnimatedExpandableListView) findViewById(R.id.listViewSplReq);
-        listView.setAdapter(adapter);
-
-        // In order to show animations, we need to use a custom click handler
-        // for our ExpandableListView.
-        listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-
+        StringRequest threadsReq = new StringRequest(Request.Method.GET,url,new Response.Listener<String>() {
             @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                // We call collapseGroupWithAnimation(int) and
-                // expandGroupWithAnimation(int) to animate group
-                // expansion/collapse.
-                if (listView.isGroupExpanded(groupPosition)) {
-                    listView.collapseGroupWithAnimation(groupPosition);
-                } else {
-                    listView.expandGroupWithAnimation(groupPosition);
+            public void onResponse(String response) {
+                // receive reply from server
+                try {
+                    JSONObject notifications=new JSONObject(response);
+                    JSONArray pending=notifications.getJSONArray("personal");
+                    //get a list of pending users (name+designation displayed)
+                    List<GroupItem> items = new ArrayList<GroupItem>();
+                    for (int i=0;i<pending.length();i++){
+                        JSONObject user=pending.getJSONObject(i);
+                        items.add(genGroup(user.getString("username")));
+                    }
+                    adapter = new ExampleAdapter(getApplicationContext());
+                    adapter.setData(items);
+                    listView = (AnimatedExpandableListView) findViewById(R.id.listViewSplReq);
+                    listView.setAdapter(adapter);
+
+                    // In order to show animations, we need to use a custom click handler
+                    // for our ExpandableListView.
+                    listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+
+                        @Override
+                        public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                            // We call collapseGroupWithAnimation(int) and
+                            // expandGroupWithAnimation(int) to animate group
+                            // expansion/collapse.
+                            if (listView.isGroupExpanded(groupPosition)) {
+                                listView.collapseGroupWithAnimation(groupPosition);
+                            } else {
+                                listView.expandGroupWithAnimation(groupPosition);
+                            }
+                            return true;
+                        }
+
+                    });
+
+                    listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+                        @Override
+                        public boolean onChildClick(ExpandableListView parent, View v, final int groupPosition, int childPosition, long id) {
+                            switch (childPosition) {
+                                case 0:
+                                    //Ask for approval
+                                    new AlertDialog.Builder(cont, AlertDialog.THEME_HOLO_LIGHT)
+                                            .setTitle("Aprove " + adapter.getGroup(groupPosition).title)
+                                            .setMessage("Do you wish approve this user?")
+                                            .setPositiveButton("No", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+
+                                                }
+                                            })
+                                            .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    StringRequest postReq = new StringRequest(Request.Method.POST, url2,new Response.Listener<String>() {
+                                                        @Override
+                                                        public void onResponse(String response) {
+                                                            //receive reply from server and refresh spl
+                                                            Toast.makeText(cont, "Special Status Granted", Toast.LENGTH_LONG).show();
+                                                            Intent intent=new Intent(Special.this,Special.class);
+                                                            intent.putExtra("info",profileInfo);
+                                                            intent.putExtra("spl", spl);
+                                                            end();
+                                                            startActivity(intent);
+                                                        }
+                                                    }, new Response.ErrorListener() {
+                                                        @Override
+                                                        public void onErrorResponse(VolleyError error) {
+                                                            Toast.makeText(getApplicationContext(), "Connection Error", Toast.LENGTH_LONG).show();
+                                                        }
+                                                    }) {
+                                                        // putting the parameters as key-value pairs to pass
+                                                        @Override
+                                                        public Map<String, String> getParams() {
+                                                            final Map<String, String> params = new HashMap<String, String>();
+                                                            params.put("username",adapter.getGroup(groupPosition).title);
+                                                            params.put("isApproved","true");
+                                                            return params;
+                                                        }
+
+                                                    };
+                                                    //Add the team details to global request queue
+                                                    RequestQ.getInstance().addToRequestQ(postReq);
+
+                                                }
+                                            })
+                                            .setIcon(android.R.drawable.ic_dialog_alert)
+                                            .show();
+                                    return true;
+
+                                case 1:
+                                    //Ask for approval
+                                    new AlertDialog.Builder(cont, AlertDialog.THEME_HOLO_LIGHT)
+                                            .setTitle("Reject " + adapter.getGroup(groupPosition).title)
+                                            .setMessage("Do you wish to reject this user request?")
+                                            .setPositiveButton("No", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                }
+                                            })
+                                            .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    StringRequest postReq = new StringRequest(Request.Method.POST, url2,new Response.Listener<String>() {
+                                                        @Override
+                                                        public void onResponse(String response) {
+                                                            //receive reply from server and refresh spl
+                                                            Toast.makeText(cont, "Request Rejected", Toast.LENGTH_LONG).show();
+                                                            Intent intent=new Intent(Special.this,Special.class);
+                                                            intent.putExtra("info",profileInfo);
+                                                            intent.putExtra("spl", spl);
+                                                            end();
+                                                            startActivity(intent);
+                                                        }
+                                                    }, new Response.ErrorListener() {
+                                                        @Override
+                                                        public void onErrorResponse(VolleyError error) {
+                                                            Toast.makeText(getApplicationContext(), "Connection Error", Toast.LENGTH_LONG).show();
+                                                        }
+                                                    }) {
+                                                        // putting the parameters as key-value pairs to pass
+                                                        @Override
+                                                        public Map<String, String> getParams() {
+                                                            final Map<String, String> params = new HashMap<String, String>();
+                                                            params.put("username",adapter.getGroup(groupPosition).title);
+                                                            params.put("isApproved","false");
+                                                            return params;
+                                                        }
+
+                                                    };
+                                                    //Add the team details to global request queue
+                                                    RequestQ.getInstance().addToRequestQ(postReq);
+                                                }
+                                            })
+                                            .setIcon(android.R.drawable.ic_dialog_alert)
+                                            .show();
+                                    return true;
+
+                                default:
+                                    return false;
+                            }
+
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                return true;
             }
 
-        });
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(Special.this, "Connection Error", Toast.LENGTH_LONG).show();
+                    }
+                });
 
-        listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                switch (childPosition) {
-                    case 0:
-                        //Ask for approval
-                        new AlertDialog.Builder(cont, AlertDialog.THEME_HOLO_LIGHT)
-                                .setTitle("Aprove "+adapter.getGroup(groupPosition).title)
-                                .setMessage("Do you wish approve this user?")
-                                .setPositiveButton("No", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                    }
-                                })
-                                .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Toast.makeText(cont, "Special Status Granted", Toast.LENGTH_LONG).show();
-                                    }
-                                })
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .show();
-                        return true;
+        RequestQ.getInstance().addToRequestQ(threadsReq);
 
-                    case 1:
-                        //Ask for approval
-                        new AlertDialog.Builder(cont, AlertDialog.THEME_HOLO_LIGHT)
-                                .setTitle("Reject "+adapter.getGroup(groupPosition).title)
-                                .setMessage("Do you wish to reject this user request?")
-                                .setPositiveButton("No", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                    }
-                                })
-                                .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Toast.makeText(cont, "Request Rejected", Toast.LENGTH_LONG).show();
-                                    }
-                                })
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .show();
-                        return true;
-
-                    default:
-                        return false;
-                }
-
-            }
-        });
     }
 
     //create group item to add to expandable list
