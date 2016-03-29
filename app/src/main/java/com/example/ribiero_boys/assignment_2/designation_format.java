@@ -23,6 +23,7 @@ public class designation_format {
     public void populate_student(LinearLayout otherfields){
 
         TextView ttt1=new TextView(cont);
+        ttt1.setTextColor(Color.WHITE);
         ttt1.setText("Depatment");
         ttt1.setTextColor(Color.BLACK);
         ttt1.setTextSize(22);
@@ -42,10 +43,12 @@ public class designation_format {
         dep.setId(R.id.dep1);
 
         TextView ttt2=new TextView(cont);
+        ttt2.setTextColor(Color.WHITE);
         ttt2.setText(" ");
         ttt2.setTextSize(6);
 
         TextView t1=new TextView(cont);
+        t1.setTextColor(Color.WHITE);
         t1.setText("Hostel");
         t1.setTextSize(22);
         t1.setTextColor(Color.BLACK);
@@ -70,10 +73,12 @@ public class designation_format {
 
         //create spaces and other elements
         TextView t2=new TextView(cont);
+        t2.setTextColor(Color.WHITE);
         t2.setText(" ");
         t2.setTextSize(6);
 
         TextView t3=new TextView(cont);
+        t3.setTextColor(Color.WHITE);
         t3.setText("Room Number");
         t3.setTextColor(Color.BLACK);
         t3.setTextSize(22);
@@ -85,9 +90,11 @@ public class designation_format {
 
         TextView tt2=new TextView(cont);
         tt2.setText(" ");
+        tt2.setTextColor(Color.WHITE);
         tt2.setTextSize(6);
 
         TextView tt3=new TextView(cont);
+        tt3.setTextColor(Color.WHITE);
         tt3.setText("Positon of Responsibility");
         tt3.setTextSize(22);
         tt3.setTextColor(Color.BLACK);
@@ -107,8 +114,10 @@ public class designation_format {
         por.setAdapter(dataAdapter3);
         por.setThreshold(1);
         por.setId(R.id.por1);
+        por.setTextColor(Color.WHITE);
 
         TextView t4=new TextView(cont);
+        t4.setTextColor(Color.WHITE);
         t4.setText(" ");
         t4.setTextSize(6);
 
@@ -135,6 +144,7 @@ public class designation_format {
         t1.setText("Depatment");
         t1.setTextColor(Color.BLACK);
         t1.setTextSize(22);
+        t1.setTextColor(Color.WHITE);
 
         //create spinner to choose dep
         Spinner dep=new Spinner(cont);
@@ -158,6 +168,7 @@ public class designation_format {
         tt.setText("Address");
         tt.setTextSize(22);
         tt.setTextColor(Color.BLACK);
+        tt.setTextColor(Color.WHITE);
 
         //for address
         EditText addr=new EditText(cont);
@@ -165,6 +176,7 @@ public class designation_format {
         addr.setHint("Enter Address, if on campus");
         addr.setInputType(InputType.TYPE_TEXT_VARIATION_POSTAL_ADDRESS);
         addr.setId(R.id.address1);
+        addr.setTextColor(Color.WHITE);
 
         TextView tt2=new TextView(cont);
         tt2.setText(" ");
@@ -190,6 +202,7 @@ public class designation_format {
         por.setAdapter(dataAdapter2);
         por.setThreshold(1);
         por.setId(R.id.por2);
+        por.setTextColor(Color.WHITE);
 
         TextView t4=new TextView(cont);
         t4.setText(" ");
@@ -199,6 +212,7 @@ public class designation_format {
         tt1.setText("Hostel, if warden");
         tt1.setTextSize(22);
         tt1.setTextColor(Color.BLACK);
+        tt1.setTextColor(Color.WHITE);
 
        /* TextView ttt=new TextView(cont);
         ttt.setText(" ");
@@ -241,6 +255,7 @@ public class designation_format {
         t1.setText("Work Type");
         t1.setTextColor(Color.BLACK);
         t1.setTextSize(22);
+        t1.setTextColor(Color.WHITE);
 
         //create autocomplete textview to choose or enter the work type
         AutoCompleteTextView work=new AutoCompleteTextView(cont);
@@ -258,6 +273,7 @@ public class designation_format {
         work.setAdapter(dataAdapter);
         work.setThreshold(1);
         work.setId(R.id.work);
+        work.setTextColor(Color.WHITE);
 
        /* TextView t2=new TextView(cont);
         t2.setText(" ");
@@ -266,7 +282,7 @@ public class designation_format {
         TextView tt=new TextView(cont);
         tt.setText("Address");
         tt.setTextSize(22);
-        tt.setTextColor(Color.BLACK);
+        tt.setTextColor(Color.WHITE);
 
         //for address
         EditText addr=new EditText(cont);
@@ -274,6 +290,7 @@ public class designation_format {
         addr.setHint("Enter Address, if on campus");
         addr.setInputType(InputType.TYPE_TEXT_VARIATION_POSTAL_ADDRESS);
         addr.setId(R.id.address2);
+        addr.setTextColor(Color.WHITE);
 
         //add all the elements to linearlayout
         otherfields.addView(t1);
@@ -287,7 +304,8 @@ public class designation_format {
         TextView t1=new TextView(cont);
         t1.setText("Address");
         t1.setTextSize(22);
-        t1.setTextColor(Color.BLACK);
+        t1.setTextColor(Color.WHITE);
+
 
         //for address
         EditText addr=new EditText(cont);
@@ -295,6 +313,7 @@ public class designation_format {
         addr.setHint("Enter Address, if on campus");
         addr.setInputType(InputType.TYPE_TEXT_VARIATION_POSTAL_ADDRESS);
         addr.setId(R.id.address3);
+        addr.setTextColor(Color.WHITE);
 
         //add all the elements to linearlayout
         otherfields.addView(t1);

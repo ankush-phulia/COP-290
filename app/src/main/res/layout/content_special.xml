@@ -20,6 +20,7 @@
         android:id="@+id/textView48"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
+        android:textColor="#ffffff"
         android:textSize="26dp" />
 
     <com.example.ribiero_boys.assignment_2.AnimatedExpandableListView
@@ -39,6 +40,7 @@
         android:id="@+id/textView49"
         android:layout_below="@+id/textView48"
         android:layout_alignParentEnd="true"
+        android:textColor="#ffffff"
         android:layout_marginTop="21dp" />
 
 </RelativeLayout>

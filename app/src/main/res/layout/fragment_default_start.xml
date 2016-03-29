@@ -37,6 +37,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Institute Level Complaint Management System"
+            android:textColor="#ffffff"
             android:textAlignment="center"
             android:id="@+id/textView5"
             android:layout_alignParentTop="true"
