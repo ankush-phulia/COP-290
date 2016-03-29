@@ -13,11 +13,24 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Login extends Fragment implements View.OnClickListener {
 
     String username,password;
     Button log;
+    String url="";
     EditText editTextUsername,editTextPassword;
     CheckBox saveLoginCheckBox;
     SharedPreferences loginPreferences;
@@ -92,7 +105,7 @@ public class Login extends Fragment implements View.OnClickListener {
                             public void onClick(DialogInterface dialog, int which) {
                                 loginPrefsEditor.putBoolean("savePass", false);
                                 loginPrefsEditor.commit();
-                                endActivityAndStartNew(intent);
+                                create_loginRequest(intent);
                             }
                         })
                         .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
@@ -100,7 +113,7 @@ public class Login extends Fragment implements View.OnClickListener {
                                 loginPrefsEditor.putBoolean("savePass", true);
                                 loginPrefsEditor.putString("password", password);
                                 loginPrefsEditor.commit();
-                                endActivityAndStartNew(intent);
+                                create_loginRequest(intent);
                             }
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
@@ -108,10 +121,51 @@ public class Login extends Fragment implements View.OnClickListener {
             } else {
                 loginPrefsEditor.clear();
                 loginPrefsEditor.commit();
-                endActivityAndStartNew(intent);
+                create_loginRequest(intent);
             }
 
         }
 
+    }
+
+    //login request posts parameters and gives response
+    public void create_loginRequest(final Intent intent){
+        StringRequest postReq = new StringRequest(Request.Method.POST, url,new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                String success = null;
+                //receive reply from server and display it to the user as appropriate
+                try {
+                    JSONObject jsonResponse = new JSONObject(response);
+                    success = jsonResponse.get("RESPONSE_MESSAGE").toString();
+                    Toast.makeText(getContext(), success, Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }finally {
+                    if (!success.equals("Data not posted!")) {
+                        Toast.makeText(getContext(), "Login Successful", Toast.LENGTH_LONG).show();
+                        endActivityAndStartNew(intent);
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), "Connection Error", Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            // putting the parameters as key-value pairs to pass
+            @Override
+            public Map<String, String> getParams() {
+                final Map<String, String> params = new HashMap<String, String>();
+                params.put("username", username);
+                params.put("password",password);
+                return params;
+            }
+
+        };
+        //Add the team details to global request queue
+        RequestQ.getInstance().addToRequestQ(postReq);
     }
 }
