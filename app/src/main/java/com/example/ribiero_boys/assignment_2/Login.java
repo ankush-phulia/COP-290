@@ -30,7 +30,8 @@ public class Login extends Fragment implements View.OnClickListener {
 
     String username,password;
     Button log;
-    String url="http://10.42.0.1:8080/login";
+
+    String url="http://192.168.43.186:8080/login";
     EditText editTextUsername,editTextPassword;
     CheckBox saveLoginCheckBox;
     SharedPreferences loginPreferences;
@@ -200,6 +201,7 @@ public class Login extends Fragment implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
                 Toast.makeText(getContext(), "Connection Error", Toast.LENGTH_LONG).show();
             }
         }) {

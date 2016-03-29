@@ -32,7 +32,7 @@ public class Notifications extends AppCompatActivity {
 
     Bundle profileInfo;
     boolean spl;
-    String url="http://10.42.0.1:8080/notifications";
+    String url="http://192.168.43.186:8080/notifications";
     AnimatedExpandableListView listView;
     ExampleAdapter adapter;
 
@@ -82,7 +82,7 @@ public class Notifications extends AppCompatActivity {
                     }
                     adapter = new ExampleAdapter(getApplicationContext());
                     adapter.setData(items);
-                    listView = (AnimatedExpandableListView) findViewById(R.id.listViewSplReq);
+                    listView = (AnimatedExpandableListView) findViewById(R.id.listViewNotifications);
                     listView.setAdapter(adapter);
                 } catch (JSONException e) {
                     e.printStackTrace();

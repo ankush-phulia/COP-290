@@ -28,7 +28,6 @@ public class Hostel extends Fragment {
     ListView listView;
     ArrayList<Integer> compl_with_ids=new ArrayList<Integer>();
     ArrayList<Integer> votes=new ArrayList<Integer>();
-    List<String> items = new ArrayList<String>();
     String ttype;
     List<String> OP = new ArrayList<String>();
     List<String> RC = new ArrayList<String>();
@@ -45,14 +44,15 @@ public class Hostel extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_hostel, container, false);
+        List<String> items = new ArrayList<String>();
 
         //set complaint type
-        TextView type=(TextView)view.findViewById(R.id.Complaint_typre);
-        ttype=getArguments().getString("type","");
-        loggeduser=getArguments().getString("user");
+        TextView type = (TextView)view.findViewById(R.id.textView19);
+        ttype = getArguments().getString("type","");
+        loggeduser = getArguments().getString("user");
         type.setText(ttype);
-        profileInfo=getArguments().getBundle("profileInfo");
-        spl=getArguments().getBoolean("spl");
+        profileInfo = getArguments().getBundle("profileInfo");
+        spl = getArguments().getBoolean("spl");
 
         //get complaint_list
         try {
@@ -121,7 +121,7 @@ public class Hostel extends Fragment {
                     }
                     break;
             }
-            listView = (ListView) view.findViewById(R.id.complaints);
+            listView = (ListView) view.findViewById(R.id.complaints2);
             listView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, items));
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -134,13 +134,14 @@ public class Hostel extends Fragment {
                     args.putInt("cid", idd);
                     args.putString("scope", "Hostel Level");
                     args.putString("user", OP.get(position));
-                    args.putString("receiver",RC.get(position));
+                    args.putString("receiver", RC.get(position));
                     args.putString("desc",desc.get(position));
                     args.putString("type",getArguments().getString("type", ""));
                     args.putInt("votes", votes.get(position));
+                    System.out.println(votes.get(position));
                     args.putString("loggeduser",loggeduser);
-                    args.putBundle("profileInfo",profileInfo);
-                    args.putBoolean("spl",spl);
+                    args.putBundle("profileInfo", profileInfo);
+                    args.putBoolean("spl", spl);
 
                     View_complaint Complaint = new View_complaint();
                     FragmentTransaction change = getFragmentManager().beginTransaction();

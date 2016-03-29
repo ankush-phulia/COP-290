@@ -11,6 +11,17 @@
     <item type="id" name="address2" />
     <item type="id" name="address3" />
     <item type="id" name="room" />
+    <item type="id" name="dep10" />
+    <item type="id" name="dep20" />
+    <item type="id" name="hostel10" />
+    <item type="id" name="hostel20" />
+    <item type="id" name="por10" />
+    <item type="id" name="por20" />
+    <item type="id" name="work0" />
+    <item type="id" name="address10" />
+    <item type="id" name="address20" />
+    <item type="id" name="address30" />
+    <item type="id" name="room0" />
 
 
 </resources>

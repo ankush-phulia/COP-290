@@ -71,9 +71,9 @@ public class View_complaint extends Fragment {
         user=getArguments().getString("user", " ");
         topic=getArguments().getString("complaint_title", " ");
         compl_id=getArguments().getInt("cid", 0);
-        url="http://10.42.0.1:8080/commentlist?complaintId="+compl_id;
-        url2="http://10.42.0.1:8080/addcomment";
-        url3="http://10.42.0.1:8080/resolve";
+        url="http://192.168.43.186:8080/commentlist?";//complaintId="+compl_id;
+        url2="http://192.168.43.186:8080/addcomment";
+        url3="http://192.168.43.186:8080/resolve";
         descr=getArguments().getString("desc", "");
         scope=getArguments().getString("scope", " ");
         receiver=getArguments().getString("receiver"," ");
@@ -84,8 +84,7 @@ public class View_complaint extends Fragment {
 
         if (getArguments().getString("type").equals("Pending Complaints Made")||getArguments().getString("type").equals("Pending Complaints Received")){
             resolved="Resolved";
-        }
-        else{
+        } else {
             resolved="Pending";
         }
 
@@ -135,8 +134,6 @@ public class View_complaint extends Fragment {
                         RequestQ.getInstance().addToRequestQ(postReq);
                         //dialog.cancel();
 
-
-
                     }
                 });
                 builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
@@ -154,13 +151,13 @@ public class View_complaint extends Fragment {
         upvotes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                votes.setText((Integer.parseInt(votes.getText().toString()) + 1));
+                votes.setText(String.valueOf(Integer.parseInt(votes.getText().toString()) + 1));
             }
         });
         downvotes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                votes.setText((Integer.parseInt(votes.getText().toString()) - 1));
+                votes.setText(String.valueOf(Integer.parseInt(votes.getText().toString()) - 1));
             }
         });
 
@@ -179,13 +176,13 @@ public class View_complaint extends Fragment {
         resolved.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StringRequest postReq = new StringRequest(Request.Method.POST, url3,new Response.Listener<String>() {
+                StringRequest postReq = new StringRequest(Request.Method.POST, url3, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         //receive reply from server and refresh main
-                        Intent intent=new Intent(getContext(),Main.class);
-                        intent.putExtra("info",profileInfo);
-                        intent.putExtra("spl",spl);
+                        Intent intent = new Intent(getContext(), Main.class);
+                        intent.putExtra("info", profileInfo);
+                        intent.putExtra("spl", spl);
                         getActivity().finish();
                         startActivity(intent);
                     }
@@ -199,7 +196,7 @@ public class View_complaint extends Fragment {
                     @Override
                     public Map<String, String> getParams() {
                         final Map<String, String> params = new HashMap<String, String>();
-                        params.put("complaintID",(compl_id).toString());
+                        params.put("complaintID", (compl_id).toString());
                         return params;
                     }
 
@@ -211,7 +208,7 @@ public class View_complaint extends Fragment {
 
 
 
-        StringRequest gradesReq = new StringRequest(Request.Method.GET,
+        StringRequest gradesReq = new StringRequest(Request.Method.POST,
                 url,
                 new Response.Listener<String>() {
                     @Override
@@ -238,7 +235,16 @@ public class View_complaint extends Fragment {
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(getContext(), "Connection Error", Toast.LENGTH_LONG).show();
                     }
-                });
+                }){
+            // putting the parameters as key-value pairs to pass
+            @Override
+            public Map<String, String> getParams() {
+                final Map<String, String> params = new HashMap<String, String>();
+                params.put("complaintID", (compl_id).toString());
+                return params;
+            }
+
+        };
 
         RequestQ.getInstance().addToRequestQ(gradesReq);
 
@@ -259,16 +265,9 @@ public class View_complaint extends Fragment {
         upvotes=(ImageButton)v.findViewById(R.id.Upvote);
         downvotes=(ImageButton)v.findViewById(R.id.Downvote);
         votes=(TextView) v.findViewById(R.id.Votes);
-        votes.setText(getArguments().getString("votes"));
-
+        votes.setText(String.valueOf(getArguments().getInt("votes")));
 
     }
-
-    /*public static View_complaint newInstance(Bundle b){
-        View_complaint v=new View_complaint();
-        v.setArguments(b);
-        return v;
-    }*/
 
 
 }

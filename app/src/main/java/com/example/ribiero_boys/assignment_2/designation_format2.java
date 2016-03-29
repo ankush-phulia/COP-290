@@ -36,7 +36,7 @@ public class designation_format2 {
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(cont, android.R.layout.simple_dropdown_item_1line, categories);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         //dep.setAdapter(dataAdapter);
-        dep.setId(R.id.dep1);
+        dep.setId(R.id.dep10);
 
         TextView ttt2=new TextView(cont);
         ttt2.setText(" ");
@@ -63,7 +63,7 @@ public class designation_format2 {
         dataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         // attaching data adapter to TextView
         //hostel.setAdapter(dataAdapter2);
-        hostel.setId(R.id.hostel1);
+        hostel.setId(R.id.hostel10);
 
         //create spaces and other elements
         TextView t2=new TextView(cont);
@@ -77,8 +77,9 @@ public class designation_format2 {
 
         TextView room=new TextView(cont);
         room.setTextSize(20);
-        room.setHint("Enter Room Number, if applicable");
-        room.setId(R.id.room);
+        //room.setHint("Enter Room Number, if applicable");
+        room.setId(R.id.room0
+        );
 
         TextView tt2=new TextView(cont);
         tt2.setText(" ");
@@ -92,7 +93,7 @@ public class designation_format2 {
         //create autocomplete textview to choose or enter the POR
         TextView por=new TextView(cont);
         por.setTextSize(20);
-        por.setHint("Enter your Position, if applicable");
+        //por.setHint("Enter your Position, if applicable");
         //types of position
         List<String> categories3 = new ArrayList<String>();
         categories3.add("General Secretary");
@@ -103,7 +104,7 @@ public class designation_format2 {
         dataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         //por.setAdapter(dataAdapter3);
         //por.setThreshold(1);
-        por.setId(R.id.por1);
+        por.setId(R.id.por10);
 
         TextView t4=new TextView(cont);
         t4.setText(" ");
@@ -145,7 +146,7 @@ public class designation_format2 {
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(cont, android.R.layout.simple_dropdown_item_1line, categories);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         //dep.setAdapter(dataAdapter);
-        dep.setId(R.id.dep2);
+        dep.setId(R.id.dep20);
 
         TextView t2=new TextView(cont);
         t2.setText(" ");
@@ -159,9 +160,9 @@ public class designation_format2 {
         //for address
         TextView addr=new TextView(cont);
         addr.setTextSize(20);
-        addr.setHint("Enter Address, if on campus");
+        //addr.setHint("Enter Address, if on campus");
         addr.setInputType(InputType.TYPE_TEXT_VARIATION_POSTAL_ADDRESS);
-        addr.setId(R.id.address1);
+        addr.setId(R.id.address10);
 
         TextView tt2=new TextView(cont);
         tt2.setText(" ");
@@ -175,7 +176,7 @@ public class designation_format2 {
         //create autocomplete textview to choose or enter the POR
         TextView por=new TextView(cont);
         por.setTextSize(20);
-        por.setHint("Enter your Position, if applicable");
+        //por.setHint("Enter your Position, if applicable");
         //types of position
         List<String> categories2 = new ArrayList<String>();
         categories2.add("Director");
@@ -186,7 +187,7 @@ public class designation_format2 {
         dataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
        // por.setAdapter(dataAdapter2);
         //por.setThreshold(1);
-        por.setId(R.id.por2);
+        por.setId(R.id.por20);
 
         TextView t4=new TextView(cont);
         t4.setText(" ");
@@ -214,7 +215,7 @@ public class designation_format2 {
         dataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         // attaching data adapter to TextView
         //hostel.setAdapter(dataAdapter3);
-        hostel.setId(R.id.hostel2);
+        hostel.setId(R.id.hostel20);
 
         //add all the elements to linearlayout
         otherfields.addView(t1);
@@ -242,7 +243,7 @@ public class designation_format2 {
         //create autocomplete textview to choose or enter the work type
         TextView work=new TextView(cont);
         work.setTextSize(20);
-        work.setHint("Enter your Work Type");
+        //work.setHint("Enter your Work Type");
         //types of work
         List<String> categories = new ArrayList<String>();
         categories.add("CSC");
@@ -254,7 +255,7 @@ public class designation_format2 {
         dataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         //work.setAdapter(dataAdapter);
         //work.setThreshold(1);
-        work.setId(R.id.work);
+        work.setId(R.id.work0);
 
        /* TextView t2=new TextView(cont);
         t2.setText(" ");
@@ -268,9 +269,9 @@ public class designation_format2 {
         //for address
         TextView addr=new TextView(cont);
         addr.setTextSize(20);
-        addr.setHint("Enter Address, if on campus");
+        //addr.setHint("Enter Address, if on campus");
         addr.setInputType(InputType.TYPE_TEXT_VARIATION_POSTAL_ADDRESS);
-        addr.setId(R.id.address2);
+        addr.setId(R.id.address20);
 
         //add all the elements to linearlayout
         otherfields.addView(t1);
@@ -289,9 +290,9 @@ public class designation_format2 {
         //for address
         TextView addr=new TextView(cont);
         addr.setTextSize(20);
-        addr.setHint("Enter Address, if on campus");
+        //addr.setHint("Enter Address, if on campus");
         addr.setInputType(InputType.TYPE_TEXT_VARIATION_POSTAL_ADDRESS);
-        addr.setId(R.id.address3);
+        addr.setId(R.id.address30);
 
         //add all the elements to linearlayout
         otherfields.addView(t1);

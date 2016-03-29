@@ -28,7 +28,6 @@ public class Personal extends Fragment {
     ListView listView;
     ArrayList<Integer> compl_with_ids=new ArrayList<Integer>();
     ArrayList<Integer> votes=new ArrayList<Integer>();
-    List<String> items = new ArrayList<String>();
     String ttype;
     List<String> OP = new ArrayList<String>();
     List<String> RC = new ArrayList<String>();
@@ -45,6 +44,7 @@ public class Personal extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_personal, container, false);
+        List<String> items = new ArrayList<String>();
 
         //set complaint type
         TextView type=(TextView)view.findViewById(R.id.Complaint_typre);

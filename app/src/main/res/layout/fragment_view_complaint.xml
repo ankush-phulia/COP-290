@@ -2,14 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:nestedScrollingEnabled="true"
     tools:context="com.example.ribiero_boys.assignment_2.View_complaint">
 
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scrollView6"
-        android:layout_gravity="center" >
 
         <LinearLayout
             android:orientation="vertical"
@@ -37,14 +32,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:id="@+id/textView44"
-                android:layout_gravity="right"
-                android:textSize="16dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Status"
                 android:id="@+id/textViewStatus"
                 android:layout_gravity="right"
@@ -59,12 +46,13 @@
                 android:layout_gravity="right"
                 android:textSize="21dp" />
 
-            <TextView
+            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/textView43"
-                android:layout_gravity="right" />
+                android:text="Resolved"
+                android:id="@+id/buttonResolved"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -75,49 +63,37 @@
                 android:layout_gravity="right"
                 android:textSize="24dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/textView45"
-                android:layout_gravity="right" />
-
-            <ScrollView
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="307dp"
-                android:id="@+id/scrollView7"
-                android:layout_gravity="center_horizontal" >
+                android:layout_height="359dp"
+                android:weightSum="1">
 
-                <LinearLayout
-                    android:orientation="vertical"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Replies"
+                    android:id="@+id/textView43"
+                    android:layout_gravity="center_horizontal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:id="@+id/textView50"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="10dp" />
+
+                <ListView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="227dp"
+                    android:id="@+id/listViewReplies"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="0.40" />
+            </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="Replies"
-                        android:id="@+id/textView46"
-                        android:layout_gravity="center_horizontal" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:id="@+id/textView47"
-                        android:layout_gravity="center_horizontal" />
-
-                    <ListView
-                        android:layout_width="match_parent"
-                        android:layout_height="259dp"
-                        android:id="@+id/listViewReplies"
-                        android:layout_gravity="center_horizontal" />
-                </LinearLayout>
-            </ScrollView>
         </LinearLayout>
-
-    </ScrollView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab3"
@@ -129,7 +105,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="161dp"
         android:layout_gravity="left|top">
 
         <TextView
@@ -147,10 +123,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/Upvote"
             android:src="@drawable/up"
-            android:layout_marginStart="27dp"
             android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="36dp" />
+            android:layout_alignParentStart="true" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -158,16 +132,8 @@
             android:id="@+id/Downvote"
             android:src="@drawable/down"
             android:layout_below="@+id/Votes"
-            android:layout_alignEnd="@+id/Votes" />
+            android:layout_alignParentLeft="true" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mark Resolved"
-            android:id="@+id/buttonResolved"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="26dp" />
     </RelativeLayout>
 
 </FrameLayout>

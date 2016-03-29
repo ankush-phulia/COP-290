@@ -38,7 +38,7 @@ import java.util.Map;
 public class Sign_up extends Fragment implements AdapterView.OnItemSelectedListener,View.OnClickListener {
 
     Button signup;
-    String url="10.42.0.1:8080/signup";
+    String url="http://192.168.43.186:8080/signup";
     EditText uname;
     EditText name;
     EditText pass;
@@ -306,7 +306,7 @@ public class Sign_up extends Fragment implements AdapterView.OnItemSelectedListe
             //check if password confirmed
             else if (!pass.getText().toString().equals(cpass.getText().toString())){
                 new AlertDialog.Builder(getContext(),AlertDialog.THEME_HOLO_LIGHT)
-                        .setTitle("Can't Confirm Paaword")
+                        .setTitle("Can't Confirm Password")
                         .setMessage("Password and Confirm Password Fields mismatch")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {

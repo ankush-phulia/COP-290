@@ -4,17 +4,11 @@
     android:layout_height="match_parent"
     tools:context="com.example.ribiero_boys.assignment_2.Institute">
 
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scrollView4"
-        android:layout_gravity="center" >
-
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:weightSum="1">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -52,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="326dp"
                 android:id="@+id/complaints4"
-                android:layout_gravity="right" />
+                android:layout_gravity="right"
+                android:layout_weight="0.81" />
         </LinearLayout>
-    </ScrollView>
 </FrameLayout>

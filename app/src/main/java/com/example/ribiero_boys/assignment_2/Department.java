@@ -28,7 +28,6 @@ public class Department extends Fragment {
     ListView listView;
     ArrayList<Integer> compl_with_ids=new ArrayList<Integer>();
     ArrayList<Integer> votes=new ArrayList<Integer>();
-    List<String> items = new ArrayList<String>();
     String ttype;
     List<String> OP = new ArrayList<String>();
     List<String> RC = new ArrayList<String>();
@@ -45,14 +44,15 @@ public class Department extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_department, container, false);
+        List<String> items = new ArrayList<String>();
 
         //set complaint type
-        TextView type=(TextView)view.findViewById(R.id.Complaint_typre);
-        ttype=getArguments().getString("type","");
-        loggeduser=getArguments().getString("user");
+        TextView type = (TextView)view.findViewById(R.id.textView15);
+        ttype = getArguments().getString("type","");
+        loggeduser = getArguments().getString("user");
         type.setText(ttype);
-        profileInfo=getArguments().getBundle("profileInfo");
-        spl=getArguments().getBoolean("spl");
+        profileInfo = getArguments().getBundle("profileInfo");
+        spl = getArguments().getBoolean("spl");
 
         //get complaint_list
         try {
@@ -121,7 +121,7 @@ public class Department extends Fragment {
                     }
                     break;
             }
-            listView = (ListView) view.findViewById(R.id.complaints);
+            listView = (ListView) view.findViewById(R.id.complaints3);
             listView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, items));
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

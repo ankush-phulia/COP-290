@@ -108,13 +108,26 @@ public class Profile extends AppCompatActivity {
         final TextView chpass=(TextView)findViewById(R.id.editTextPassword3);
         chpass.setText(password);
         TextView des=(TextView)findViewById(R.id.TextViewDesignation);
-        des.setText(designation);
+        switch (designation) {
+            case 0:
+                des.setText("Student");
+                break;
+            case 1:
+                des.setText("Faculty");
+                break;
+            case 2:
+                des.setText("Employee");
+                break;
+            case 3:
+                des.setText("Others");
+                break;
+        }
     }
 
     public void getFields(int designation){
         LinearLayout otherfields=(LinearLayout)findViewById(R.id.Extras2);
         otherfields.setOrientation(LinearLayout.VERTICAL);
-        designation_format Format=new designation_format();
+        designation_format2 Format=new designation_format2();
         Format.cont=this;
         switch (designation){
             case 0:
@@ -145,10 +158,10 @@ public class Profile extends AppCompatActivity {
         switch (designation){
             case 0:
                 //populate the fields with data
-                TextView dep=(TextView)findViewById(R.id.dep1);
-                TextView hostel=(TextView)findViewById(R.id.hostel1);
-                TextView por=(TextView)findViewById(R.id.por1);
-                TextView room=(TextView)findViewById(R.id.room);
+                TextView dep = (TextView) findViewById(R.id.dep10);
+                TextView hostel = (TextView) findViewById(R.id.hostel10);
+                TextView por = (TextView) findViewById(R.id.por10);
+                TextView room = (TextView) findViewById(R.id.room0);
                 try {
                     dep.setText(json.getInt("Department"));
                     hostel.setText(json.getInt("Hostel"));
@@ -161,10 +174,10 @@ public class Profile extends AppCompatActivity {
                 break;
             case 1:
                 //populate the fields with data
-                TextView dep2=(TextView)findViewById(R.id.dep2);
-                TextView addr_fac_employee=(TextView)findViewById(R.id.address1);
-                TextView addnlcharge=(TextView)findViewById(R.id.por2);
-                TextView hostel2=(TextView)findViewById(R.id.hostel2);
+                TextView dep2=(TextView)findViewById(R.id.dep20);
+                TextView addr_fac_employee=(TextView)findViewById(R.id.address10);
+                TextView addnlcharge=(TextView)findViewById(R.id.por20);
+                TextView hostel2=(TextView)findViewById(R.id.hostel20);
                 try {
                     dep2.setText(json.getInt("Department"));
                     hostel2.setText(json.getInt("Hostel"));
@@ -178,8 +191,8 @@ public class Profile extends AppCompatActivity {
                 break;
             case 2:
                 //populate the fields with data
-                TextView work=(TextView)findViewById(R.id.work);
-                TextView addr_employee=(TextView)findViewById(R.id.address2);
+                TextView work=(TextView)findViewById(R.id.work0);
+                TextView addr_employee=(TextView)findViewById(R.id.address20);
 
                 try {
                     work.setText(json.getString("Work"));

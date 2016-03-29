@@ -1,6 +1,7 @@
 package com.example.ribiero_boys.assignment_2;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,7 +20,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,12 +36,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //CREDIT TO IDUNNOLOLZ FOR EXPANDABLELIST ADAPTER
 public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    String url="http://10.42.0.1:8080/complaintlist";
+    String url="http://192.168.43.186:8080/complaintlist";
     AnimatedExpandableListView listView;
     ExampleAdapter adapter;
     Bundle profileInfo;
@@ -57,10 +66,11 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent newcomp=new Intent(Main.this,New_complaint.class);
-                newcomp.putExtra("info",profileInfo);
-                startActivity(newcomp);
+            public void onClick(View v) {
+                final Intent intent = new Intent(getApplicationContext(),New_complaint.class);
+                intent.putExtra("info", getIntent().getBundleExtra("info"));
+                intent.putExtra("spl", getIntent().getBooleanExtra("spl", false));
+                startActivity(intent);
             }
         });
 

@@ -36,8 +36,8 @@ public class Special extends AppCompatActivity {
     boolean spl;
     AnimatedExpandableListView listView;
     ExampleAdapter adapter;
-    String url="http://10.42.0.1:8080/special";
-    String url2="http://10.42.0.1:8080/approval";
+    String url="http://192.168.43.186:8080/special";
+    String url2="http://192.168.43.186:8080/approval";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
