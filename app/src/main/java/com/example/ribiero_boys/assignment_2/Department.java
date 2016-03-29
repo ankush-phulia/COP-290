@@ -12,6 +12,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +26,14 @@ import java.util.List;
 public class Department extends Fragment {
 
     ListView listView;
-    ArrayList<Integer> compl_with_ids;
+    ArrayList<Integer> compl_with_ids=new ArrayList<Integer>();
+    ArrayList<Integer> votes=new ArrayList<Integer>();
+    List<String> items = new ArrayList<String>();
+    String ttype;
+    List<String> OP = new ArrayList<String>();
+    List<String> RC = new ArrayList<String>();
+    List<String> desc = new ArrayList<String>();
+    String loggeduser;
 
     public Department() {
         // Required empty public constructor
@@ -34,39 +45,112 @@ public class Department extends Fragment {
         View view= inflater.inflate(R.layout.fragment_department, container, false);
 
         //set complaint type
-        TextView type=(TextView)view.findViewById(R.id.textView15);
-        type.setText(getArguments().getString("type",""));
+        TextView type=(TextView)view.findViewById(R.id.Complaint_typre);
+        ttype=getArguments().getString("type","");
+        loggeduser=getArguments().getString("user");
+        type.setText(ttype);
 
-        // Populate our list with groups and it's children
-        List<String> items = new ArrayList<String>();
-        items.add("Complaint 1");
-        items.add("Complaint 2");
-        items.add("Complaint 3");
-
-        ((Main)getActivity()).showFloatingActionButton();
-
-        listView = (ListView) view.findViewById(R.id.complaints3);
-        listView.setAdapter(new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, items));
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String sel_compl = ((TextView) view).getText().toString();
-                Integer idd = compl_with_ids.get(position);
-                Bundle args = new Bundle();
-                args.putString("complaint_title", sel_compl);
-                args.putInt("cid", idd);
-                args.putString("user", getArguments().getString("username", ""));
-                args.putString("scope","Department Level");
-
-                View_complaint Complaint = new View_complaint();
-                Complaint.setArguments(args);
-                FragmentTransaction change = getFragmentManager().beginTransaction();
-                change.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
-                change.replace(R.id.MainFragments, Complaint).addToBackStack("default");
-                change.commit();
+        //get complaint_list
+        try {
+            JSONObject complaints=new JSONObject(getArguments().getString("cjson"));
+            JSONObject type_compl;
+            JSONArray relevant_compl;
+            switch (ttype){
+                case "Pending Complaints Made":
+                    type_compl=complaints.getJSONObject("pendingPosted");
+                    relevant_compl=type_compl.getJSONArray("department");
+                    //compl_with_ids=getArguments().getIntegerArrayList("compl_ids_pers",new ArrayList<Integer>());
+                    // Populate our list with groups and it's children
+                    for (int i=0; i<relevant_compl.length();i++){
+                        JSONObject cmplt= (JSONObject) relevant_compl.get(i);
+                        compl_with_ids.add(cmplt.getInt("complaintID"));
+                        items.add(cmplt.getString("topic"));
+                        OP.add(cmplt.getString("posterName"));
+                        RC.add(cmplt.getString("receiverName"));
+                        desc.add(cmplt.getString("description"));
+                        votes.add(cmplt.getInt("votes"));
+                    }
+                    break;
+                case "Resolved Complaints Made":
+                    type_compl=complaints.getJSONObject("resolvedPosted");
+                    relevant_compl=type_compl.getJSONArray("department");
+                    //compl_with_ids=getArguments().getIntegerArrayList("compl_ids_pers",new ArrayList<Integer>());
+                    // Populate our list with groups and it's children
+                    for (int i=0; i<relevant_compl.length();i++){
+                        JSONObject cmplt= (JSONObject) relevant_compl.get(i);
+                        compl_with_ids.add(cmplt.getInt("complaintID"));
+                        items.add(cmplt.getString("topic"));
+                        OP.add(cmplt.getString("posterName"));
+                        RC.add(cmplt.getString("receiverName"));
+                        desc.add(cmplt.getString("description"));
+                        votes.add(cmplt.getInt("votes"));
+                    }
+                    break;
+                case "Pending Complaints Received":
+                    type_compl=complaints.getJSONObject("pendingReceived");
+                    relevant_compl=type_compl.getJSONArray("department");
+                    //compl_with_ids=getArguments().getIntegerArrayList("compl_ids_pers",new ArrayList<Integer>());
+                    // Populate our list with groups and it's children
+                    for (int i=0; i<relevant_compl.length();i++){
+                        JSONObject cmplt= (JSONObject) relevant_compl.get(i);
+                        compl_with_ids.add(cmplt.getInt("complaintID"));
+                        items.add(cmplt.getString("topic"));
+                        OP.add(cmplt.getString("posterName"));
+                        RC.add(cmplt.getString("receiverName"));
+                        desc.add(cmplt.getString("description"));
+                        votes.add(cmplt.getInt("votes"));
+                    }
+                    break;
+                case "Resolved Complaints Received":
+                    type_compl=complaints.getJSONObject("resolvedReceived");
+                    relevant_compl=type_compl.getJSONArray("department");
+                    //compl_with_ids=getArguments().getIntegerArrayList("compl_ids_pers",new ArrayList<Integer>());
+                    // Populate our list with groups and it's children
+                    for (int i=0; i<relevant_compl.length();i++) {
+                        JSONObject cmplt = (JSONObject) relevant_compl.get(i);
+                        compl_with_ids.add(cmplt.getInt("complaintID"));
+                        items.add(cmplt.getString("topic"));
+                        OP.add(cmplt.getString("posterName"));
+                        RC.add(cmplt.getString("receiverName"));
+                        desc.add(cmplt.getString("description"));
+                        votes.add(cmplt.getInt("votes"));
+                    }
+                    break;
             }
-        });
+            listView = (ListView) view.findViewById(R.id.complaints);
+            listView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, items));
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String sel_compl = ((TextView) view).getText().toString();
+                    Integer idd = compl_with_ids.get(position);
+                    Bundle args = new Bundle();
+                    args.putString("complaint_title", sel_compl);
+                    args.putInt("cid", idd);
+                    args.putString("scope", "Department Level");
+                    args.putString("user", OP.get(position));
+                    args.putString("receiver",RC.get(position));
+                    args.putString("desc",desc.get(position));
+                    args.putString("type",getArguments().getString("type", ""));
+                    args.putInt("votes", votes.get(position));
+                    args.putString("loggeduser",loggeduser);
+
+                    View_complaint Complaint = new View_complaint();
+                    FragmentTransaction change = getFragmentManager().beginTransaction();
+                    change.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
+                    Complaint.setArguments(args);
+                    change.replace(R.id.MainFragments, Complaint).addToBackStack("default");
+                    change.commit();
+                }
+            });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ((Main) getActivity()).showFloatingActionButton();
+
         return view;
     }
 

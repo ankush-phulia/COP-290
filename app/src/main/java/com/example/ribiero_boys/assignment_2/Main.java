@@ -21,6 +21,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +34,12 @@ import java.util.List;
 //CREDIT TO IDUNNOLOLZ FOR EXPANDABLELIST ADAPTER
 public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    String url="http://10.42.0.1:8080/complaintlist";
     AnimatedExpandableListView listView;
     ExampleAdapter adapter;
     Bundle profileInfo;
     FloatingActionButton fab;
+    String complaint_list;
     boolean spl;
 
     @Override
@@ -73,8 +81,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         List<GroupItem> items = new ArrayList<GroupItem>();
         items.add(genGroup("Pending Complaints Made"));
         items.add(genGroup("Resolved Complaints Made"));
-        items.add(genGroup("Pending Complaints Received"));
-        items.add(genGroup("Resolved Complaints Received"));
+        if (profileInfo.getInt("type",0)==1 || profileInfo.getInt("type",0)==2){
+            items.add(genGroup("Pending Complaints Received"));
+            items.add(genGroup("Resolved Complaints Received"));
+        }
 
         adapter = new ExampleAdapter(this);
         adapter.setData(items);
@@ -101,57 +111,84 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
         });
 
-        listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                switch (childPosition) {
-                    case 0:
-                        //Go to Personal Level
-                        Personal fragPersonal = new Personal();
-                        profileInfo.putString("type", adapter.getGroup(groupPosition).title);
-                        fragPersonal.setArguments(profileInfo);
-                        transaction.replace(R.id.MainFragments, fragPersonal);
-                        transaction.commit();
-                        drawer.closeDrawers();
-                        return true;
+        //fetch all the complaints
+        StringRequest threadsReq = new StringRequest(Request.Method.GET,url,new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // receive reply from server
+                        complaint_list=response;
+                        listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+                                @Override
+                                public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                                    Bundle ComplList=new Bundle();
+                                    final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                                    switch (adapter.getGroup(groupPosition).items.get(childPosition).title) {
+                                        case "Personal":
+                                            //Go to Personal Level
+                                            Personal fragPersonal = new Personal();
+                                            ComplList.putString("type", adapter.getGroup(groupPosition).title);
+                                            ComplList.putString("cjson",complaint_list);
+                                            ComplList.putString("user",profileInfo.getString("username"," "));
+                                            fragPersonal.setArguments(ComplList);
+                                            transaction.replace(R.id.MainFragments, fragPersonal);
+                                            transaction.commit();
+                                            drawer.closeDrawers();
+                                            return true;
 
-                    case 1:
-                        //Go to Hostel Level
-                        Hostel fragHostel = new Hostel();
-                        profileInfo.putString("type", adapter.getGroup(groupPosition).title);
-                        fragHostel.setArguments(profileInfo);
-                        transaction.replace(R.id.MainFragments, fragHostel);
-                        transaction.commit();
-                        drawer.closeDrawers();
-                        return true;
+                                        case "Hostel Level":
+                                            //Go to Hostel Level
+                                            Hostel fragHostel = new Hostel();
+                                            ComplList.putString("type", adapter.getGroup(groupPosition).title);
+                                            ComplList.putString("cjson",complaint_list);
+                                            ComplList.putString("user",profileInfo.getString("username"," "));
+                                            fragHostel.setArguments(ComplList);
+                                            transaction.replace(R.id.MainFragments, fragHostel);
+                                            transaction.commit();
+                                            drawer.closeDrawers();
+                                            return true;
 
-                    case 2:
-                        //Go to Department Level
-                        Department fragDepartment = new Department();
-                        profileInfo.putString("type",adapter.getGroup(groupPosition).title);
-                        fragDepartment.setArguments(profileInfo);
-                        transaction.replace(R.id.MainFragments, fragDepartment);
-                        transaction.commit();
-                        drawer.closeDrawers();
-                        return true;
-                    case 3:
-                        //Go to Institute Level
-                        Institute fragInstitute = new Institute();
-                        profileInfo.putString("type",adapter.getGroup(groupPosition).title);
-                        fragInstitute.setArguments(profileInfo);
-                        transaction.replace(R.id.MainFragments, fragInstitute);
-                        transaction.commit();
-                        drawer.closeDrawers();
-                        return true;
+                                        case "Department Level":
+                                            //Go to Department Level
+                                            Department fragDepartment = new Department();
+                                            ComplList.putString("type",adapter.getGroup(groupPosition).title);
+                                            ComplList.putString("cjson",complaint_list);
+                                            ComplList.putString("user",profileInfo.getString("username"," "));
+                                            fragDepartment.setArguments(ComplList);
+                                            transaction.replace(R.id.MainFragments, fragDepartment);
+                                            transaction.commit();
+                                            drawer.closeDrawers();
+                                            return true;
+                                        case "Institute Level":
+                                            //Go to Institute Level
+                                            Institute fragInstitute = new Institute();
+                                            ComplList.putString("type",adapter.getGroup(groupPosition).title);
+                                            ComplList.putString("cjson",complaint_list);
+                                            ComplList.putString("user",profileInfo.getString("username"," "));
+                                            fragInstitute.setArguments(ComplList);
+                                            transaction.replace(R.id.MainFragments, fragInstitute);
+                                            transaction.commit();
+                                            drawer.closeDrawers();
+                                            return true;
 
-                    default:
-                        return false;
-                }
+                                        default:
+                                            return false;
+                                    }
 
-            }
-        });
+                                }
+                            });
+                        }
+
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(Main.this, "Connection Error", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        RequestQ.getInstance().addToRequestQ(threadsReq);
+
     }
 
     //create group item to add to expandable list
@@ -159,8 +196,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         GroupItem pcm=new GroupItem();
         pcm.title=s;
         pcm.items.add(new ChildItem("Personal"));
-        pcm.items.add(new ChildItem("Hostel Level"));
-        pcm.items.add(new ChildItem("Department Level"));
+        if (profileInfo.getInt("type",0)==0 || profileInfo.getInt("type",0)==1){
+            pcm.items.add(new ChildItem("Hostel Level"));
+            pcm.items.add(new ChildItem("Department Level"));
+        }
         pcm.items.add(new ChildItem("Institute Level"));
         return pcm;
     }

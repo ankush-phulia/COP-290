@@ -1,7 +1,6 @@
 package com.example.ribiero_boys.assignment_2;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -39,7 +38,6 @@ public class RequestQ extends Application {
     public <T> void addToRequestQ(Request<T> request){
         //to add any type of request to the queue
         this.getRequestQueue().add(request);
-        Log.d("addToRequestQ", "4");
     }
 
 }

@@ -38,7 +38,7 @@ import java.util.Map;
 public class Sign_up extends Fragment implements AdapterView.OnItemSelectedListener,View.OnClickListener {
 
     Button signup;
-    String url="";
+    String url="10.42.0.1:8080/signup";
     EditText uname;
     EditText name;
     EditText pass;
@@ -323,18 +323,20 @@ public class Sign_up extends Fragment implements AdapterView.OnItemSelectedListe
                 StringRequest postReq = new StringRequest(Request.Method.POST, url,new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                String success = null;
+                                boolean success = false;
                                 //receive reply from server and display it to the user as appropriate
                                 try {
                                     JSONObject jsonResponse = new JSONObject(response);
-                                    success = jsonResponse.get("RESPONSE_MESSAGE").toString();
-                                    Toast.makeText(getContext(), success, Toast.LENGTH_LONG).show();
+                                    success = (boolean)jsonResponse.get("success");
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }finally {
-                                    if (!success.equals("Data not posted!")) {
+                                    if (success) {
                                         Toast.makeText(getContext(), "User Registered Successfully", Toast.LENGTH_LONG).show();
                                         getActivity().onBackPressed();
+                                    }
+                                    else{
+                                        Toast.makeText(getContext(), "This User Already Exists", Toast.LENGTH_LONG).show();
                                     }
                                 }
                             }

@@ -30,13 +30,17 @@ public class Login extends Fragment implements View.OnClickListener {
 
     String username,password;
     Button log;
-    String url="";
+    String url="http://10.42.0.1:8080/login";
     EditText editTextUsername,editTextPassword;
     CheckBox saveLoginCheckBox;
     SharedPreferences loginPreferences;
     SharedPreferences.Editor loginPrefsEditor;
+    Bundle infoToPass=new Bundle();
     boolean saveLogin;
     boolean savePass;
+    boolean spl;
+    String name;
+    Integer type;
 
     public Login() {
         // Required empty public constructor
@@ -88,10 +92,6 @@ public class Login extends Fragment implements View.OnClickListener {
             final Intent intent=new Intent(getContext(),Main.class);
             username = editTextUsername.getText().toString();
             password = editTextPassword.getText().toString();
-            Bundle infoToPass=new Bundle();
-            infoToPass.putString("username",username);
-            infoToPass.putString("password",password);
-            intent.putExtra("info",infoToPass);
 
             if (saveLoginCheckBox.isChecked()) {
                 //save the username in shared prefs
@@ -133,18 +133,67 @@ public class Login extends Fragment implements View.OnClickListener {
         StringRequest postReq = new StringRequest(Request.Method.POST, url,new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                String success = null;
+                Integer success = -2;
                 //receive reply from server and display it to the user as appropriate
                 try {
-                    JSONObject jsonResponse = new JSONObject(response);
-                    success = jsonResponse.get("RESPONSE_MESSAGE").toString();
-                    Toast.makeText(getContext(), success, Toast.LENGTH_LONG).show();
+                    final JSONObject jsonResponse = new JSONObject(response);
+                    success = (Integer)jsonResponse.get("success");
+                    type=(Integer)jsonResponse.get("type");
+                    name=jsonResponse.getString("name");
+                    spl=jsonResponse.getBoolean("isSpecial");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }finally {
-                    if (!success.equals("Data not posted!")) {
-                        Toast.makeText(getContext(), "Login Successful", Toast.LENGTH_LONG).show();
-                        endActivityAndStartNew(intent);
+                    //check the response messages
+                    switch(success){
+                        case -2://not registered
+                            new AlertDialog.Builder(getContext(),AlertDialog.THEME_HOLO_LIGHT)
+                                    .setTitle("User Not Registered")
+                                    .setMessage("This username is not Registered")
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                        }
+                                    })
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
+                            break;
+                        case -1://invalid password
+                            new AlertDialog.Builder(getContext(),AlertDialog.THEME_HOLO_LIGHT)
+                                    .setTitle("Invalid Password")
+                                    .setMessage("Please Enter Correct Password")
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            editTextPassword.setText("");
+                                            editTextPassword.requestFocus();
+                                        }
+                                    })
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
+                            break;
+                        case 0://sign up pending
+                            new AlertDialog.Builder(getContext(),AlertDialog.THEME_HOLO_LIGHT)
+                                    .setTitle("User Not Registered")
+                                    .setMessage("Sign Up Request of this User is still being Processed")
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                        }
+                                    })
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
+                            break;
+                        case 1://valid credentials
+                            infoToPass.putString("username", username);
+                            infoToPass.putString("password",password);
+                            infoToPass.putString("name", name);
+                            infoToPass.putInt("type", type);
+                            infoToPass.putString("json",response);
+                            intent.putExtra("spl",spl);
+                            intent.putExtra("info", infoToPass);
+                            Toast.makeText(getContext(), "Login Successful", Toast.LENGTH_LONG).show();
+                            endActivityAndStartNew(intent);
+                            break;
                     }
                 }
             }

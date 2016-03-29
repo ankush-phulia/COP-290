@@ -15,7 +15,6 @@ import android.widget.TextView;
 public class Overview extends Fragment {
 
     String user;
-    String pass;
 
     public Overview() {
         // Required empty public constructor
@@ -27,8 +26,7 @@ public class Overview extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_overview, container, false);
 
-        user = getArguments().getString("username"," ");
-        pass = getArguments().getString("password"," ");
+        user = getArguments().getString("name"," ");
         TextView welcome=(TextView) view.findViewById(R.id.Welcome);
         welcome.setText("Welcome " + user);
 

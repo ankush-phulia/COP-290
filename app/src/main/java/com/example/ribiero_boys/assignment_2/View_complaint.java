@@ -11,7 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,14 +28,17 @@ import java.util.List;
 public class View_complaint extends Fragment {
 
     String user;
+    String receiver;
     String topic;
     String descr;
     String resolved;
     Integer compl_id;
     ListView listView;
     String scope;
-    Integer upvotes;
-    Integer downvotes;
+    ImageButton upvotes;
+    ImageButton downvotes;
+    TextView votes;
+    String loggeduser;
     ArrayList<Integer> repl_with_ids;
 
     public View_complaint() {
@@ -50,8 +55,10 @@ public class View_complaint extends Fragment {
         user=getArguments().getString("user", " ");
         topic=getArguments().getString("complaint_title", " ");
         compl_id=getArguments().getInt("cid", 0);
-        descr="A sample Complaint Description";
+        descr=getArguments().getString("desc", "");
         scope=getArguments().getString("scope", " ");
+        receiver=getArguments().getString("receiver"," ");
+        loggeduser=getArguments().getString("loggeduser"," ");
         if (getArguments().getString("type").equals("Pending Complaints Made")||getArguments().getString("type").equals("Pending Complaints Received")){
             resolved="Resolved";
         }
@@ -94,6 +101,31 @@ public class View_complaint extends Fragment {
         });
 
         populateElements(v);
+        upvotes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                votes.setText((Integer.parseInt(votes.getText().toString()) + 1));
+            }
+        });
+        downvotes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                votes.setText((Integer.parseInt(votes.getText().toString()) - 1));
+            }
+        });
+
+        //option to resolve complaint only with reciever
+        Button resolved=(Button)v.findViewById(R.id.buttonResolved);
+        if (loggeduser.equals(receiver) && resolved.equals("Pending") && !scope.equals("Personal")){
+            resolved.setVisibility(View.VISIBLE);
+        }
+        else if(resolved.equals("Pending") && scope.equals("Personal")){
+            resolved.setVisibility(View.VISIBLE);
+        }
+        else{
+            resolved.setVisibility(View.INVISIBLE);
+        }
+
 
         return v;
     }
@@ -108,6 +140,10 @@ public class View_complaint extends Fragment {
         sts.setText(resolved);
         TextView scpe=(TextView)v.findViewById(R.id.textViewScope);
         scpe.setText(scope);
+        upvotes=(ImageButton)v.findViewById(R.id.Upvote);
+        downvotes=(ImageButton)v.findViewById(R.id.Downvote);
+        votes=(TextView) v.findViewById(R.id.Votes);
+        votes.setText(getArguments().getString("votes"));
 
         // Populate our list with groups and it's children
         List<String> items = new ArrayList<String>();
