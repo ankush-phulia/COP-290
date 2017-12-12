@@ -1,0 +1,58 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/overview"
+
+    tools:context="com.ribieroboys.moodleplus.Dashboard">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|top">
+
+
+            <!--ExpandableListView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/Grades"
+                android:layout_below="@+id/grades"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="32dp" /-->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Grades"
+                android:id="@+id/textView14"
+                android:layout_marginTop="15dp"
+                android:textSize="25dp"
+                android:textColor="#800517"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="5dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#000"
+                android:id="@+id/ruler"
+                android:layout_below="@id/textView14"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Medium Text"
+                android:id="@+id/grades"
+                android:textColor="#800517"
+                android:layout_below="@+id/ruler"
+                android:layout_alignParentStart="true" />
+        </RelativeLayout>
+    </ScrollView>
+
+
+</FrameLayout>
