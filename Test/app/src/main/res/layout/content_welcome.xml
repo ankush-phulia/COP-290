@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/background1"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.ankush.test.Welcome"
+    tools:showIn="@layout/activity_welcome">
+    <!-- background image from "https://www.google.co.in/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwiW46rKkLXKAhXWBI4KHQmzAdYQjRwIBw&url=http%3A%2F%2Ftophdimg.com%2Flight-color-background-images-for-website.html&psig=AFQjCNF37my4oLQ3OXKRo5em1apG0yu0JQ&ust=1453267263800512"
+    -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Welcome to\nCOP 290 Registration"
+        android:id="@+id/textView"
+        android:layout_marginBottom="38dp"
+        android:layout_above="@+id/button"
+        android:layout_centerHorizontal="true"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:typeface="serif"
+        android:gravity="center" />
+
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:background="@drawable/custom_button"
+        android:textColor="#FFFFFF"
+        android:text="Proceed"
+        android:textSize="20sp"
+        android:id="@+id/button"
+        android:shadowColor="#A8A8A8"
+        android:textStyle="italic"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
