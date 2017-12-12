@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="dep1" />
+    <item type="id" name="dep2" />
+    <item type="id" name="hostel1" />
+    <item type="id" name="hostel2" />
+    <item type="id" name="por1" />
+    <item type="id" name="por2" />
+    <item type="id" name="work" />
+    <item type="id" name="address1" />
+    <item type="id" name="address2" />
+    <item type="id" name="address3" />
+    <item type="id" name="room" />
+    <item type="id" name="dep10" />
+    <item type="id" name="dep20" />
+    <item type="id" name="hostel10" />
+    <item type="id" name="hostel20" />
+    <item type="id" name="por10" />
+    <item type="id" name="por20" />
+    <item type="id" name="work0" />
+    <item type="id" name="address10" />
+    <item type="id" name="address20" />
+    <item type="id" name="address30" />
+    <item type="id" name="room0" />
+
+
+</resources>
