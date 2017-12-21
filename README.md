@@ -1,5 +1,4 @@
 # COP-290
-Design Practices for Computer Science
 
 Projects done in Design Practices for Computer Science, 2016
 
