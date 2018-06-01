@@ -11,15 +11,24 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.List;
 
-//assisted by androidhive.com
+// assisted by androidhive.com
 
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     private Context _context;
     private List<String> _listDataHeader;
     private HashMap<String, List<String>> _listDataChild;
-    int[] images = {R.mipmap.icon_overview,R.mipmap.icon_notification,R.mipmap.icon_grades,R.mipmap.icon_courses} ;
-    public ExpandableListAdapter(Context context, List<String> listDataHeader,HashMap<String, List<String>> listChildData) {
+    int[] images = {
+        R.mipmap.icon_overview,
+        R.mipmap.icon_notification,
+        R.mipmap.icon_grades,
+        R.mipmap.icon_courses
+    };
+
+    public ExpandableListAdapter(
+            Context context,
+            List<String> listDataHeader,
+            HashMap<String, List<String>> listChildData) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
@@ -36,12 +45,19 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, final int childPosition,boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(
+            int groupPosition,
+            final int childPosition,
+            boolean isLastChild,
+            View convertView,
+            ViewGroup parent) {
 
         final String childText = (String) getChild(groupPosition, childPosition);
 
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater infalInflater =
+                    (LayoutInflater)
+                            this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.group_item, null);
         }
 
@@ -53,8 +69,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
-                .size();
+        return this._listDataChild.get(this._listDataHeader.get(groupPosition)).size();
     }
 
     @Override
@@ -73,10 +88,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getGroupView(int groupPosition, boolean isExpanded,View convertView, ViewGroup parent) {
+    public View getGroupView(
+            int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater infalInflater =
+                    (LayoutInflater)
+                            this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.group_header, null);
         }
 
@@ -85,9 +103,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         lblListHeader.setText(headerTitle);
         ImageView v = (ImageView) convertView.findViewById(R.id.iconListHeader);
         v.setImageResource(images[groupPosition]);
-        if (getChildrenCount(groupPosition)==0){
-
-        }
+        if (getChildrenCount(groupPosition) == 0) {}
 
         return convertView;
     }

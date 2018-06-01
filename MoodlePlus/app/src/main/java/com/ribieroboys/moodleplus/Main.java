@@ -16,20 +16,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Main extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
@@ -46,7 +44,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     String gradesJSON;
     String url;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,9 +51,15 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //set up th navigation Drawer
+        // set up th navigation Drawer
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle =
+                new ActionBarDrawerToggle(
+                        this,
+                        drawer,
+                        toolbar,
+                        R.string.navigation_drawer_open,
+                        R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -65,219 +68,289 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         final Intent dataReceived = getIntent();
         receive_data(dataReceived);
 
-        //Open Overview first
+        // Open Overview first
         Dashboard firstFragment = new Dashboard();
         firstFragment.setArguments(profileInfo);
-        getSupportFragmentManager().beginTransaction().add(R.id.frame_container, firstFragment).commit();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.frame_container, firstFragment)
+                .commit();
 
-        //populate the expandable list of the drawer
+        // populate the expandable list of the drawer
         expListView = (ExpandableListView) findViewById(R.id.expandableListView);
         prepareListData(Courses);
         listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
         expListView.setAdapter(listAdapter);
 
+        expListView.setOnChildClickListener(
+                new ExpandableListView.OnChildClickListener() {
 
-        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+                    @Override
+                    public boolean onChildClick(
+                            ExpandableListView parent,
+                            View v,
+                            int groupPosition,
+                            int childPosition,
+                            long id) {
+                        Course fragCourse = new Course();
+                        Bundle courseDetails = new Bundle();
+                        courseDetails.putString("URL", url);
+                        courseDetails.putString("/default/notifications.json", notiJSON);
+                        courseDetails.putString("/default/grades.json", gradesJSON);
+                        courseDetails.putString(
+                                "/courses/list.json",
+                                dataReceived.getStringExtra("/courses/list.json"));
+                        courseDetails.putStringArrayList(
+                                "courseListCodes",
+                                dataReceived.getStringArrayListExtra("courseListCodes"));
+                        courseDetails.putBundle("loginResponse", profileInfo);
 
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                Course fragCourse = new Course();
-                Bundle courseDetails = new Bundle();
-                courseDetails.putString("URL", url);
-                courseDetails.putString("/default/notifications.json", notiJSON);
-                courseDetails.putString("/default/grades.json", gradesJSON);
-                courseDetails.putString("/courses/list.json", dataReceived.getStringExtra("/courses/list.json"));
-                courseDetails.putStringArrayList("courseListCodes", dataReceived.getStringArrayListExtra("courseListCodes"));
-                courseDetails.putBundle("loginResponse", profileInfo);
+                        courseDetails.putString("courseCode", Courses.get(childPosition));
+                        courseDetails.putString("Overview", CourseOverviewData.get(childPosition));
+                        courseDetails.putString(
+                                "Assignments", CourseAssignmentsData.get(childPosition));
+                        courseDetails.putString("Grades", CourseGradesData.get(childPosition));
+                        courseDetails.putString("Threads", CourseThreadsData.get(childPosition));
 
-                courseDetails.putString("courseCode", Courses.get(childPosition));
-                courseDetails.putString("Overview", CourseOverviewData.get(childPosition));
-                courseDetails.putString("Assignments", CourseAssignmentsData.get(childPosition));
-                courseDetails.putString("Grades", CourseGradesData.get(childPosition));
-                courseDetails.putString("Threads", CourseThreadsData.get(childPosition));
+                        fragCourse.setArguments(courseDetails);
 
-                fragCourse.setArguments(courseDetails);
-
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.frame_container, fragCourse);
-                transaction.addToBackStack(null);
-                transaction.commit();
-
-                drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                drawer.closeDrawers();
-
-                return true;
-            }
-        });
-
-
-        expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                switch (groupPosition) {
-                    case 0:
-                        //Go tot Overview
-                        Dashboard fragDashboard = new Dashboard();
-                        fragDashboard.setArguments(profileInfo);
-                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                        transaction.replace(R.id.frame_container, fragDashboard);
+                        FragmentTransaction transaction =
+                                getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.frame_container, fragCourse);
                         transaction.addToBackStack(null);
                         transaction.commit();
+
                         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                         drawer.closeDrawers();
+
                         return true;
+                    }
+                });
 
-                    case 1:
-                        //Go to Notifications
-                        Notifications fragNotifications = new Notifications();
-                        Bundle notiBundle = new Bundle();
-                        notiBundle.putString("/default/notifications.json", notiJSON);
-                        fragNotifications.setArguments(notiBundle);
-                        FragmentTransaction transaction2 = getSupportFragmentManager().beginTransaction();
-                        transaction2.replace(R.id.frame_container, fragNotifications);
-                        transaction2.addToBackStack(null);
-                        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                        drawer.closeDrawers();
-                        transaction2.commit();
-                        return true;
+        expListView.setOnGroupClickListener(
+                new ExpandableListView.OnGroupClickListener() {
 
-                    case 2:
-                        //Go to Grades
-                        Grades fragGrades = new Grades();
-                        Bundle gradesBundle = new Bundle();
-                        gradesBundle.putString("/default/grades.json", gradesJSON);
-                        fragGrades.setArguments(gradesBundle);
-                        FragmentTransaction transaction3 = getSupportFragmentManager().beginTransaction();
-                        transaction3.replace(R.id.frame_container, fragGrades);
-                        transaction3.addToBackStack(null);
-                        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                        drawer.closeDrawers();
-                        transaction3.commit();
-                        return true;
+                    @Override
+                    public boolean onGroupClick(
+                            ExpandableListView parent, View v, int groupPosition, long id) {
+                        switch (groupPosition) {
+                            case 0:
+                                // Go tot Overview
+                                Dashboard fragDashboard = new Dashboard();
+                                fragDashboard.setArguments(profileInfo);
+                                FragmentTransaction transaction =
+                                        getSupportFragmentManager().beginTransaction();
+                                transaction.replace(R.id.frame_container, fragDashboard);
+                                transaction.addToBackStack(null);
+                                transaction.commit();
+                                drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                                drawer.closeDrawers();
+                                return true;
 
-                    case 3:
-                        //Open Course List
-                        JSONArray courseList;
-                        try {
-                            courseList = (new JSONObject(dataReceived.getStringExtra("/courses/list.json"))).getJSONArray("courses");
+                            case 1:
+                                // Go to Notifications
+                                Notifications fragNotifications = new Notifications();
+                                Bundle notiBundle = new Bundle();
+                                notiBundle.putString("/default/notifications.json", notiJSON);
+                                fragNotifications.setArguments(notiBundle);
+                                FragmentTransaction transaction2 =
+                                        getSupportFragmentManager().beginTransaction();
+                                transaction2.replace(R.id.frame_container, fragNotifications);
+                                transaction2.addToBackStack(null);
+                                drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                                drawer.closeDrawers();
+                                transaction2.commit();
+                                return true;
 
-                            CourseOverviewData = new ArrayList<String>();
-                            CourseGradesData = new ArrayList<String>();
-                            CourseAssignmentsData = new ArrayList<String>();
-                            CourseThreadsData = new ArrayList<String>();
+                            case 2:
+                                // Go to Grades
+                                Grades fragGrades = new Grades();
+                                Bundle gradesBundle = new Bundle();
+                                gradesBundle.putString("/default/grades.json", gradesJSON);
+                                fragGrades.setArguments(gradesBundle);
+                                FragmentTransaction transaction3 =
+                                        getSupportFragmentManager().beginTransaction();
+                                transaction3.replace(R.id.frame_container, fragGrades);
+                                transaction3.addToBackStack(null);
+                                drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                                drawer.closeDrawers();
+                                transaction3.commit();
+                                return true;
 
-                            for (int courseNo = 0; courseNo < Courses.size(); courseNo++) {
-                                CourseOverviewData.add(courseList.getString(courseNo));
-                                String CourseCode = Courses.get(courseNo);
+                            case 3:
+                                // Open Course List
+                                JSONArray courseList;
+                                try {
+                                    courseList =
+                                            (new JSONObject(
+                                                            dataReceived.getStringExtra(
+                                                                    "/courses/list.json")))
+                                                    .getJSONArray("courses");
 
-                                String assignmentURL = url + "/courses/course.json/" + CourseCode + "/assignments";
-                                StringRequest assignReq = new StringRequest(Request.Method.GET,
-                                        assignmentURL,
-                                        new Response.Listener<String>() {
-                                            @Override
-                                            public void onResponse(String response) {
-                                                // receive reply from server
-                                                try {
-                                                    JSONObject jsonResponse = new JSONObject(response);
-                                                    CourseAssignmentsData.add(jsonResponse.getJSONArray("assignments").toString());
-                                                }
-                                                catch (Exception e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        },
-                                        new Response.ErrorListener() {
-                                            @Override
-                                            public void onErrorResponse(VolleyError error) {
-                                                Toast.makeText(Main.this, "Connection Error", Toast.LENGTH_LONG).show();
-                                            }
-                                        });
+                                    CourseOverviewData = new ArrayList<String>();
+                                    CourseGradesData = new ArrayList<String>();
+                                    CourseAssignmentsData = new ArrayList<String>();
+                                    CourseThreadsData = new ArrayList<String>();
 
-                                RequestQ.getInstance().addToRequestQ(assignReq);
+                                    for (int courseNo = 0; courseNo < Courses.size(); courseNo++) {
+                                        CourseOverviewData.add(courseList.getString(courseNo));
+                                        String CourseCode = Courses.get(courseNo);
 
-                                String gradesURL = url + "/courses/course.json/" + CourseCode + "/grades";
-                                StringRequest gradesReq = new StringRequest(Request.Method.GET,
-                                        gradesURL,
-                                        new Response.Listener<String>() {
-                                            @Override
-                                            public void onResponse(String response) {
-                                                // receive reply from server
-                                                try {
-                                                    JSONObject jsonResponse = new JSONObject(response);
-                                                    CourseGradesData.add(jsonResponse.getJSONArray("grades").toString());
-                                                }
-                                                catch (Exception e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        },
-                                        new Response.ErrorListener() {
-                                            @Override
-                                            public void onErrorResponse(VolleyError error) {
-                                                Toast.makeText(Main.this, "Connection Error", Toast.LENGTH_LONG).show();
-                                            }
-                                        });
+                                        String assignmentURL =
+                                                url
+                                                        + "/courses/course.json/"
+                                                        + CourseCode
+                                                        + "/assignments";
+                                        StringRequest assignReq =
+                                                new StringRequest(
+                                                        Request.Method.GET,
+                                                        assignmentURL,
+                                                        new Response.Listener<String>() {
+                                                            @Override
+                                                            public void onResponse(
+                                                                    String response) {
+                                                                // receive reply from server
+                                                                try {
+                                                                    JSONObject jsonResponse =
+                                                                            new JSONObject(
+                                                                                    response);
+                                                                    CourseAssignmentsData.add(
+                                                                            jsonResponse
+                                                                                    .getJSONArray(
+                                                                                            "assignments")
+                                                                                    .toString());
+                                                                } catch (Exception e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                        },
+                                                        new Response.ErrorListener() {
+                                                            @Override
+                                                            public void onErrorResponse(
+                                                                    VolleyError error) {
+                                                                Toast.makeText(
+                                                                                Main.this,
+                                                                                "Connection Error",
+                                                                                Toast.LENGTH_LONG)
+                                                                        .show();
+                                                            }
+                                                        });
 
-                                RequestQ.getInstance().addToRequestQ(gradesReq);
+                                        RequestQ.getInstance().addToRequestQ(assignReq);
 
-                                String threadsURL = url + "/courses/course.json/" + CourseCode + "/threads";
-                                StringRequest threadsReq = new StringRequest(Request.Method.GET,
-                                        threadsURL,
-                                        new Response.Listener<String>() {
-                                            @Override
-                                            public void onResponse(String response) {
-                                                // receive reply from server
-                                                try {
-                                                    JSONObject jsonResponse = new JSONObject(response);
-                                                    CourseThreadsData.add(jsonResponse.getJSONArray("course_threads").toString());
-                                                }
-                                                catch (Exception e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        },
-                                        new Response.ErrorListener() {
-                                            @Override
-                                            public void onErrorResponse(VolleyError error) {
-                                                Toast.makeText(Main.this, "Connection Error", Toast.LENGTH_LONG).show();
-                                            }
-                                        });
+                                        String gradesURL =
+                                                url
+                                                        + "/courses/course.json/"
+                                                        + CourseCode
+                                                        + "/grades";
+                                        StringRequest gradesReq =
+                                                new StringRequest(
+                                                        Request.Method.GET,
+                                                        gradesURL,
+                                                        new Response.Listener<String>() {
+                                                            @Override
+                                                            public void onResponse(
+                                                                    String response) {
+                                                                // receive reply from server
+                                                                try {
+                                                                    JSONObject jsonResponse =
+                                                                            new JSONObject(
+                                                                                    response);
+                                                                    CourseGradesData.add(
+                                                                            jsonResponse
+                                                                                    .getJSONArray(
+                                                                                            "grades")
+                                                                                    .toString());
+                                                                } catch (Exception e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                        },
+                                                        new Response.ErrorListener() {
+                                                            @Override
+                                                            public void onErrorResponse(
+                                                                    VolleyError error) {
+                                                                Toast.makeText(
+                                                                                Main.this,
+                                                                                "Connection Error",
+                                                                                Toast.LENGTH_LONG)
+                                                                        .show();
+                                                            }
+                                                        });
 
-                                RequestQ.getInstance().addToRequestQ(threadsReq);
+                                        RequestQ.getInstance().addToRequestQ(gradesReq);
 
-                            }
+                                        String threadsURL =
+                                                url
+                                                        + "/courses/course.json/"
+                                                        + CourseCode
+                                                        + "/threads";
+                                        StringRequest threadsReq =
+                                                new StringRequest(
+                                                        Request.Method.GET,
+                                                        threadsURL,
+                                                        new Response.Listener<String>() {
+                                                            @Override
+                                                            public void onResponse(
+                                                                    String response) {
+                                                                // receive reply from server
+                                                                try {
+                                                                    JSONObject jsonResponse =
+                                                                            new JSONObject(
+                                                                                    response);
+                                                                    CourseThreadsData.add(
+                                                                            jsonResponse
+                                                                                    .getJSONArray(
+                                                                                            "course_threads")
+                                                                                    .toString());
+                                                                } catch (Exception e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                        },
+                                                        new Response.ErrorListener() {
+                                                            @Override
+                                                            public void onErrorResponse(
+                                                                    VolleyError error) {
+                                                                Toast.makeText(
+                                                                                Main.this,
+                                                                                "Connection Error",
+                                                                                Toast.LENGTH_LONG)
+                                                                        .show();
+                                                            }
+                                                        });
+
+                                        RequestQ.getInstance().addToRequestQ(threadsReq);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                return false;
+
+                            default:
+                                return true;
                         }
-                        catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                    }
+                });
 
-                        return false;
+        expListView.setOnGroupExpandListener(
+                new ExpandableListView.OnGroupExpandListener() {
 
-                    default:
-                        return true;
-                }
+                    @Override
+                    public void onGroupExpand(int groupPosition) {}
+                });
 
-            }
-        });
+        expListView.setOnGroupCollapseListener(
+                new ExpandableListView.OnGroupCollapseListener() {
 
-        expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-
-            @Override
-            public void onGroupExpand(int groupPosition) {
-            }
-        });
-
-        expListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-
-            @Override
-            public void onGroupCollapse(int groupPosition) {
-            }
-        });
+                    @Override
+                    public void onGroupCollapse(int groupPosition) {}
+                });
     }
 
-    public void receive_data(Intent dataReceived){
-        //receive data from login page
+    public void receive_data(Intent dataReceived) {
+        // receive data from login page
         profileInfo = dataReceived.getBundleExtra("loginResponse");
         Courses = dataReceived.getStringArrayListExtra("courseListCodes");
         url = dataReceived.getStringExtra("URL");
@@ -286,7 +359,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
     private void prepareListData(List<String> Courses) {
-        //Populate the expandable list
+        // Populate the expandable list
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
 
@@ -316,46 +389,55 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_settings:
-                //Profile selected
+                // Profile selected
                 final Intent goToProfile = new Intent(Main.this, Profile.class);
                 goToProfile.putExtra("profileInfo", profileInfo);
                 startActivity(goToProfile);
                 return true;
 
             case R.id.logout:
-                //Logout selected
+                // Logout selected
                 final Intent logout = new Intent(Main.this, Login.class);
                 new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_LIGHT)
                         .setTitle("Logout")
                         .setMessage("Do you wish to log out?")
-                        .setPositiveButton("No", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
+                        .setPositiveButton(
+                                "No",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {}
+                                })
+                        .setNegativeButton(
+                                "Yes",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
 
-                                String logoutURL = url + "/default/logout.json";
-                                StringRequest getReq = new StringRequest(Request.Method.GET,
-                                        logoutURL,
-                                        new Response.Listener<String>() {
-                                            @Override
-                                            public void onResponse(String response) {
+                                        String logoutURL = url + "/default/logout.json";
+                                        StringRequest getReq =
+                                                new StringRequest(
+                                                        Request.Method.GET,
+                                                        logoutURL,
+                                                        new Response.Listener<String>() {
+                                                            @Override
+                                                            public void onResponse(
+                                                                    String response) {}
+                                                        },
+                                                        new Response.ErrorListener() {
+                                                            @Override
+                                                            public void onErrorResponse(
+                                                                    VolleyError error) {
+                                                                Toast.makeText(
+                                                                                Main.this,
+                                                                                "Connection Error",
+                                                                                Toast.LENGTH_LONG)
+                                                                        .show();
+                                                            }
+                                                        });
 
-                                            }
-                                        },
-                                        new Response.ErrorListener() {
-                                            @Override
-                                            public void onErrorResponse(VolleyError error) {
-                                                Toast.makeText(Main.this, "Connection Error", Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-
-                                // send the request to RequestQ
-                                RequestQ.getInstance().addToRequestQ(getReq);
-                                startActivity(logout);
-                            }
-                        })
+                                        // send the request to RequestQ
+                                        RequestQ.getInstance().addToRequestQ(getReq);
+                                        startActivity(logout);
+                                    }
+                                })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
                 return true;
@@ -367,7 +449,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
     @Override
     public void onBackPressed() {
-        //Close the drawer and do nothing else
+        // Close the drawer and do nothing else
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -380,5 +462,4 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     public boolean onNavigationItemSelected(MenuItem item) {
         return false;
     }
-
 }

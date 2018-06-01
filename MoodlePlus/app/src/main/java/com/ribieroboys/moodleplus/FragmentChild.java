@@ -7,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class FragmentChild extends Fragment {
@@ -16,14 +14,15 @@ public class FragmentChild extends Fragment {
     JSONObject overviewJSON;
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(
+            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_child, container, false);
         overview = (TextView) view.findViewById(R.id.overview_frag);
         creditStructure = (TextView) view.findViewById(R.id.credit_structure);
@@ -39,13 +38,10 @@ public class FragmentChild extends Fragment {
             textToSet += "Credits:\t" + overviewJSON.getString("credits") + "\n";
             textToSet += "(L-T-P:\t" + overviewJSON.getString("l_t_p") + ")\n\n";
             creditStructure.setText(textToSet);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return view;
     }
-
-
 }

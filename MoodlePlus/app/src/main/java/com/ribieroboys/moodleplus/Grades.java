@@ -1,6 +1,5 @@
 package com.ribieroboys.moodleplus;
 
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,12 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Grades extends Fragment {
     TextView grades;
@@ -30,93 +27,102 @@ public class Grades extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(
+            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_grades, container, false);
         grades = (TextView) rootView.findViewById(R.id.grades);
-/*        expListView = (ExpandableListView) rootView.findViewById(R.id.expandableListView);
+        /*        expListView = (ExpandableListView) rootView.findViewById(R.id.expandableListView);
         listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild);
         expListView.setAdapter(listAdapter);
         prepareListData();*/
 
         try {
-            //retreive grades
-            gradesJSON = (new JSONObject(getArguments().getString("/default/grades.json"))).getJSONArray("grades");
-            coursesJSON = (new JSONObject(getArguments().getString("/default/grades.json"))).getJSONArray("courses");
-        }
-        catch (Exception e) {
+            // retreive grades
+            gradesJSON =
+                    (new JSONObject(getArguments().getString("/default/grades.json")))
+                            .getJSONArray("grades");
+            coursesJSON =
+                    (new JSONObject(getArguments().getString("/default/grades.json")))
+                            .getJSONArray("courses");
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if(gradesJSON.length() > 0) {
-            //parse the grades JSON
+        if (gradesJSON.length() > 0) {
+            // parse the grades JSON
             String textToSet = "";
             try {
                 for (int i = 0; i < gradesJSON.length(); i++) {
                     textToSet += " " + Integer.toString(i + 1) + ". ";
-                    textToSet += ((JSONObject) coursesJSON.get(i)).getString("code").toUpperCase() + "\n";
+                    textToSet +=
+                            ((JSONObject) coursesJSON.get(i)).getString("code").toUpperCase()
+                                    + "\n";
                     JSONObject grades = ((JSONObject) gradesJSON.get(i));
-                    textToSet += "\tScored " + grades.getString("score") + " / " + grades.getString("out_of") + " in " + grades.getString("name") + "\n";
+                    textToSet +=
+                            "\tScored "
+                                    + grades.getString("score")
+                                    + " / "
+                                    + grades.getString("out_of")
+                                    + " in "
+                                    + grades.getString("name")
+                                    + "\n";
                     textToSet += "\t(Weightage:\t" + grades.getString("weightage") + ")\n\n";
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             grades.setText(textToSet);
-        }
-        else {
+        } else {
             grades.setText("No grades available yet!");
         }
 
         /*expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
 
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                    @Override
+                    public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 
-                return true;
-            }
-        });
-
-
-        expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                switch (groupPosition) {
-
-                    default:
                         return true;
-                }
+                    }
+                });
 
-            }
-        });
 
-        expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+                expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
 
-            @Override
-            public void onGroupExpand(int groupPosition) {
-            }
-        });
+                    @Override
+                    public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                        switch (groupPosition) {
 
-        expListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+                            default:
+                                return true;
+                        }
 
-            @Override
-            public void onGroupCollapse(int groupPosition) {
-            }
-        });
-*/
+                    }
+                });
+
+                expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+
+                    @Override
+                    public void onGroupExpand(int groupPosition) {
+                    }
+                });
+
+                expListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+
+                    @Override
+                    public void onGroupCollapse(int groupPosition) {
+                    }
+                });
+        */
         return rootView;
     }
 
-
-   /* private void prepareListData() {
+    /* private void prepareListData() {
         try {
 
             for (int assignNo=0; assignNo < gradesJSON.length(); assignNo++) {
@@ -145,5 +151,4 @@ public class Grades extends Fragment {
         inflater.inflate(R.menu.main, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
-
 }

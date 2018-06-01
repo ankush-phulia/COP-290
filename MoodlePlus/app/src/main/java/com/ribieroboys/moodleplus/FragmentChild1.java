@@ -7,12 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class FragmentChild1 extends Fragment {
     JSONArray assignJSON;
@@ -22,14 +21,15 @@ public class FragmentChild1 extends Fragment {
     HashMap<String, List<String>> listDataChild;
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(
+            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_child1, container, false);
 
         try {
@@ -38,50 +38,55 @@ public class FragmentChild1 extends Fragment {
             expListView = (ExpandableListView) view.findViewById(R.id.expandableListViewAssign);
 
             prepareListData();
-            listAdapter = new ExpandableListAdapterSecond(this.getContext(), listDataHeader, listDataChild);
+            listAdapter =
+                    new ExpandableListAdapterSecond(
+                            this.getContext(), listDataHeader, listDataChild);
             expListView.setAdapter(listAdapter);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+        expListView.setOnChildClickListener(
+                new ExpandableListView.OnChildClickListener() {
 
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                    @Override
+                    public boolean onChildClick(
+                            ExpandableListView parent,
+                            View v,
+                            int groupPosition,
+                            int childPosition,
+                            long id) {
 
-                return true;
-            }
-        });
+                        return true;
+                    }
+                });
 
+        expListView.setOnGroupClickListener(
+                new ExpandableListView.OnGroupClickListener() {
 
-        expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+                    @Override
+                    public boolean onGroupClick(
+                            ExpandableListView parent, View v, int groupPosition, long id) {
+                        switch (groupPosition) {
+                            default:
+                                return false;
+                        }
+                    }
+                });
 
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                switch (groupPosition) {
+        expListView.setOnGroupExpandListener(
+                new ExpandableListView.OnGroupExpandListener() {
 
-                    default:
-                        return false;
-                }
+                    @Override
+                    public void onGroupExpand(int groupPosition) {}
+                });
 
-            }
-        });
+        expListView.setOnGroupCollapseListener(
+                new ExpandableListView.OnGroupCollapseListener() {
 
-        expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-
-            @Override
-            public void onGroupExpand(int groupPosition) {
-            }
-        });
-
-        expListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-
-            @Override
-            public void onGroupCollapse(int groupPosition) {
-            }
-        });
-
+                    @Override
+                    public void onGroupCollapse(int groupPosition) {}
+                });
 
         return view;
     }
@@ -91,7 +96,7 @@ public class FragmentChild1 extends Fragment {
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
         try {
-            for (int assignNo=0; assignNo < assignJSON.length(); assignNo++) {
+            for (int assignNo = 0; assignNo < assignJSON.length(); assignNo++) {
                 JSONObject assignment = (JSONObject) assignJSON.get(assignNo);
                 String header = assignment.getString("name");
                 listDataHeader.add(header);
@@ -102,10 +107,8 @@ public class FragmentChild1 extends Fragment {
                 listDataChild.put(listDataHeader.get(assignNo), childData);
             }
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 }

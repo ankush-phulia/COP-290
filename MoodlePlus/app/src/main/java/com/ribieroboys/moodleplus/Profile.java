@@ -29,30 +29,29 @@ public class Profile extends AppCompatActivity {
         profileInfo = dataReceived.getBundleExtra("profileInfo");
 
         getIDs();
-        //set the text fields as per the profile data received
+        // set the text fields as per the profile data received
         username.setText(profileInfo.getString("user"));
-        fullname.setText(profileInfo.getString("firstName") + " " + profileInfo.getString("lastName"));
+        fullname.setText(
+                profileInfo.getString("firstName") + " " + profileInfo.getString("lastName"));
         entryNo.setText(profileInfo.getString("entryNo"));
         email.setText(profileInfo.getString("email"));
-
     }
 
-    public void  getIDs(){
-        //get the UI elements
+    public void getIDs() {
+        // get the UI elements
         username = (TextView) findViewById(R.id.profile_username);
         fullname = (TextView) findViewById(R.id.profile_fullname);
         entryNo = (TextView) findViewById(R.id.profile_entryno);
         email = (TextView) findViewById(R.id.profile_email);
     }
 
-
-    public void end(){
+    public void end() {
         this.finish();
     }
 
     @Override
     public void onBackPressed() {
-        //close the activity
+        // close the activity
         end();
     }
 
@@ -68,7 +67,7 @@ public class Profile extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_settings:
-                //profile option selected
+                // profile option selected
                 final Intent goToProfile = new Intent(Profile.this, Profile.class);
                 goToProfile.putExtra("profileInfo", profileInfo);
                 startActivity(goToProfile);
@@ -76,20 +75,23 @@ public class Profile extends AppCompatActivity {
                 return true;
 
             case R.id.logout:
-                //logout option selected
+                // logout option selected
                 final Intent intent2 = new Intent(Profile.this, Login.class);
                 new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK)
                         .setTitle("Logout")
                         .setMessage("Do you wish to log out?")
-                        .setPositiveButton("No", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                startActivity(intent2);
-                            }
-                        })
+                        .setPositiveButton(
+                                "No",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {}
+                                })
+                        .setNegativeButton(
+                                "Yes",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        startActivity(intent2);
+                                    }
+                                })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
                 return true;

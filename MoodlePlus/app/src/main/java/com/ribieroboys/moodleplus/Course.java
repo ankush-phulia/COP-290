@@ -17,7 +17,7 @@ public class Course extends Fragment {
     String courseCode;
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         courseCode = getArguments().getString("courseCode");
 
         super.onCreate(savedInstanceState);
@@ -26,15 +26,16 @@ public class Course extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(
+            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_parent, container, false);
 
         this.getIDs(view);
         this.setEvents();
-        this.addPage("Overview",0);
-        this.addPage("Assignments",1);
-        this.addPage("Grades",2);
-        this.addPage("Threads",3);
+        this.addPage("Overview", 0);
+        this.addPage("Assignments", 1);
+        this.addPage("Grades", 2);
+        this.addPage("Threads", 3);
 
         viewPager.setCurrentItem(0);
 
@@ -53,22 +54,22 @@ public class Course extends Fragment {
 
     private void setEvents() {
 
-        tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                super.onTabSelected(tab);
-                viewPager.setCurrentItem(tab.getPosition());
-                selectedTabPosition = viewPager.getCurrentItem();
-            }
+        tabLayout.setOnTabSelectedListener(
+                new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        super.onTabSelected(tab);
+                        viewPager.setCurrentItem(tab.getPosition());
+                        selectedTabPosition = viewPager.getCurrentItem();
+                    }
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
-        });
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {}
+                });
     }
 
     public void addPage(String pagename, int i) {
-        switch(i){
+        switch (i) {
             case 0:
                 FragmentChild fragmentChild = new FragmentChild();
                 fragmentChild.setArguments(getArguments());
@@ -101,8 +102,7 @@ public class Course extends Fragment {
 
     private void notifyAdapterAndPager() {
         adapter.notifyDataSetChanged();
-        if (adapter.getCount() > 0)
-            tabLayout.setupWithViewPager(viewPager);
+        if (adapter.getCount() > 0) tabLayout.setupWithViewPager(viewPager);
         viewPager.setCurrentItem(adapter.getCount() - 1);
         setupTabLayout();
     }
@@ -112,7 +112,5 @@ public class Course extends Fragment {
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             tabLayout.getTabAt(i).setCustomView(adapter.getTabView(i));
         }
-
     }
-
 }

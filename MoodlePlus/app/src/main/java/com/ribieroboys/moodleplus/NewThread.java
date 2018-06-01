@@ -6,18 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-
+import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.List;
 
 public class NewThread extends Activity implements View.OnClickListener {
 
@@ -51,32 +47,47 @@ public class NewThread extends Activity implements View.OnClickListener {
 
     public void onClick(View view) {
         if (view == createThread) {
-            String loginURL = url + "/threads/new.json?title=" + title.getText() + "&description=" + Description.getText() + "&course_code=" + courseCode;
-            StringRequest getReq = new StringRequest(Request.Method.GET,
-                    loginURL,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            // receive reply from server
-                            try {
-                                JSONObject jsonResponse = new JSONObject(response);
-                                System.out.println(jsonResponse.get("success").toString().compareTo("true"));
-                            }
-                            catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(NewThread.this, "Connection Error", Toast.LENGTH_LONG).show();
-                        }
-                    });
+            String loginURL =
+                    url
+                            + "/threads/new.json?title="
+                            + title.getText()
+                            + "&description="
+                            + Description.getText()
+                            + "&course_code="
+                            + courseCode;
+            StringRequest getReq =
+                    new StringRequest(
+                            Request.Method.GET,
+                            loginURL,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    // receive reply from server
+                                    try {
+                                        JSONObject jsonResponse = new JSONObject(response);
+                                        System.out.println(
+                                                jsonResponse
+                                                        .get("success")
+                                                        .toString()
+                                                        .compareTo("true"));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(
+                                                    NewThread.this,
+                                                    "Connection Error",
+                                                    Toast.LENGTH_LONG)
+                                            .show();
+                                }
+                            });
 
             // send the request to RequestQ
             RequestQ.getInstance().addToRequestQ(getReq);
-
 
             Intent backToMain = new Intent(getIntent());
             backToMain.setClass(NewThread.this, Main.class);
