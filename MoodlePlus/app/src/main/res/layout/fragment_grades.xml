@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/overview"
 
-    tools:context="com.ribieroboys.moodleplus.Dashboard">
+    tools:context="com.ribieroboys.ankushphulia.moodleplus.Dashboard">
 
     <ScrollView
         android:layout_width="match_parent"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ribieroboys.moodleplus">
+    package="com.ribieroboys.ankushphulia.moodleplus">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -33,10 +33,6 @@
              ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
         -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
         <activity
             android:name=".Login"
             android:label="@string/title_activity_login"
@@ -44,7 +40,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ribieroboys.moodleplus.splash_screen" />
+                android:value="com.ribieroboys.ankushphulia.moodleplus.splash_screen" />
         </activity>
         <activity
             android:name=".Profile"
@@ -53,7 +49,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ribieroboys.moodleplus.Main" />
+                android:value="com.ribieroboys.ankushphulia.moodleplus.Main" />
         </activity>
         <activity
             android:name=".Main"
@@ -62,7 +58,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ribieroboys.moodleplus.Login" />
+                android:value="com.ribieroboys.ankushphulia.moodleplus.Login" />
         </activity>
         <activity android:name=".NewThread" />
         <activity android:name=".ViewThread"></activity>

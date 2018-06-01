@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/notification"
-    tools:context="com.ribieroboys.moodleplus.Dashboard">
+    android:background="@drawable/notification_icon"
+    tools:context="com.ribieroboys.ankushphulia.moodleplus.Dashboard">
 
 <ScrollView
     android:layout_width="match_parent"

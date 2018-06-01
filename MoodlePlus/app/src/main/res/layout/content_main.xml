@@ -9,7 +9,7 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.ribieroboys.moodleplus.Main"
+    tools:context="com.ribieroboys.ankushphulia.moodleplus.Main"
     tools:showIn="@layout/app_bar_main">
 
 

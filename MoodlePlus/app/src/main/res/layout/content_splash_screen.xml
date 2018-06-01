@@ -10,7 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@drawable/moodleladders"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.ribieroboys.moodleplus.splash_screen"
+    tools:context="com.ribieroboys.ankushphulia.moodleplus.splash_screen"
     tools:showIn="@layout/activity_splash_screen">
 
 </RelativeLayout>
