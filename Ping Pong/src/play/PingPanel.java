@@ -1,6 +1,5 @@
 package play;
 
-import slidinglayout.SLAnimator;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
 import java.awt.BorderLayout;
@@ -18,142 +17,150 @@ import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import slidinglayout.SLAnimator;
 
-/**
- * @author Aurelien Ribon | http://www.aurelienribon.com/
- */
+/** @author Aurelien Ribon | http://www.aurelienribon.com/ */
 public class PingPanel extends JPanel {
-	private static final Color FG_COLOR = new Color(0xFFFFFF);
-	private static final Color BG_COLOR = new Color(0x3B5998);
-	private static final Color BORDER_COLOR = new Color(0x000000);
+    private static final Color FG_COLOR = new Color(0xFFFFFF);
+    private static final Color BG_COLOR = new Color(0x3B5998);
+    private static final Color BORDER_COLOR = new Color(0x000000);
 
-	private static final TweenManager tweenManager = SLAnimator.createTweenManager();
-	private final JLabel label = new JLabel();
-	private BufferedImage bgImg;
-	private Runnable action;
-	private boolean actionEnabled = true;
-	private boolean hover = false;
-	private int borderThickness = 2;
+    private static final TweenManager tweenManager = SLAnimator.createTweenManager();
+    private final JLabel label = new JLabel();
+    private BufferedImage bgImg;
+    private Runnable action;
+    private boolean actionEnabled = true;
+    private boolean hover = false;
+    private int borderThickness = 2;
 
-	public PingPanel(String name, String imgPath) {
-		setBackground(BG_COLOR);
-		setLayout(new BorderLayout());
+    public PingPanel(String name, String imgPath) {
+        setBackground(BG_COLOR);
+        setLayout(new BorderLayout());
 
-		label.setForeground(FG_COLOR);
-		label.setFont(new Font("Sans", Font.BOLD, 90));
-		label.setVerticalAlignment(SwingConstants.CENTER);
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setText(name);
+        label.setForeground(FG_COLOR);
+        label.setFont(new Font("Sans", Font.BOLD, 90));
+        label.setVerticalAlignment(SwingConstants.CENTER);
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setText(name);
 
-		try {
-			bgImg = ImageIO.read(new File(imgPath));
-		} catch (IOException ex) {
-			System.err.println("[error] cannot read image path '" + imgPath + "'");
-			add(label, BorderLayout.CENTER);
-		}
+        try {
+            bgImg = ImageIO.read(new File(imgPath));
+        } catch (IOException ex) {
+            System.err.println("[error] cannot read image path '" + imgPath + "'");
+            add(label, BorderLayout.CENTER);
+        }
 
-		addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				hover = true;
-				if (actionEnabled) showBorder();
-			}
+        addMouseListener(
+                new MouseAdapter() {
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        hover = true;
+                        if (actionEnabled) showBorder();
+                    }
 
-			@Override
-			public void mouseExited(MouseEvent e) {
-				hover = false;
-				hideBorder();
-			}
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        hover = false;
+                        hideBorder();
+                    }
 
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				if (action != null && actionEnabled) action.run();
-			}
-		});
-	}
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                        if (action != null && actionEnabled) action.run();
+                    }
+                });
+    }
 
-	public void setAction(Runnable action) {this.action = action;}
-	public void enableAction() {actionEnabled = true; if (hover) showBorder();}
-	public void disableAction() {actionEnabled = false;}
+    public void setAction(Runnable action) {
+        this.action = action;
+    }
 
-	private void showBorder() {
-		tweenManager.killTarget(borderThickness);
-		Tween.to(PingPanel.this, Accessor.BORDER_THICKNESS, 0.4f)
-			.target(10)
-			.start(tweenManager);
-	}
+    public void enableAction() {
+        actionEnabled = true;
+        if (hover) showBorder();
+    }
 
-	private void hideBorder() {
-		tweenManager.killTarget(borderThickness);
-		Tween.to(PingPanel.this, Accessor.BORDER_THICKNESS, 0.4f)
-			.target(2)
-			.start(tweenManager);
-	}
+    public void disableAction() {
+        actionEnabled = false;
+    }
 
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
+    private void showBorder() {
+        tweenManager.killTarget(borderThickness);
+        Tween.to(PingPanel.this, Accessor.BORDER_THICKNESS, 0.4f).target(10).start(tweenManager);
+    }
 
-		Graphics2D gg = (Graphics2D) g;
+    private void hideBorder() {
+        tweenManager.killTarget(borderThickness);
+        Tween.to(PingPanel.this, Accessor.BORDER_THICKNESS, 0.4f).target(2).start(tweenManager);
+    }
 
-		int w = getWidth();
-		int h = getHeight();
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
-		if (bgImg != null) {
-			int imgW = bgImg.getWidth();
-			int imgH = bgImg.getHeight();
+        Graphics2D gg = (Graphics2D) g;
 
-			if ((float)w/h < (float)imgW/imgH) {
-				int tw = h * imgW/ imgH;
-				int th = h;
-				gg.drawImage(bgImg, (w-tw)/2, 0, tw, th, null);
-			} else {
-				int tw = w;
-				int th = w * imgH / imgW;
-				gg.drawImage(bgImg, 0, (h-th)/2, tw, th, null);
-			}
-		}
+        int w = getWidth();
+        int h = getHeight();
 
-		int t = borderThickness;
-		gg.setColor(BORDER_COLOR);
-		gg.fillRect(0, 0, t, h-1);
-		gg.fillRect(0, 0, w-1, t);
-		gg.fillRect(0, h-1-t, w-1, t);
-		gg.fillRect(w-1-t, 0, t, h-1);
-	}
+        if (bgImg != null) {
+            int imgW = bgImg.getWidth();
+            int imgH = bgImg.getHeight();
 
-	// -------------------------------------------------------------------------
-	// Tween Accessor
-	// -------------------------------------------------------------------------
+            if ((float) w / h < (float) imgW / imgH) {
+                int tw = h * imgW / imgH;
+                int th = h;
+                gg.drawImage(bgImg, (w - tw) / 2, 0, tw, th, null);
+            } else {
+                int tw = w;
+                int th = w * imgH / imgW;
+                gg.drawImage(bgImg, 0, (h - th) / 2, tw, th, null);
+            }
+        }
 
-	public static class Accessor extends SLAnimator.ComponentAccessor {
-		public static final int BORDER_THICKNESS = 100;
+        int t = borderThickness;
+        gg.setColor(BORDER_COLOR);
+        gg.fillRect(0, 0, t, h - 1);
+        gg.fillRect(0, 0, w - 1, t);
+        gg.fillRect(0, h - 1 - t, w - 1, t);
+        gg.fillRect(w - 1 - t, 0, t, h - 1);
+    }
 
-		@Override
-		public int getValues(Component target, int tweenType, float[] returnValues) {
-			PingPanel tp = (PingPanel) target;
+    // -------------------------------------------------------------------------
+    // Tween Accessor
+    // -------------------------------------------------------------------------
 
-			int ret = super.getValues(target, tweenType, returnValues);
-			if (ret >= 0) return ret;
+    public static class Accessor extends SLAnimator.ComponentAccessor {
+        public static final int BORDER_THICKNESS = 100;
 
-			switch (tweenType) {
-				case BORDER_THICKNESS: returnValues[0] = tp.borderThickness; return 1;
-				default: return -1;
-			}
-		}
+        @Override
+        public int getValues(Component target, int tweenType, float[] returnValues) {
+            PingPanel tp = (PingPanel) target;
 
-		@Override
-		public void setValues(Component target, int tweenType, float[] newValues) {
-			PingPanel tp = (PingPanel) target;
+            int ret = super.getValues(target, tweenType, returnValues);
+            if (ret >= 0) return ret;
 
-			super.setValues(target, tweenType, newValues);
+            switch (tweenType) {
+                case BORDER_THICKNESS:
+                    returnValues[0] = tp.borderThickness;
+                    return 1;
+                default:
+                    return -1;
+            }
+        }
 
-			switch (tweenType) {
-				case BORDER_THICKNESS:
-					tp.borderThickness = Math.round(newValues[0]);
-					tp.repaint();
-					break;
-			}
-		}
-	}
+        @Override
+        public void setValues(Component target, int tweenType, float[] newValues) {
+            PingPanel tp = (PingPanel) target;
+
+            super.setValues(target, tweenType, newValues);
+
+            switch (tweenType) {
+                case BORDER_THICKNESS:
+                    tp.borderThickness = Math.round(newValues[0]);
+                    tp.repaint();
+                    break;
+            }
+        }
+    }
 }

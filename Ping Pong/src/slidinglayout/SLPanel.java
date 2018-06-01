@@ -7,15 +7,12 @@ import java.awt.event.ComponentEvent;
 import javax.swing.JLayeredPane;
 
 /**
- * The SLPanel is the root of the library. It is a {@link JLayeredPane} under
- * the hood. Therefore, every child that is added to it is able to move
- * over or under the other children.
- * <p/>
+ * The SLPanel is the root of the library. It is a {@link JLayeredPane} under the hood. Therefore,
+ * every child that is added to it is able to move over or under the other children.
  *
- * However, this panel also features its own layout, through the use of
- * {@link SLConfig configurations}. A configuration is a layout of the
- * panel children. The panel can then create smooth transitions between two
- * configurations.
+ * <p>However, this panel also features its own layout, through the use of {@link SLConfig
+ * configurations}. A configuration is a layout of the panel children. The panel can then create
+ * smooth transitions between two configurations.
  *
  * <pre>
  * // First create the panel and give it a way to animate
@@ -46,54 +43,54 @@ import javax.swing.JLayeredPane;
  * @author Aurelien Ribon | http://www.aurelienribon.com/
  */
 public class SLPanel extends JLayeredPane {
-	private TweenManager tweenManager;
-	SLConfig currentCfg;
-	boolean isTransitionPlaying = false;
+    private TweenManager tweenManager;
+    SLConfig currentCfg;
+    boolean isTransitionPlaying = false;
 
-	public SLPanel() {
-		addComponentListener(new ComponentAdapter() {
-			@Override public void componentResized(ComponentEvent e) {
-				if (currentCfg != null) initialize(currentCfg);
-			}
-		});
-	}
+    public SLPanel() {
+        addComponentListener(
+                new ComponentAdapter() {
+                    @Override
+                    public void componentResized(ComponentEvent e) {
+                        if (currentCfg != null) initialize(currentCfg);
+                    }
+                });
+    }
 
-	/**
-	 * Sets the {@link TweenManager} that will be used to animate the
-	 * transitions. You can use the {@link SLAnimator} class to create a new
-	 * manager that wil run in a dedicated thread, or you can pass any
-	 * manager if you already have one running in a thread.
-	 */
-	public void setTweenManager(TweenManager tweenManager) {
-		this.tweenManager = tweenManager;
-	}
+    /**
+     * Sets the {@link TweenManager} that will be used to animate the transitions. You can use the
+     * {@link SLAnimator} class to create a new manager that wil run in a dedicated thread, or you
+     * can pass any manager if you already have one running in a thread.
+     */
+    public void setTweenManager(TweenManager tweenManager) {
+        this.tweenManager = tweenManager;
+    }
 
-	/**
-	 * Sets the initial configuration of the panel. This configuration will be
-	 * enforced without transition. Do not forget to call this before starting
-	 * any transition!
-	 */
-	public void initialize(SLConfig cfg) {
-		currentCfg = cfg;
+    /**
+     * Sets the initial configuration of the panel. This configuration will be enforced without
+     * transition. Do not forget to call this before starting any transition!
+     */
+    public void initialize(SLConfig cfg) {
+        currentCfg = cfg;
 
-		if (getWidth() != 0 || getHeight() != 0) {
-			cfg.placeAndRoute();
+        if (getWidth() != 0 || getHeight() != 0) {
+            cfg.placeAndRoute();
 
-			removeAll();
-			for (Component c : cfg.getCmps()) {
-				SLConfig.Tile t = cfg.getTile(c);
-				c.setBounds(t.x, t.y, t.w, t.h);
-				c.validate();
-				add(c, new Integer(1));
-			}
-		}
-	}
+            removeAll();
+            for (Component c : cfg.getCmps()) {
+                SLConfig.Tile t = cfg.getTile(c);
+                c.setBounds(t.x, t.y, t.w, t.h);
+                c.validate();
+                add(c, new Integer(1));
+            }
+        }
+    }
 
-	/**
-	 * Creates a new transition. Do not hesitate to chain the method calls
-	 * from this one, the API is meant for that.
-	 */
-	public SLTransition createTransition() {
-		return new SLTransition(this, tweenManager);
-	}
+    /**
+     * Creates a new transition. Do not hesitate to chain the method calls from this one, the API is
+     * meant for that.
+     */
+    public SLTransition createTransition() {
+        return new SLTransition(this, tweenManager);
+    }
 }

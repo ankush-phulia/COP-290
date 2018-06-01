@@ -1,16 +1,13 @@
 package network;
 
-import play.BoardMulti;
-
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import play.BoardMulti;
 
-/**
- * Created by nitin on 24/4/16.
- */
+/** Created by nitin on 24/4/16. */
 public class ReadData implements Runnable {
     Socket connection;
     DataInputStream in;
@@ -23,8 +20,7 @@ public class ReadData implements Runnable {
         buffer = new ArrayList<>();
         try {
             in = new DataInputStream(connection.getInputStream());
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             threadMessage("Cannot get DataInputStream of client...");
         }
         isAlive = true;
@@ -36,27 +32,21 @@ public class ReadData implements Runnable {
             String lineRead;
             while (connection.isConnected()) {
                 lineRead = in.readUTF();
-                if (isStateBoardMulti)
-                    BoardMulti.parse_packet(lineRead);
-                else
-                    buffer.add(lineRead);
+                if (isStateBoardMulti) BoardMulti.parse_packet(lineRead);
+                else buffer.add(lineRead);
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             threadMessage("Unable to read! Disconnected probably?");
             isAlive = false;
         }
-
     }
 
-    public String readFromBuffer () {
-        if (buffer.isEmpty())
-            return null;
+    public String readFromBuffer() {
+        if (buffer.isEmpty()) return null;
         String token = buffer.get(0);
         buffer.remove(0);
         return token;
     }
-
 
     /* For debugging purpose only.
      * Display a message, preceded by

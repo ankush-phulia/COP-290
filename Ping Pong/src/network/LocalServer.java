@@ -7,9 +7,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-/**
- * Created by nitin on 24/4/16.
- */
+/** Created by nitin on 24/4/16. */
 public class LocalServer {
     ServerSocket myServer;
     List<Socket> clientSocket = new ArrayList<>();
@@ -17,12 +15,12 @@ public class LocalServer {
     List<InetAddress> ip_address = new ArrayList<>();
     List<ReadData> inputStreamClient = new ArrayList<>();
 
-
-    public InetAddress getMyIP () { return myServer.getInetAddress(); }
-
+    public InetAddress getMyIP() {
+        return myServer.getInetAddress();
+    }
 
     // Returns a list of all available IPs (over different network interfaces)
-    public static List<InetAddress> getAllAvailableIP () {
+    public static List<InetAddress> getAllAvailableIP() {
         List<InetAddress> IPs = new ArrayList<>();
         try {
             Enumeration e = NetworkInterface.getNetworkInterfaces();
@@ -35,18 +33,16 @@ public class LocalServer {
                         InetAddress i = (Inet4Address) ee.nextElement();
                         IPs.add(i);
                         System.out.println(i.getHostAddress());
+                    } catch (ClassCastException c) {
                     }
-                    catch (ClassCastException c) { }
                 }
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         return IPs;
     }
-
 
     // Creates a new server with port no. 'port'
     // Throws IOException if unsuccessful
@@ -56,10 +52,9 @@ public class LocalServer {
         threadMessage("Server created on port " + myServer.getLocalPort());
     }
 
-
     // returns list of IP Address of all clients
     // (useful for keeping track of all clients)
-    public List<InetAddress> getAllClients () {
+    public List<InetAddress> getAllClients() {
         ArrayList<InetAddress> connections = new ArrayList<>();
         for (int count = 0; count < clientSocket.size(); count++) {
             if (inputStreamClient.get(count).isAlive) {
@@ -68,7 +63,6 @@ public class LocalServer {
         }
         return connections;
     }
-
 
     // Tries to establish connection with a new client
     // returns the corresponding thread
@@ -79,10 +73,9 @@ public class LocalServer {
         return clientThread;
     }
 
-
     // closes the server socket
     // returns true if closed successfully
-    public boolean disconnect () {
+    public boolean disconnect() {
         try {
             myServer.close();
             return true;
@@ -91,24 +84,21 @@ public class LocalServer {
         }
     }
 
-
     // returns true if myServer is alive
-    public boolean alive () {
+    public boolean alive() {
         return myServer != null && !myServer.isClosed();
     }
 
-
     // writes 'writeData' to client with IP Address 'ip_addr'
     // returns false if client is disconnected else true
-    public boolean writeToClient (InetAddress ip_addr, String writeData) {
+    public boolean writeToClient(InetAddress ip_addr, String writeData) {
         int position = ip_address.indexOf(ip_addr);
         DataOutputStream out = writingStreamClient.get(position);
         Socket client = clientSocket.get(position);
 
         try {
             out.writeUTF(writeData);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             if (!client.isConnected()) {
                 threadMessage("Client is disconnected...");
@@ -123,10 +113,9 @@ public class LocalServer {
         return true;
     }
 
-
     // writes 'writeData' to all clients
     // returns IP address of lost client
-    public InetAddress writeToAllClients (String writeData) {
+    public InetAddress writeToAllClients(String writeData) {
         InetAddress lost = null;
         for (int position = 0; position < clientSocket.size(); position++) {
             DataOutputStream out = writingStreamClient.get(position);
@@ -134,44 +123,40 @@ public class LocalServer {
 
             try {
                 out.writeUTF(writeData);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
 
-                    threadMessage("Client is disconnected...");
-                    // Client is disconnected. Take necessary steps here
-                    lost = ip_address.remove(position);
-                    writingStreamClient.remove(position);
-                    clientSocket.remove(position);
-                    inputStreamClient.remove(position);
+                threadMessage("Client is disconnected...");
+                // Client is disconnected. Take necessary steps here
+                lost = ip_address.remove(position);
+                writingStreamClient.remove(position);
+                clientSocket.remove(position);
+                inputStreamClient.remove(position);
 
-                    threadMessage("Disconnected: " + lost + client.toString());
+                threadMessage("Disconnected: " + lost + client.toString());
 
-                    position--;
+                position--;
             }
         }
         return lost;
     }
 
-
     // reads data from client with IP Address 'ip_addr'
     // returns null if no data is available
-    public String readFromClient (InetAddress ip_addr) {
+    public String readFromClient(InetAddress ip_addr) {
         int position = ip_address.indexOf(ip_addr);
         ReadData rd = inputStreamClient.get(position);
-        return  rd.readFromBuffer();
+        return rd.readFromBuffer();
     }
-
 
     // helper function 'NewClient' class
     // NOT for outside use
-    synchronized void addElements (Socket s, DataOutputStream dos, InetAddress sa, ReadData rd) {
+    synchronized void addElements(Socket s, DataOutputStream dos, InetAddress sa, ReadData rd) {
         clientSocket.add(s);
         writingStreamClient.add(dos);
         ip_address.add(sa);
         inputStreamClient.add(rd);
     }
-
 
     /* For debugging purpose only.
      * Display a message, preceded by
@@ -181,5 +166,4 @@ public class LocalServer {
         String threadName = Thread.currentThread().getName();
         System.out.format("%s: %s%n", threadName, message);
     }
-
 }

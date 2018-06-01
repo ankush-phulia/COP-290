@@ -6,14 +6,11 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-/**
- * Created by nitin on 24/4/16.
- */
+/** Created by nitin on 24/4/16. */
 public class ConnectionToServer {
     Socket clientSocket;
     DataOutputStream writingStream;
     public ReadData readingStream;
-
 
     /* Connect to a client with IP Address/Name 'inetAddr' & port no. 'port'
      *  Throws IOException if unsuccessful
@@ -25,33 +22,35 @@ public class ConnectionToServer {
             try {
                 clientSocket.connect(new InetSocketAddress(inetAddr, port), 10000);
             } catch (IOException e) {
-            	e.printStackTrace();
+                e.printStackTrace();
                 threadMessage("Unable to connect to a given IP address.");
                 clientSocket = null;
                 return;
             }
 
-            threadMessage("Connection established with " + clientSocket.getRemoteSocketAddress() +
-                    " on port " + clientSocket.getLocalPort());
+            threadMessage(
+                    "Connection established with "
+                            + clientSocket.getRemoteSocketAddress()
+                            + " on port "
+                            + clientSocket.getLocalPort());
 
             writingStream = new DataOutputStream(clientSocket.getOutputStream());
             readingStream = new ReadData(clientSocket);
             Thread readThread = new Thread(readingStream);
             readThread.start();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             threadMessage("Error occurred while obtaining output stream of server.");
             clientSocket = null;
         }
     }
 
-
     // checks whether connection is alive or not
-    public boolean connectionEstablished () { return clientSocket != null; }
-
+    public boolean connectionEstablished() {
+        return clientSocket != null;
+    }
 
     // closes the socket
-    public boolean disconnect () {
+    public boolean disconnect() {
         try {
             clientSocket.close();
             return true;
@@ -60,19 +59,18 @@ public class ConnectionToServer {
         }
     }
 
-
     // returns IP address of client
-    public InetAddress getIPAddress () { return clientSocket.getLocalAddress(); }
-
+    public InetAddress getIPAddress() {
+        return clientSocket.getLocalAddress();
+    }
 
     // writes 'writeData' to server
     // returns false if client is disconnected else true
-    public boolean writeToServer (String writeData) {
+    public boolean writeToServer(String writeData) {
 
         try {
             writingStream.writeUTF(writeData);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             if (!clientSocket.isConnected()) {
                 threadMessage("Server is disconnected...");
@@ -84,13 +82,11 @@ public class ConnectionToServer {
         return true;
     }
 
-
     // reads data from server
     // returns null if no data is available
-    public String readFromServer () {
-        return  readingStream.readFromBuffer();
+    public String readFromServer() {
+        return readingStream.readFromBuffer();
     }
-
 
     /* For debugging purpose only.
      * Display a message, preceded by
@@ -100,5 +96,4 @@ public class ConnectionToServer {
         String threadName = Thread.currentThread().getName();
         System.out.format("%s: %s%n", threadName, message);
     }
-
 }

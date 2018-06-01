@@ -1,8 +1,9 @@
 package slidinglayout;
 
-/**
- * @author Aurelien Ribon | http://www.aurelienribon.com/
- */
+/** @author Aurelien Ribon | http://www.aurelienribon.com/ */
 public enum SLSide {
-	TOP, BOTTOM, LEFT, RIGHT
+    TOP,
+    BOTTOM,
+    LEFT,
+    RIGHT
 }
