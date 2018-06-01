@@ -73,7 +73,12 @@ public class Dashboard extends Fragment {
         int month = Integer.parseInt(dateString.substring(3, 5));
         if (month == 2) {
             end = "29" + dateString.substring(2);
-        } else if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10
+        } else if (month == 1
+                || month == 3
+                || month == 5
+                || month == 7
+                || month == 8
+                || month == 10
                 || month == 12) {
             end = "31" + dateString.substring(2);
         } else {
