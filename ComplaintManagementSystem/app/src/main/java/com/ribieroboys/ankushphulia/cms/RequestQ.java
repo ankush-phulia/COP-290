@@ -1,17 +1,15 @@
 package com.ribieroboys.ankushphulia.cms;
 
 import android.app.Application;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-
 import java.net.CookieHandler;
 import java.net.CookieManager;
 
 public class RequestQ extends Application {
 
-    //create a global request queue to cater to server requests
+    // create a global request queue to cater to server requests
 
     RequestQueue rq;
     static RequestQ RQinstance;
@@ -19,7 +17,7 @@ public class RequestQ extends Application {
     CookieManager cMan;
 
     @Override
-    public void onCreate(){
+    public void onCreate() {
         super.onCreate();
         RQinstance = this;
         rq = Volley.newRequestQueue(getApplicationContext());
@@ -35,9 +33,8 @@ public class RequestQ extends Application {
         return rq;
     }
 
-    public <T> void addToRequestQ(Request<T> request){
-        //to add any type of request to the queue
+    public <T> void addToRequestQ(Request<T> request) {
+        // to add any type of request to the queue
         this.getRequestQueue().add(request);
     }
-
 }

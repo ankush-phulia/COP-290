@@ -1,8 +1,8 @@
 package com.ribieroboys.ankushphulia.cms;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 public class Start extends AppCompatActivity {
 
@@ -19,10 +19,9 @@ public class Start extends AppCompatActivity {
     public void onBackPressed() {
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.start_fragments);
         if (f instanceof default_start) {
-        //nothing for default_start fragment
-        }else{
+            // nothing for default_start fragment
+        } else {
             super.onBackPressed();
         }
     }
-
 }

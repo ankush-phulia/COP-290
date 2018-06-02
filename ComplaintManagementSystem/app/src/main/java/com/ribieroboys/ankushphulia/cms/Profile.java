@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,15 +32,15 @@ public class Profile extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //set valus of the fields visible
-        profileInfo=getIntent().getBundleExtra("info");
+        // set valus of the fields visible
+        profileInfo = getIntent().getBundleExtra("info");
         try {
-            JSONObject json=new JSONObject(profileInfo.getString("json"));
+            JSONObject json = new JSONObject(profileInfo.getString("json"));
             setparameters(profileInfo);
             getExtras(designation, json);
 
-            final Context cont=this;
-           /* Button save =(Button)findViewById(R.id.buttonSave);
+            final Context cont = this;
+            /* Button save =(Button)findViewById(R.id.buttonSave);
             save.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -96,18 +95,18 @@ public class Profile extends AppCompatActivity {
     }
 
     public void setparameters(Bundle profileInfo) {
-        name=profileInfo.getString("name"," ");
-        password=profileInfo.getString("password", " ");
-        username=profileInfo.getString("username", " ");
-        designation=profileInfo.getInt("type", 0);
+        name = profileInfo.getString("name", " ");
+        password = profileInfo.getString("password", " ");
+        username = profileInfo.getString("username", " ");
+        designation = profileInfo.getInt("type", 0);
         getFields(designation);
-        TextView namet=(TextView)findViewById(R.id.TextViewName);
+        TextView namet = (TextView) findViewById(R.id.TextViewName);
         namet.setText(name);
-        TextView uname=(TextView)findViewById(R.id.TextViewUsername2);
+        TextView uname = (TextView) findViewById(R.id.TextViewUsername2);
         uname.setText(username);
-        final TextView chpass=(TextView)findViewById(R.id.editTextPassword3);
+        final TextView chpass = (TextView) findViewById(R.id.editTextPassword3);
         chpass.setText(password);
-        TextView des=(TextView)findViewById(R.id.TextViewDesignation);
+        TextView des = (TextView) findViewById(R.id.TextViewDesignation);
         switch (designation) {
             case 0:
                 des.setText("Student");
@@ -124,40 +123,40 @@ public class Profile extends AppCompatActivity {
         }
     }
 
-    public void getFields(int designation){
-        LinearLayout otherfields=(LinearLayout)findViewById(R.id.Extras2);
+    public void getFields(int designation) {
+        LinearLayout otherfields = (LinearLayout) findViewById(R.id.Extras2);
         otherfields.setOrientation(LinearLayout.VERTICAL);
-        designation_format2 Format=new designation_format2();
-        Format.cont=this;
-        switch (designation){
+        designation_format2 Format = new designation_format2();
+        Format.cont = this;
+        switch (designation) {
             case 0:
-                //student selected
+                // student selected
                 Format.populate_student(otherfields);
                 break;
             case 1:
-                //faculty selected
+                // faculty selected
                 Format.populate_faculty(otherfields);
                 break;
             case 2:
-                //employee selected
+                // employee selected
                 Format.populate_employee(otherfields);
                 break;
             case 3:
-                //others selected
+                // others selected
                 Format.populate_other(otherfields);
                 break;
         }
     }
 
-    public void getExtras(int designation,JSONObject json){
+    public void getExtras(int designation, JSONObject json) {
 
-        LinearLayout otherfields=(LinearLayout)findViewById(R.id.Extras2);
+        LinearLayout otherfields = (LinearLayout) findViewById(R.id.Extras2);
         otherfields.setOrientation(LinearLayout.VERTICAL);
-        designation_format2 Format=new designation_format2();
-        Format.cont=this;
-        switch (designation){
+        designation_format2 Format = new designation_format2();
+        Format.cont = this;
+        switch (designation) {
             case 0:
-                //populate the fields with data
+                // populate the fields with data
                 TextView dep = (TextView) findViewById(R.id.dep10);
                 TextView hostel = (TextView) findViewById(R.id.hostel10);
                 TextView por = (TextView) findViewById(R.id.por10);
@@ -173,11 +172,11 @@ public class Profile extends AppCompatActivity {
 
                 break;
             case 1:
-                //populate the fields with data
-                TextView dep2=(TextView)findViewById(R.id.dep20);
-                TextView addr_fac_employee=(TextView)findViewById(R.id.address10);
-                TextView addnlcharge=(TextView)findViewById(R.id.por20);
-                TextView hostel2=(TextView)findViewById(R.id.hostel20);
+                // populate the fields with data
+                TextView dep2 = (TextView) findViewById(R.id.dep20);
+                TextView addr_fac_employee = (TextView) findViewById(R.id.address10);
+                TextView addnlcharge = (TextView) findViewById(R.id.por20);
+                TextView hostel2 = (TextView) findViewById(R.id.hostel20);
                 try {
                     dep2.setText(json.getInt("Department"));
                     hostel2.setText(json.getInt("Hostel"));
@@ -187,12 +186,11 @@ public class Profile extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-
                 break;
             case 2:
-                //populate the fields with data
-                TextView work=(TextView)findViewById(R.id.work0);
-                TextView addr_employee=(TextView)findViewById(R.id.address20);
+                // populate the fields with data
+                TextView work = (TextView) findViewById(R.id.work0);
+                TextView addr_employee = (TextView) findViewById(R.id.address20);
 
                 try {
                     work.setText(json.getString("Work"));
@@ -203,8 +201,8 @@ public class Profile extends AppCompatActivity {
 
                 break;
             case 3:
-                //populate the fields with data
-                TextView addr_others=(EditText)findViewById(R.id.address3);
+                // populate the fields with data
+                TextView addr_others = (EditText) findViewById(R.id.address3);
                 try {
                     addr_others.setText(json.getString("Address"));
                 } catch (JSONException e) {
@@ -217,13 +215,12 @@ public class Profile extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        Intent intent=getIntent();
-        spl=intent.getBooleanExtra("spl",false);
-        if (spl){
+        Intent intent = getIntent();
+        spl = intent.getBooleanExtra("spl", false);
+        if (spl) {
             getMenuInflater().inflate(R.menu.main2, menu);
             return true;
-        }
-        else{
+        } else {
             getMenuInflater().inflate(R.menu.main, menu);
             return true;
         }
@@ -233,12 +230,11 @@ public class Profile extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-
             case R.id.notifications:
-                //Notifications selected
+                // Notifications selected
                 final Intent goToNotifications = new Intent(Profile.this, Notifications.class);
-                goToNotifications.putExtra("info",profileInfo);
-                goToNotifications.putExtra("spl",spl);
+                goToNotifications.putExtra("info", profileInfo);
+                goToNotifications.putExtra("spl", spl);
                 end();
                 startActivity(goToNotifications);
                 return true;
@@ -247,31 +243,35 @@ public class Profile extends AppCompatActivity {
                 return true;
 
             case R.id.logout:
-                //Logout selected
+                // Logout selected
                 final Intent logout = new Intent(Profile.this, Login.class);
                 new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_LIGHT)
                         .setTitle("Logout")
                         .setMessage("Do you wish to log out?")
-                        .setPositiveButton("No", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                final Intent goToStart = new Intent(Profile.this, Start.class);
-                                end();
-                                startActivity(goToStart);
-                            }
-                        })
+                        .setPositiveButton(
+                                "No",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {}
+                                })
+                        .setNegativeButton(
+                                "Yes",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        final Intent goToStart =
+                                                new Intent(Profile.this, Start.class);
+                                        end();
+                                        startActivity(goToStart);
+                                    }
+                                })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
                 return true;
 
             case R.id.special:
-                //special selected
+                // special selected
                 final Intent goToSpecial = new Intent(Profile.this, Special.class);
-                goToSpecial.putExtra("info",profileInfo);
-                goToSpecial.putExtra("spl",spl);
+                goToSpecial.putExtra("info", profileInfo);
+                goToSpecial.putExtra("spl", spl);
                 end();
                 startActivity(goToSpecial);
                 return true;
@@ -291,8 +291,7 @@ public class Profile extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //close the activity
+        // close the activity
         end();
     }
-
 }

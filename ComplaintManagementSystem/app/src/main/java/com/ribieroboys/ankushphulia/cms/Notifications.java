@@ -15,24 +15,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Notifications extends AppCompatActivity {
 
     Bundle profileInfo;
     boolean spl;
-    String url="http://192.168.43.186:8080/notifications";
+    String url = "http://192.168.43.186:8080/notifications";
     AnimatedExpandableListView listView;
     ExampleAdapter adapter;
 
@@ -43,70 +40,79 @@ public class Notifications extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        profileInfo=getIntent().getBundleExtra("info");
+        profileInfo = getIntent().getBundleExtra("info");
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent newcomp = new Intent(Notifications.this, New_complaint.class);
-                newcomp.putExtra("info", profileInfo);
-                startActivity(newcomp);
-            }
-        });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        //fetch all the complaints
-        StringRequest threadsReq = new StringRequest(Request.Method.GET,url,new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                // receive reply from server
-                try {
-                    JSONObject notifications=new JSONObject(response);
-                    JSONArray pers=notifications.getJSONArray("personal");
-                    JSONArray hos=notifications.getJSONArray("hostel");
-                    JSONArray dep=notifications.getJSONArray("department");
-                    JSONArray insti=notifications.getJSONArray("institute");
-
-                    //get a list of pending users (name+designation displayed)
-                    List<GroupItem> items = new ArrayList<GroupItem>();
-                    items.add(gengroup("Personal", pers));
-                    if (hos.length()>0){
-                        items.add(gengroup("Hostel Level",hos));
-                    }
-                    if (dep.length()>0){
-                        items.add(gengroup("Department Level",dep));
-                    }
-                    if (insti.length()>0){
-                        items.add(gengroup("Institute Level",insti));
-                    }
-                    adapter = new ExampleAdapter(getApplicationContext());
-                    adapter.setData(items);
-                    listView = (AnimatedExpandableListView) findViewById(R.id.listViewNotifications);
-                    listView.setAdapter(adapter);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        },
-                new Response.ErrorListener() {
+        fab.setOnClickListener(
+                new View.OnClickListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(Notifications.this, "Connection Error", Toast.LENGTH_LONG).show();
+                    public void onClick(View view) {
+                        Intent newcomp = new Intent(Notifications.this, New_complaint.class);
+                        newcomp.putExtra("info", profileInfo);
+                        startActivity(newcomp);
                     }
                 });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // fetch all the complaints
+        StringRequest threadsReq =
+                new StringRequest(
+                        Request.Method.GET,
+                        url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                // receive reply from server
+                                try {
+                                    JSONObject notifications = new JSONObject(response);
+                                    JSONArray pers = notifications.getJSONArray("personal");
+                                    JSONArray hos = notifications.getJSONArray("hostel");
+                                    JSONArray dep = notifications.getJSONArray("department");
+                                    JSONArray insti = notifications.getJSONArray("institute");
+
+                                    // get a list of pending users (name+designation displayed)
+                                    List<GroupItem> items = new ArrayList<GroupItem>();
+                                    items.add(gengroup("Personal", pers));
+                                    if (hos.length() > 0) {
+                                        items.add(gengroup("Hostel Level", hos));
+                                    }
+                                    if (dep.length() > 0) {
+                                        items.add(gengroup("Department Level", dep));
+                                    }
+                                    if (insti.length() > 0) {
+                                        items.add(gengroup("Institute Level", insti));
+                                    }
+                                    adapter = new ExampleAdapter(getApplicationContext());
+                                    adapter.setData(items);
+                                    listView =
+                                            (AnimatedExpandableListView)
+                                                    findViewById(R.id.listViewNotifications);
+                                    listView.setAdapter(adapter);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(
+                                                Notifications.this,
+                                                "Connection Error",
+                                                Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                        });
 
         RequestQ.getInstance().addToRequestQ(threadsReq);
-
     }
 
-    public GroupItem gengroup(String s,JSONArray x){
-        GroupItem g=new GroupItem();
-        g.title=s;
-        for (int i=0;i<x.length();i++){
+    public GroupItem gengroup(String s, JSONArray x) {
+        GroupItem g = new GroupItem();
+        g.title = s;
+        for (int i = 0; i < x.length(); i++) {
             try {
-                JSONObject j=x.getJSONObject(i);
+                JSONObject j = x.getJSONObject(i);
                 g.items.add(new ChildItem(j.getString("description")));
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -118,13 +124,12 @@ public class Notifications extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        Intent intent=getIntent();
-        spl=intent.getBooleanExtra("spl",false);
-        if (spl){
+        Intent intent = getIntent();
+        spl = intent.getBooleanExtra("spl", false);
+        if (spl) {
             getMenuInflater().inflate(R.menu.main2, menu);
             return true;
-        }
-        else{
+        } else {
             getMenuInflater().inflate(R.menu.main, menu);
             return true;
         }
@@ -134,46 +139,49 @@ public class Notifications extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-
             case R.id.notifications:
-                //Notifications selected
+                // Notifications selected
                 return true;
 
             case R.id.action_settings:
-                //Profile selected
+                // Profile selected
                 final Intent goToProfile = new Intent(Notifications.this, Profile.class);
-                goToProfile.putExtra("info",profileInfo);
-                goToProfile.putExtra("spl",spl);
+                goToProfile.putExtra("info", profileInfo);
+                goToProfile.putExtra("spl", spl);
                 end();
                 startActivity(goToProfile);
                 return true;
 
             case R.id.logout:
-                //Logout selected
+                // Logout selected
                 final Intent logout = new Intent(Notifications.this, Login.class);
                 new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_LIGHT)
                         .setTitle("Logout")
                         .setMessage("Do you wish to log out?")
-                        .setPositiveButton("No", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                final Intent goToStart = new Intent(Notifications.this, Start.class);
-                                end();
-                                startActivity(goToStart);
-                            }
-                        })
+                        .setPositiveButton(
+                                "No",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {}
+                                })
+                        .setNegativeButton(
+                                "Yes",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        final Intent goToStart =
+                                                new Intent(Notifications.this, Start.class);
+                                        end();
+                                        startActivity(goToStart);
+                                    }
+                                })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
                 return true;
 
             case R.id.special:
-                //special selected
+                // special selected
                 final Intent goToSpecial = new Intent(Notifications.this, Special.class);
-                goToSpecial.putExtra("info",profileInfo);
-                goToSpecial.putExtra("spl",spl);
+                goToSpecial.putExtra("info", profileInfo);
+                goToSpecial.putExtra("spl", spl);
                 end();
                 startActivity(goToSpecial);
                 return true;
@@ -193,11 +201,11 @@ public class Notifications extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //close the activity
+        // close the activity
         end();
     }
 
-    //custom classes meant for expandable lists and their children
+    // custom classes meant for expandable lists and their children
     private static class GroupItem {
         String title;
         List<ChildItem> items = new ArrayList<ChildItem>();
@@ -206,12 +214,12 @@ public class Notifications extends AppCompatActivity {
     private static class ChildItem {
         String title;
 
-        public ChildItem(String t){
-            this.title=t;
+        public ChildItem(String t) {
+            this.title = t;
         }
     }
 
-    //placeholders used by adpater
+    // placeholders used by adpater
     private static class ChildHolder {
         TextView title;
     }
@@ -221,7 +229,7 @@ public class Notifications extends AppCompatActivity {
     }
 
     private class ExampleAdapter extends AnimatedExpandableListView.AnimatedExpandableListAdapter {
-        //custom listview adapter for the classes we have
+        // custom listview adapter for the classes we have
         private LayoutInflater inflater;
 
         private List<GroupItem> items;
@@ -245,21 +253,26 @@ public class Notifications extends AppCompatActivity {
         }
 
         @Override
-        public View getRealChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        public View getRealChildView(
+                int groupPosition,
+                int childPosition,
+                boolean isLastChild,
+                View convertView,
+                ViewGroup parent) {
             ChildHolder holder;
             ChildItem item = getChild(groupPosition, childPosition);
             if (convertView == null) {
                 holder = new ChildHolder();
                 convertView = inflater.inflate(R.layout.list_item, parent, false);
                 holder.title = (TextView) convertView.findViewById(R.id.textTitle);
-                //holder.hint = (TextView) convertView.findViewById(R.id.textHint);
+                // holder.hint = (TextView) convertView.findViewById(R.id.textHint);
                 convertView.setTag(holder);
             } else {
                 holder = (ChildHolder) convertView.getTag();
             }
 
             holder.title.setText(item.title);
-            //holder.hint.setText(item.hint);
+            // holder.hint.setText(item.hint);
 
             return convertView;
         }
@@ -285,7 +298,8 @@ public class Notifications extends AppCompatActivity {
         }
 
         @Override
-        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+        public View getGroupView(
+                int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
             GroupHolder holder;
             GroupItem item = getGroup(groupPosition);
             if (convertView == null) {
@@ -311,7 +325,5 @@ public class Notifications extends AppCompatActivity {
         public boolean isChildSelectable(int arg0, int arg1) {
             return true;
         }
-
     }
-
 }
