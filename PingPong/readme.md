@@ -1,7 +1,5 @@
 # Multiplayer P2P ping-pong
 
-### Identical to the project in the COP 290 Repository
-
 * Uses JDK 1.8.0_51
     * Additionally uses the tween engine Libraries
     * Uses the Sliding Layout by Aurelien Ribon
