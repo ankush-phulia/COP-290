@@ -1,11 +1,11 @@
 package network;
 
+import game.BoardMulti;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import game.BoardMulti;
 
 /** Created by nitin on 24/4/16. */
 public class ReadData implements Runnable {
