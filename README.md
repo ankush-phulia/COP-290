@@ -1,6 +1,6 @@
-# COP-290
+# Design Practices for Computer Science
 
-Projects done in Design Practices for Computer Science, 2016
+Projects done in COP 290 - Design Practices for Computer Science, 2016
 
 1. COP 290 Course Registration Android App
 
